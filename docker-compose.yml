@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${RDBS_PASSWORD:-123}
+      POSTGRES_DB: ${RDBS_DATABASE:-monitoring}
+    ports:
+      - "5432:5432"
+    volumes:
+      - monitoring-db:/var/lib/postgresql/data
+
+  migration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    depends_on:
+      - db
+    env_file:
+      - dev.env
+    command: ["rdbs:upgrade"]
+
+  monitoring-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - db
+      - migration
+    ports:
+      - "8000:80"
+    env_file:
+      - dev.env
+    command: ["api:run"]
+
+volumes:
+  monitoring-db:
