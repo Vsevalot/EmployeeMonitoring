@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    environment:
+      BASE_URL: "host.docker.internal:8000"
+    ports:
+      - 8080:8080
