@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 import datetime
-from domain.contracts import IdentifierType
+from domain.contracts import IdentifierType, Mood
 
 
 class MorningBody(BaseModel):
@@ -13,8 +13,8 @@ class EveningBody(BaseModel):
 
 
 class FeedbackResponse(BaseModel):
-    morning: bool
-    evening: bool
+    morning: Mood
+    evening: Mood
 
 
 class Factor(BaseModel):
@@ -59,6 +59,7 @@ class RegisterBodyBase(BaseModel):
 class ManagerRegisterBody(RegisterBodyBase):
     company: str
     department: str
+    invite_id: str
 
 
 class EmployeeRegisterBody(RegisterBodyBase):
