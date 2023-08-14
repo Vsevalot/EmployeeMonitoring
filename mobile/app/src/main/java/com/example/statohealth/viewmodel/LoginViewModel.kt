@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.statohealth.Network
+import com.example.statohealth.infrastructure.Network
 import com.example.statohealth.Pages
 import com.example.statohealth.data.LoginModelRequest
 import com.example.statohealth.data.ResultResponse

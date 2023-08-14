@@ -1,4 +1,4 @@
-package com.example.statohealth
+package com.example.statohealth.infrastructure
 
 import android.content.Context
 import android.util.Log
