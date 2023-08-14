@@ -1,4 +1,4 @@
-package com.example.statohealth.view.model
+package com.example.statohealth.viewmodel
 
 import android.content.Context
 import android.util.Log

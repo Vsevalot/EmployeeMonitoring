@@ -7,19 +7,22 @@ import androidx.activity.viewModels
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.statohealth.Instructions
-import com.example.statohealth.Login
 import com.example.statohealth.Pages
-import com.example.statohealth.Register
 import com.example.statohealth.ui.theme.StatoHealthTheme
-import com.example.statohealth.view.model.InstructionsViewModel
-import com.example.statohealth.view.model.LoginViewModel
-import com.example.statohealth.view.model.RegisterViewModel
+import com.example.statohealth.view.Instructions
+import com.example.statohealth.view.Login
+import com.example.statohealth.view.Register
+import com.example.statohealth.view.TimePicker
+import com.example.statohealth.viewmodel.InstructionsViewModel
+import com.example.statohealth.viewmodel.LoginViewModel
+import com.example.statohealth.viewmodel.RegisterViewModel
+import com.example.statohealth.viewmodel.TimePickerViewModel
 
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val registerViewModel: RegisterViewModel by viewModels()
     private val instructionsViewModel: InstructionsViewModel by viewModels()
+    private val timePickerViewModel: TimePickerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Pages.instructionsPage) {
                         Instructions (instructionsViewModel, navController, context)
+                    }
+                    composable(Pages.timePickerPage) {
+                        TimePicker (timePickerViewModel, navController, context)
                     }
                 }
             }

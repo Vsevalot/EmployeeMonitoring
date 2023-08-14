@@ -1,4 +1,4 @@
-package com.example.statohealth
+package com.example.statohealth.view
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.statohealth.activities.MainActivity
-import com.example.statohealth.view.model.InstructionsViewModel
+import com.example.statohealth.viewmodel.InstructionsViewModel
 
 @Composable
 fun Instructions(
