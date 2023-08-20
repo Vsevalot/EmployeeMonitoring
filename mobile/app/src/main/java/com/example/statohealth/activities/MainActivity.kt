@@ -11,10 +11,12 @@ import com.example.statohealth.Pages
 import com.example.statohealth.ui.theme.StatoHealthTheme
 import com.example.statohealth.view.Instructions
 import com.example.statohealth.view.Login
+import com.example.statohealth.view.MorningState
 import com.example.statohealth.view.Register
 import com.example.statohealth.view.TimePicker
 import com.example.statohealth.viewmodel.InstructionsViewModel
 import com.example.statohealth.viewmodel.LoginViewModel
+import com.example.statohealth.viewmodel.MorningStateViewModel
 import com.example.statohealth.viewmodel.RegisterViewModel
 import com.example.statohealth.viewmodel.TimePickerViewModel
 
@@ -23,6 +25,7 @@ class MainActivity : ComponentActivity() {
     private val registerViewModel: RegisterViewModel by viewModels()
     private val instructionsViewModel: InstructionsViewModel by viewModels()
     private val timePickerViewModel: TimePickerViewModel by viewModels()
+    private val morningStateViewModel: MorningStateViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +47,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Pages.timePickerPage) {
                         TimePicker (timePickerViewModel, navController, context)
+                    }
+                    composable(Pages.morningStatePage) {
+                        MorningState (morningStateViewModel, navController, context)
                     }
                 }
             }

@@ -9,5 +9,6 @@ class Pages
         const val timePickerPage: String = "TimePickerPage"
         const val morningStatePage: String = "MorningStatePage"
         const val eveningStatePage: String = "EveningStatePage"
+        const val accountPage: String = "AccountPage"
     }
 }
