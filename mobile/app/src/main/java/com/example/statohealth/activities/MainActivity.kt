@@ -9,11 +9,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.statohealth.Pages
 import com.example.statohealth.ui.theme.StatoHealthTheme
+import com.example.statohealth.view.EveningState
 import com.example.statohealth.view.Instructions
 import com.example.statohealth.view.Login
 import com.example.statohealth.view.MorningState
 import com.example.statohealth.view.Register
 import com.example.statohealth.view.TimePicker
+import com.example.statohealth.viewmodel.EveningStateViewModel
 import com.example.statohealth.viewmodel.InstructionsViewModel
 import com.example.statohealth.viewmodel.LoginViewModel
 import com.example.statohealth.viewmodel.MorningStateViewModel
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
     private val instructionsViewModel: InstructionsViewModel by viewModels()
     private val timePickerViewModel: TimePickerViewModel by viewModels()
     private val morningStateViewModel: MorningStateViewModel by viewModels()
+    private val eveningStateViewModel: EveningStateViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +53,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Pages.morningStatePage) {
                         MorningState (morningStateViewModel, navController, context)
+                    }
+                    composable(Pages.eveningStatePage) {
+                        EveningState (eveningStateViewModel, navController, context)
                     }
                 }
             }

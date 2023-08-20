@@ -7,11 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.statohealth.infrastructure.Network
+import com.example.statohealth.Feedbacks
 import com.example.statohealth.Pages
 import com.example.statohealth.data.FeedbackModel
 import com.example.statohealth.data.FeedbacksModelResponse
 import com.example.statohealth.infrastructure.CurrentDate
+import com.example.statohealth.infrastructure.Network
 
 
 class TimePickerViewModel : ViewModel() {
@@ -56,5 +57,6 @@ class TimePickerViewModel : ViewModel() {
         Log.d("MyLog", "OnSuccess $response")
         morningFeedback = response.morning
         eveningFeedback = response.evening
+        Feedbacks.morning = response.morning
     }
 }
