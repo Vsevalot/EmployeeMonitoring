@@ -11,5 +11,6 @@ class Pages
         const val eveningStatePage: String = "EveningStatePage"
         const val factorsPage: String = "FactorsPage"
         const val accountPage: String = "AccountPage"
+        const val recommendationsPage: String = "RecommendationsPage"
     }
 }

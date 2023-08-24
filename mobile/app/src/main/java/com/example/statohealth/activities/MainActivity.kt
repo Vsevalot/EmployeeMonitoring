@@ -9,18 +9,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.statohealth.Pages
 import com.example.statohealth.ui.theme.StatoHealthTheme
+import com.example.statohealth.view.Account
 import com.example.statohealth.view.EveningState
 import com.example.statohealth.view.Factors
 import com.example.statohealth.view.Instructions
 import com.example.statohealth.view.Login
 import com.example.statohealth.view.MorningState
+import com.example.statohealth.view.Recommendations
 import com.example.statohealth.view.Register
 import com.example.statohealth.view.TimePicker
+import com.example.statohealth.viewmodel.AccountViewModel
 import com.example.statohealth.viewmodel.EveningStateViewModel
 import com.example.statohealth.viewmodel.FactorsViewModel
 import com.example.statohealth.viewmodel.InstructionsViewModel
 import com.example.statohealth.viewmodel.LoginViewModel
 import com.example.statohealth.viewmodel.MorningStateViewModel
+import com.example.statohealth.viewmodel.RecommendationsViewModel
 import com.example.statohealth.viewmodel.RegisterViewModel
 import com.example.statohealth.viewmodel.TimePickerViewModel
 
@@ -32,6 +36,8 @@ class MainActivity : ComponentActivity() {
     private val morningStateViewModel: MorningStateViewModel by viewModels()
     private val eveningStateViewModel: EveningStateViewModel by viewModels()
     private val factorsViewModel: FactorsViewModel by viewModels()
+    private val accountViewModel: AccountViewModel by viewModels()
+    private val recommendationsViewModel: RecommendationsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +68,12 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Pages.factorsPage) {
                         Factors (factorsViewModel, navController, context)
+                    }
+                    composable(Pages.accountPage) {
+                        Account (accountViewModel, navController, context)
+                    }
+                    composable(Pages.recommendationsPage) {
+                        Recommendations (recommendationsViewModel, navController, context)
                     }
                 }
             }
