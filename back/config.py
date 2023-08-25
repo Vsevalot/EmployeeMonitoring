@@ -8,6 +8,7 @@ class DBConfig(BaseSettings):
     database: str
     user: str
     password: SecretStr = Field(..., env="rdbs_password")
+    echo: bool = False
 
     @property
     def dsn(self) -> str:

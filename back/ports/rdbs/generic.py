@@ -5,12 +5,27 @@ from sqlalchemy.dialects.postgresql import BYTEA
 
 db_metadata = factory.metadata()
 
-organisation_unit = factory.actions_tracked_table(
+company = factory.table(
+    name="companies",
+    db_metadata=db_metadata,
+    columns=(
+        factory.integer_primary_key(),
+        factory.string(name="name", length=150, nullable=False),
+    ),
+)
+
+organisation_unit = factory.table(
     name="organisation_units",
     db_metadata=db_metadata,
     columns=(
         factory.integer_primary_key(),
         factory.string(name="name", length=150, nullable=False),
+        factory.foreign_key(
+            name="company_id",
+            to_=company,
+            type_=sqlalchemy.INTEGER,
+            nullable=False,
+        ),
     ),
 )
 
@@ -19,7 +34,8 @@ user = factory.table(
     db_metadata=db_metadata,
     columns=(
         factory.integer_primary_key(),
-        sqlalchemy.Column("hashed_pwd", BYTEA(length=32)),
+        factory.string(name="email", length=100, nullable=False, unique=True),
+        sqlalchemy.Column("password", BYTEA(length=32)),
         sqlalchemy.Column("salt", BYTEA(length=16)),
         factory.string(name="first_name", length=100, nullable=True),
         factory.string(name="last_name", length=150, nullable=True),
@@ -32,18 +48,72 @@ user = factory.table(
             nullable=True,
         ),
         factory.string(name="position", length=150, nullable=True),
-        factory.string(name="email", length=100, nullable=True),
         factory.string(name="phone", length=100, nullable=True),
+        factory.string(name="role", length=20, nullable=True),
     ),
 )
-
 
 permission = factory.table(
     name="permissions",
     db_metadata=db_metadata,
     columns=(
         factory.foreign_key(to_=user, type_=sqlalchemy.INTEGER, name="user_id"),
-        factory.string(name="permission"),
+        factory.string(name="permission", length=100),
     ),
     constraints=[sqlalchemy.UniqueConstraint("user_id", "permission")],
+)
+
+
+session = factory.table(
+    name="sessions",
+    db_metadata=db_metadata,
+    columns=(
+        factory.foreign_key(to_=user, type_=sqlalchemy.INTEGER, name="user_id"),
+        factory.string(name="session_id", length=36),
+    ),
+    constraints=[sqlalchemy.UniqueConstraint("user_id")],
+)
+
+category = factory.table(
+    name='categories',
+    db_metadata=db_metadata,
+    columns=(
+        factory.integer_primary_key(),
+        factory.string(name="name", length=50, nullable=False),
+    )
+)
+
+factor = factory.table(
+    name='factors',
+    db_metadata=db_metadata,
+    columns=(
+        factory.integer_primary_key(),
+        factory.foreign_key(to_=category, type_=sqlalchemy.INTEGER, name="category_id"),
+        factory.string(name="name", length=100, nullable=False),
+        factory.string(name="type", length=20, nullable=False),
+    )
+)
+
+state = factory.table(
+    name='states',
+    db_metadata=db_metadata,
+    columns=(
+        factory.integer_primary_key(),
+        factory.integer(name="value"),
+        factory.string(name="name", length=20, nullable=False),
+    )
+)
+
+feedback = factory.table(
+    name="feedbacks",
+    db_metadata=db_metadata,
+    columns=(
+        factory.foreign_key(to_=user, type_=sqlalchemy.INTEGER, name="user_id"),
+        factory.date(name="date"),
+        factory.string(name="day_time", length=20),
+        factory.foreign_key(to_=state, type_=sqlalchemy.INTEGER, name="state_id", nullable=False),
+        factory.foreign_key(to_=factor, type_=sqlalchemy.INTEGER, name="factor_id", nullable=True),
+        factory.string(name='value', length=200, nullable=True),
+    ),
+    constraints=[sqlalchemy.UniqueConstraint("user_id", "date", "day_time")],
 )

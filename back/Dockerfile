@@ -28,7 +28,7 @@ ADD ext /opt/app/ext
 ADD ports /opt/app/ports
 ADD domain /opt/app/domain
 ADD services /opt/app/services
-ADD storages /opt/app/storages
+ADD repositories /opt/app/storages
 ADD main.py /opt/app
 ADD config.py /opt/app
 ADD contracts.py /opt/app
