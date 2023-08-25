@@ -7,7 +7,7 @@ from ports.api.v1.dependencies import get_user_service, get_token_service
 router = APIRouter(tags=["Login"])
 
 
-@router.post("/v1/login")
+@router.post("/api/v1/login")
 async def login_user(
     body: LoginBody,
     user_service: UserService = Depends(get_user_service),

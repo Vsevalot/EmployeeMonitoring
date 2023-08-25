@@ -46,7 +46,7 @@ class State(BaseModel):
 
 
 class StatesResponse(BaseModel):
-    res: list[State]
+    result: list[State]
 
 
 class RegisterBodyBase(BaseModel):
@@ -112,23 +112,13 @@ class ParticipantSingleResponse(BaseModel):
     result: Participant
 
 
-class Company(BaseModel):
-    id: IdentifierType
-    name: str
-
-
-class Department(BaseModel):
-    id: IdentifierType
-    name: str
-    company: Company
-
-
 class ManagerListItem(BaseModel):
     id: IdentifierType
     first_name: str
     last_name: str
     surname: str
-    department: Department
+    department: str
+    company: str
 
 
 class ManagerListResponse(BaseModel):

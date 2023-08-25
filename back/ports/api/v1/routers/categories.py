@@ -8,7 +8,7 @@ from ports.api.v1.dependencies import get_current_user, get_category_service
 router = APIRouter(tags=["Categories"])
 
 
-@router.get("/v1/categories")
+@router.get("/api/v1/categories")
 async def get_factors(
     category_service: CategoryService = Depends(get_category_service)
 ) -> FactorsResponse:

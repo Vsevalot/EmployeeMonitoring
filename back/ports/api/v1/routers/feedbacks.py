@@ -13,8 +13,8 @@ from ports.api.v1.dependencies import (
 router = APIRouter(tags=["Feedbacks"])
 
 
-@router.get("/v1/feedbacks/{date}")
-async def get_instruction(
+@router.get("/api/v1/feedbacks/{date}")
+async def get_date_feedback(
     date: datetime.date,
     user: User = Depends(get_current_user),
     feedback_service: FeedbackService = Depends(get_feedback_service),
@@ -28,7 +28,7 @@ async def get_instruction(
     )
 
 
-@router.post("/v1/feedbacks/{date}/morning")
+@router.post("/api/v1/feedbacks/{date}/morning")
 async def save_morning(
     date: datetime.date,
     body: MorningBody,
@@ -41,10 +41,10 @@ async def save_morning(
         date=date,
         day_time=DayTime.morning,
     )
-    return Response(status_code=201)
+    return Response(status_code=204)
 
 
-@router.post("/v1/feedbacks/{date}/evening")
+@router.post("/api/v1/feedbacks/{date}/evening")
 async def save_evening(
     date: datetime.date,
     body: EveningBody,
@@ -59,4 +59,4 @@ async def save_evening(
         factor_id=body.factor_id,
         value=body.value,
     )
-    return Response(status_code=201)
+    return Response(status_code=204)

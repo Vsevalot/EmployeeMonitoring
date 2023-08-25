@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from ports.api.v1.schemas import ManagerListResponse, ManagerListItem, Department
+from ports.api.v1.schemas import ManagerListResponse, ManagerListItem
 from domain.contracts import UserRole
 from services import UserService
 from ports.api.v1.dependencies import get_user_service
@@ -8,7 +8,7 @@ from ports.api.v1.dependencies import get_user_service
 router = APIRouter(tags=["Managers"])
 
 
-@router.get("/v1/managers")
+@router.get("/api/v1/managers")
 async def get_managers(
     user_service: UserService = Depends(get_user_service),
 ) -> ManagerListResponse:
@@ -18,5 +18,6 @@ async def get_managers(
         first_name=m['first_name'],
         last_name=m['last_name'],
         surname=m['surname'],
-        department=Department(**m['business_unit']),
+        department=m['business_unit']['name'],
+        company=m['business_unit']['company']['name'],
     ) for m in managers])

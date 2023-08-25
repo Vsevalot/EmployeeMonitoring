@@ -9,7 +9,7 @@ from ports.api.v1.dependencies import get_current_user
 router = APIRouter(tags=["Recommendations"])
 
 
-@router.get("/v1/recommendations")
+@router.get("/api/v1/recommendations")
 async def get_instruction(
         user: User = Depends(get_current_user),
 ) -> RecommendationsResponse:
