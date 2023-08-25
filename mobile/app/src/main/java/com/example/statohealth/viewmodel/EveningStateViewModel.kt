@@ -11,8 +11,8 @@ import com.example.statohealth.Feedbacks
 import com.example.statohealth.Pages
 import com.example.statohealth.data.EveningFeedbackModelRequest
 import com.example.statohealth.data.FeedbackModel
+import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.data.StatesModelResponse
-import com.example.statohealth.data.StatusResponse
 import com.example.statohealth.infrastructure.CurrentDate
 import com.example.statohealth.infrastructure.Network
 import java.security.InvalidParameterException
@@ -39,15 +39,15 @@ class EveningStateViewModel : ViewModel() {
             val currentdate = CurrentDate()
             Network(context)
                 .sendPostRequest(
-                    "feedbacks/${currentdate.year}.${currentdate.month}.${currentdate.day}/evening",
-                    EveningFeedbackModelRequest(choosenState.id, 0),
+                    "feedbacks/${currentdate.toStringDate()}/evening",
+                    EveningFeedbackModelRequest(choosenState.id),
                     ::updateProgressVisibility,
                     ::successPostEveningStateAction
                 )
         }
     }
 
-    fun successPostEveningStateAction(response: StatusResponse) {
+    fun successPostEveningStateAction(response: ResultResponse?) {
         Log.d("MyLog", "OnSuccess $response")
         navController.navigate(Pages.accountPage)
     }
@@ -63,6 +63,6 @@ class EveningStateViewModel : ViewModel() {
 
     fun successGetStatesAction(response: StatesModelResponse) {
         Log.d("MyLog", "OnSuccess $response")
-        states = response.res
+        states = response.result
     }
 }

@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.statohealth.Pages
-import com.example.statohealth.data.ResultResponse
+import com.example.statohealth.data.MeResponse
 import com.example.statohealth.infrastructure.Network
 
 
@@ -24,15 +24,15 @@ class AccountViewModel : ViewModel() {
     fun getMe(context: Context) {
         Network(context)
             .sendGetRequest(
-                "me",
+                "participants/me",
                 ::updateProgressVisibility,
                 ::successAction
             )
     }
 
-    fun successAction(response: ResultResponse) {
+    fun successAction(response: MeResponse) {
         Log.d("MyLog", "OnSuccess $response")
-        meText = response.result
+        meText = response.result.firstName + response.result.lastName
     }
 
     fun getRecommendationsClick() {

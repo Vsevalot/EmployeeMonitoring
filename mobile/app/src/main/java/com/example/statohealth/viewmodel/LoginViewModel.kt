@@ -7,20 +7,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.statohealth.infrastructure.Network
 import com.example.statohealth.Pages
 import com.example.statohealth.data.LoginModelRequest
 import com.example.statohealth.data.ResultResponse
+import com.example.statohealth.infrastructure.Network
 
 
 class LoginViewModel : ViewModel() {
-    var login by mutableStateOf("")
+    var email by mutableStateOf("")
     var password by mutableStateOf("")
     var progressVisible by mutableStateOf(false)
     lateinit var navController: NavHostController
 
     fun setLoginProperty(newLogin: String) {
-        login = newLogin
+        email = newLogin
     }
 
     fun setPasswordProperty(newPassword: String) {
@@ -35,16 +35,16 @@ class LoginViewModel : ViewModel() {
         Network(context)
             .sendPostRequest(
                 "login",
-                LoginModelRequest(login, password),
+                LoginModelRequest(email, password),
                 ::updateProgressVisibility,
                 ::successLoginAction,
                 false
             )
     }
 
-    fun successLoginAction(response: ResultResponse) {
+    fun successLoginAction(response: ResultResponse?) {
         Log.d("MyLog", "OnSuccess $response")
-        Network.authorizationToken = response.result
+        Network.authorizationToken = response?.result ?: throw Exception()
         navController.navigate(Pages.instructionsPage)
     }
 

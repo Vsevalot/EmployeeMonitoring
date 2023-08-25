@@ -47,7 +47,7 @@ class TimePickerViewModel : ViewModel() {
         val currentdate = CurrentDate()
         Network(context)
             .sendGetRequest(
-                "feedbacks/${currentdate.year}.${currentdate.month}.${currentdate.day}",
+                "feedbacks/${currentdate.toStringDate()}",
                 ::updateProgressVisibility,
                 ::successAction
             )

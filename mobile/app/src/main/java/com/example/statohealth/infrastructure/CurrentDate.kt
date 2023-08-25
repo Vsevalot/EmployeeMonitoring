@@ -16,4 +16,16 @@ class CurrentDate {
     fun isMorning(): Boolean = hour in 6..11
     fun isEvening(): Boolean = hour in 18..24
 
+    fun toStringDate(): String {
+        var formattedMonth = if(month<10)
+            "0$month"
+        else
+            month.toString()
+
+        var formattedDay = if(day<10)
+            "0$day"
+        else
+            day.toString()
+        return "${year}-${formattedMonth}-${formattedDay}"
+    }
 }

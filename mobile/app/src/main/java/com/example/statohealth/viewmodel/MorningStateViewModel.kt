@@ -10,8 +10,8 @@ import androidx.navigation.NavHostController
 import com.example.statohealth.Pages
 import com.example.statohealth.data.FeedbackModel
 import com.example.statohealth.data.MorningFeedbackModelRequest
+import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.data.StatesModelResponse
-import com.example.statohealth.data.StatusResponse
 import com.example.statohealth.infrastructure.CurrentDate
 import com.example.statohealth.infrastructure.Network
 
@@ -33,14 +33,14 @@ class MorningStateViewModel : ViewModel() {
         val currentdate = CurrentDate()
         Network(context)
             .sendPostRequest(
-                "feedbacks/${currentdate.year}.${currentdate.month}.${currentdate.day}/morning",
+                "feedbacks/${currentdate.toStringDate()}/morning",
                 MorningFeedbackModelRequest(choosenState.id),
                 ::updateProgressVisibility,
                 ::successPostMorningStateAction
             )
     }
 
-    fun successPostMorningStateAction(response: StatusResponse) {
+    fun successPostMorningStateAction(response: ResultResponse?) {
         Log.d("MyLog", "OnSuccess $response")
         navController.navigate(Pages.accountPage)
     }
@@ -56,6 +56,6 @@ class MorningStateViewModel : ViewModel() {
 
     fun successGetStatesAction(response: StatesModelResponse) {
         Log.d("MyLog", "OnSuccess $response")
-        states = response.res
+        states = response.result
     }
 }

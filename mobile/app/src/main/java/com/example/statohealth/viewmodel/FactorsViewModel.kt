@@ -9,21 +9,21 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.statohealth.Feedbacks
 import com.example.statohealth.Pages
+import com.example.statohealth.data.CategoryModel
 import com.example.statohealth.data.EveningFeedbackModelRequest
 import com.example.statohealth.data.FactorModel
+import com.example.statohealth.data.FactorType
 import com.example.statohealth.data.FactorsModelResponse
-import com.example.statohealth.data.StatusResponse
-import com.example.statohealth.data.SubFactorModel
-import com.example.statohealth.data.SubFactorType
+import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.infrastructure.CurrentDate
 import com.example.statohealth.infrastructure.Network
 
 class FactorsViewModel : ViewModel() {
     var progressVisible by mutableStateOf(false)
-    var factors by mutableStateOf(arrayOf(FactorModel(-1, "", arrayOf(SubFactorModel(-1, "", SubFactorType.SINGLE)))))
-    var choosenFactor by mutableStateOf(factors[0])
-    var choosenSubFactor by mutableStateOf(factors[0].factors[0])
-    var subFactorText by mutableStateOf("")
+    var categories by mutableStateOf(arrayOf(CategoryModel(-1, "", arrayOf(FactorModel(-1, "", FactorType.SINGLE)))))
+    var choosenCategory by mutableStateOf(categories[0])
+    var choosenFactor by mutableStateOf(categories[0].factors[0])
+    var factorText by mutableStateOf("")
 
     lateinit var navController: NavHostController
 
@@ -32,34 +32,34 @@ class FactorsViewModel : ViewModel() {
     }
 
     fun sendButtonEnabled(): Boolean {
-        return choosenSubFactor.id != -1 && (choosenSubFactor.type == SubFactorType.SINGLE
-                || (choosenSubFactor.type == SubFactorType.TEXT && subFactorText.isNotEmpty()))
+        return choosenFactor.id != -1 && (choosenFactor.type == FactorType.SINGLE
+                || (choosenFactor.type == FactorType.TEXT && factorText.isNotEmpty()))
     }
 
     fun sendButtonClick(context: Context) {
         val currentdate = CurrentDate()
         Network(context)
             .sendPostRequest(
-                "feedbacks/${currentdate.year}.${currentdate.month}.${currentdate.day}/evening",
+                "feedbacks/${currentdate.toStringDate()}/evening",
                 EveningFeedbackModelRequest(
                     Feedbacks.evening?.id ?: throw Exception("Feedbacks.evening was null"),
-                    choosenSubFactor.id,
-                    subFactorText.ifEmpty { null }
+                    choosenFactor.id,
+                    factorText.ifEmpty { null }
                 ),
                 ::updateProgressVisibility,
                 ::successPostEveningStateAction
             )
     }
 
-    fun successPostEveningStateAction(response: StatusResponse) {
+    fun successPostEveningStateAction(response: ResultResponse?) {
         Log.d("MyLog", "OnSuccess $response")
         navController.navigate(Pages.accountPage)
     }
 
-    fun getFactors(context: Context) {
+    fun getCategories(context: Context) {
         Network(context)
             .sendGetRequest(
-                "factors",
+                "categories",
                 ::updateProgressVisibility,
                 ::successGetFactorsAction
             )
@@ -67,6 +67,6 @@ class FactorsViewModel : ViewModel() {
 
     fun successGetFactorsAction(response: FactorsModelResponse) {
         Log.d("MyLog", "OnSuccess $response")
-        factors = response.result
+        categories = response.result
     }
 }

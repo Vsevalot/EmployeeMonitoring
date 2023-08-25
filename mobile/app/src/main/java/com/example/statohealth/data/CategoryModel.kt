@@ -1,7 +1,7 @@
 package com.example.statohealth.data
 
-data class FactorModel(
+data class CategoryModel(
     val id: Int,
     val name: String,
-    val type: FactorType
+    val factors: Array<FactorModel>
 )

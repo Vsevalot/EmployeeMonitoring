@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.statohealth.activities.MainActivity
-import com.example.statohealth.data.SubFactorType
+import com.example.statohealth.data.FactorType
 import com.example.statohealth.viewmodel.FactorsViewModel
 
 @Composable
@@ -34,7 +34,7 @@ fun Factors(
     factorsViewModel.navController = navController
 
     LaunchedEffect(Unit) {
-        factorsViewModel.getFactors(context)
+        factorsViewModel.getCategories(context)
     }
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -51,19 +51,19 @@ fun Factors(
             ),
         )
         {
-            if (factorsViewModel.choosenFactor.id == -1)
+            if (factorsViewModel.choosenCategory.id == -1)
                 Column(
                     verticalArrangement = Arrangement.spacedBy(
                         10.dp,
                         Alignment.CenterVertically
                     )
                 ) {
-                    factorsViewModel.factors.forEach { factor ->
+                    factorsViewModel.categories.forEach { factor ->
                         Button(modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 25.dp)
                             .height(56.dp), onClick = {
-                            factorsViewModel.choosenFactor = factor
+                            factorsViewModel.choosenCategory = factor
                         })
                         {
                             Text(factor.name, fontSize = 25.sp)
@@ -72,7 +72,7 @@ fun Factors(
                 }
             else
                 Column(Modifier.selectableGroup(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    factorsViewModel.choosenFactor.factors.forEach { subFactor ->
+                    factorsViewModel.choosenCategory.factors.forEach { subFactor ->
                         Row(
                             Modifier
                                 .fillMaxWidth()
@@ -81,17 +81,17 @@ fun Factors(
                         )
                         {
                             RadioButton(
-                                selected = (subFactor == factorsViewModel.choosenSubFactor),
-                                onClick = { factorsViewModel.choosenSubFactor = subFactor }
+                                selected = (subFactor == factorsViewModel.choosenFactor),
+                                onClick = { factorsViewModel.choosenFactor = subFactor }
                             )
-                            Text(text = subFactor.value, fontSize = 22.sp)
+                            Text(text = subFactor.name, fontSize = 22.sp)
                         }
-                        if (subFactor.type == SubFactorType.TEXT) {
+                        if (subFactor.type == FactorType.TEXT) {
                             OutlinedTextField(
-                                value = factorsViewModel.subFactorText,
-                                enabled = factorsViewModel.choosenSubFactor.type == SubFactorType.TEXT,
+                                value = factorsViewModel.factorText,
+                                enabled = factorsViewModel.choosenFactor.type == FactorType.TEXT,
                                 onValueChange = { newText ->
-                                    factorsViewModel.subFactorText = newText
+                                    factorsViewModel.factorText = newText
                                 },
                                 singleLine = true,
                                 label = {

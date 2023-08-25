@@ -7,12 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.statohealth.infrastructure.Network
 import com.example.statohealth.Pages
 import com.example.statohealth.data.ManagerModel
 import com.example.statohealth.data.ManagersModelResponse
 import com.example.statohealth.data.RegisterModelRequest
-import com.example.statohealth.data.StatusResponse
+import com.example.statohealth.data.ResultResponse
+import com.example.statohealth.infrastructure.Network
 
 class RegisterViewModel : ViewModel() {
     lateinit var navController: NavHostController
@@ -97,7 +97,7 @@ class RegisterViewModel : ViewModel() {
     fun register(context: Context) {
         Network(context)
             .sendPostRequest(
-                "register/employees",
+                "register/participants",
                 RegisterModelRequest(firstName,lastName,surname,birthdate,position,phone,email,password,choosenManager.id) as Any,
                 ::updateProgressVisibility,
                 ::successRegisterAction,
@@ -105,7 +105,7 @@ class RegisterViewModel : ViewModel() {
             )
     }
 
-    fun successRegisterAction(response: StatusResponse) {
+    fun successRegisterAction(response: ResultResponse?) {
         Log.d("MyLog", "OnSuccess $response")
         navController.navigate(Pages.loginPage)
     }

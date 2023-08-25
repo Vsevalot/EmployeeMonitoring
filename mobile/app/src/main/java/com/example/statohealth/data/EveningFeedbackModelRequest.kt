@@ -4,6 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class EveningFeedbackModelRequest(
     @SerializedName("state_id") val stateId: Int,
-    @SerializedName("factor_id") val factorId: Int,
+    @SerializedName("factor_id") val factorId: Int? = null,
     val value: String? = null
 )
