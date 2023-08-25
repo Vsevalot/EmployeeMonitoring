@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 import datetime
-from domain.contracts import IdentifierType, Mood
+from domain.contracts import IdentifierType, States, FactorType
+from domain.entities import User
 
 
 class MorningBody(BaseModel):
@@ -9,27 +10,29 @@ class MorningBody(BaseModel):
 
 class EveningBody(BaseModel):
     state_id: IdentifierType
-    factor_id: IdentifierType | None
+    factor_id: IdentifierType | None = None
+    value: str | None = None
 
 
 class FeedbackResponse(BaseModel):
-    morning: Mood
-    evening: Mood
+    morning: States | None = None
+    evening: States | None = None
 
 
 class Factor(BaseModel):
     id: IdentifierType
-    value: str
+    name: str
+    type: FactorType
 
 
-class FactorCategory(BaseModel):
+class Category(BaseModel):
     id: IdentifierType
     name: str
     factors: list[Factor]
 
 
 class FactorsResponse(BaseModel):
-    result: list[FactorCategory]
+    result: list[Category]
 
 
 class InstructionResponse(BaseModel):
@@ -38,11 +41,12 @@ class InstructionResponse(BaseModel):
 
 class State(BaseModel):
     id: IdentifierType
-    value: str
+    name: str
+    value: int
 
 
 class StatesResponse(BaseModel):
-    res: list[State]
+    result: list[State]
 
 
 class RegisterBodyBase(BaseModel):
@@ -59,10 +63,9 @@ class RegisterBodyBase(BaseModel):
 class ManagerRegisterBody(RegisterBodyBase):
     company: str
     department: str
-    invite_id: str
 
 
-class EmployeeRegisterBody(RegisterBodyBase):
+class ParticipantRegisterBody(RegisterBodyBase):
     manager_id: IdentifierType
 
 
@@ -75,20 +78,38 @@ class LoginResponse(BaseModel):
     result: str
 
 
-class ParticipantListItem(BaseModel):
+class Participant(BaseModel):
     id: IdentifierType
-    first_name: str
-    last_name: str
-    surname: str
-    birthdate: datetime.date
-    company: str
-    position: str
-    phone: str
+    first_name: str | None
+    last_name: str | None
+    surname: str | None
+    birthdate: datetime.date | None
+    company: str | None
+    position: str | None
+    phone: str | None
     email: str
 
+    @classmethod
+    def from_user(cls, user: User):
+        return cls(
+            id=user['id'],
+            first_name=user['first_name'],
+            last_name=user['last_name'],
+            surname=user['surname'],
+            phone=user['phone'],
+            company=user['business_unit']['company']['name'],
+            position=user['position'],
+            email=user['email'],
+            birthdate=user['birthdate'],
+        )
 
-class ParticipantResponse(BaseModel):
-    result: list[ParticipantListItem]
+
+class ParticipantListResponse(BaseModel):
+    result: list[Participant]
+
+
+class ParticipantSingleResponse(BaseModel):
+    result: Participant
 
 
 class ManagerListItem(BaseModel):
@@ -96,9 +117,17 @@ class ManagerListItem(BaseModel):
     first_name: str
     last_name: str
     surname: str
-    company: str
     department: str
+    company: str
 
 
 class ManagerListResponse(BaseModel):
     result: list[ManagerListItem]
+
+
+class ManagerResponse(BaseModel):
+    result: str
+
+
+class RecommendationsResponse(BaseModel):
+    result: str

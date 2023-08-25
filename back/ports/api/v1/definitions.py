@@ -1,10 +1,10 @@
-from fastapi import FastAPI
-from services import TokenService
-from storages import UserStorage, BusinessUnitStorage, CompanyStorage
+from sqlalchemy.ext.asyncio import AsyncEngine
+from fastapi import FastAPI, Request as BaseRequest
 
 
 class Application(FastAPI):
-    token_service: TokenService | None = None
-    user_storage: UserStorage | None = None
-    business_unit_storage: BusinessUnitStorage | None = None
-    company_storage: CompanyStorage | None = None
+    engine: AsyncEngine
+
+
+class Request(BaseRequest):
+    app: Application
