@@ -1,11 +1,19 @@
 from typing import Annotated
 
-from ports.api.v1.schemas import ParticipantListResponse, Participant, ParticipantSingleResponse
+from ports.api.v1.schemas import (
+    ParticipantListResponse,
+    Participant,
+    ParticipantSingleResponse,
+)
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from domain.entities import User
+from domain.contracts import IdentifierType
+from contracts import PARTICIPANT_READ_SELF
+from services import UserService
 from ports.api.v1.dependencies import (
     get_current_user,
+    get_user_service,
 )
 
 
@@ -15,22 +23,37 @@ router = APIRouter(tags=["Participants"])
 @router.get("/v1/participants")
 async def get_participants(
     user: User = Depends(get_current_user),
+    user_service: UserService = Depends(get_user_service),
 ) -> ParticipantListResponse:
-    return ParticipantListResponse(result=[])
+    if PARTICIPANT_READ_SELF not in user["permissions"]:
+        raise HTTPException(status_code=403)
+    users = await user_service.get_list(
+        {"organisation_unit_id": user["business_unit"]["id"]}
+    )
+    return ParticipantListResponse(result=[Participant.from_user(u) for u in users])
 
 
 @router.get("/v1/participants/me")
 async def get_me(
-        user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ) -> ParticipantSingleResponse:
-    return ParticipantSingleResponse(result=Participant(
-        id=user['id'],
-        first_name=user['first_name'],
-        last_name=user['last_name'],
-        surname=user['surname'],
-        phone=user['phone'],
-        company=user['business_unit']['company']['name'],
-        position=user['position'],
-        email=user['email'],
-        birthdate=user['birthdate'],
-    ))
+    return ParticipantSingleResponse(result=Participant.from_user(user))
+
+
+@router.get("/v1/participants/{participant_id}")
+async def get_me(
+    participant_id: IdentifierType,
+    user: User = Depends(get_current_user),
+    user_service: UserService = Depends(get_user_service),
+) -> ParticipantSingleResponse:
+    if PARTICIPANT_READ_SELF not in user["permissions"]:
+        raise HTTPException(status_code=403)
+    requested_users = await user_service.get_list(
+        {
+            "id": participant_id,
+            "organisation_unit_id": user["business_unit"]["id"],
+        }
+    )
+    if not requested_users:
+        raise HTTPException(status_code=404)
+    return ParticipantSingleResponse(result=Participant.from_user(requested_users[0]))

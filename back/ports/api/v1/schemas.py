@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 import datetime
 from domain.contracts import IdentifierType, States, FactorType
+from domain.entities import User
 
 
 class MorningBody(BaseModel):
@@ -87,6 +88,20 @@ class Participant(BaseModel):
     position: str | None
     phone: str | None
     email: str
+
+    @classmethod
+    def from_user(cls, user: User):
+        return cls(
+            id=user['id'],
+            first_name=user['first_name'],
+            last_name=user['last_name'],
+            surname=user['surname'],
+            phone=user['phone'],
+            company=user['business_unit']['company']['name'],
+            position=user['position'],
+            email=user['email'],
+            birthdate=user['birthdate'],
+        )
 
 
 class ParticipantListResponse(BaseModel):

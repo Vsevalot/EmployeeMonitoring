@@ -2,6 +2,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from domain.contracts import IdentifierType, UserRole
+from contracts import PARTICIPANT_READ_SELF
 from domain.entities import User
 from ports.api.v1.schemas import ManagerRegisterBody, ParticipantRegisterBody
 from utils import UnitOfWorkRDBS
@@ -29,7 +30,7 @@ class UserService:
                 surname=data.surname,
                 password=hashed_pwd,
                 salt=salt,
-                permissions=[],
+                permissions=[PARTICIPANT_READ_SELF],
                 organisation_unit_id=organisation_unit_id,
                 birthdate=data.birthdate,
                 role=UserRole.manager,
@@ -68,6 +69,6 @@ class UserService:
         async with self._uow:
             return await self._uow.user.get(user_id=user_id, email=email)
 
-    async def get_list(self, filters: Mapping[str, Any]) -> list[User]:
+    async def get_list(self, filters: Mapping[str, Any] | None = None) -> list[User]:
         async with self._uow:
-            return await self._uow.user.get_list(filters)
+            return await self._uow.user.get_list(filters or {})
