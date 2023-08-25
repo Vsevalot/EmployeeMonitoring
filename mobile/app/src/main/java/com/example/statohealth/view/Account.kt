@@ -1,4 +1,4 @@
-package com.example.statohealth
+package com.example.statohealth.view
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,24 +18,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.statohealth.activities.MainActivity
-import com.example.statohealth.view.model.InstructionsViewModel
+import com.example.statohealth.viewmodel.AccountViewModel
 
 @Composable
-fun Instructions(
-    instructionsViewModel: InstructionsViewModel,
+fun Account(
+    accountViewModel: AccountViewModel,
     navController: NavHostController,
     context: MainActivity
 ) {
-    instructionsViewModel.navController = navController
+    accountViewModel.navController = navController
 
     LaunchedEffect(Unit) {
-        instructionsViewModel.getInstructions(context)
+        accountViewModel.getMe(context)
     }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        ProgressIndicator(instructionsViewModel.progressVisible)
+        ProgressIndicator(accountViewModel.progressVisible)
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -43,7 +43,7 @@ fun Instructions(
         )
         {
             Text(
-                instructionsViewModel.instructionsText, fontSize = 25.sp, modifier = Modifier
+                accountViewModel.meText, fontSize = 25.sp, modifier = Modifier
                     .weight(0.9f)
                     .padding(32.dp)
                     .verticalScroll(rememberScrollState())
@@ -52,10 +52,10 @@ fun Instructions(
             {
 
                 Button(onClick = {
-                    instructionsViewModel.start()
+                    accountViewModel.getRecommendationsClick()
                 })
                 {
-                    Text("Старт", fontSize = 25.sp)
+                    Text("Получить рекомендации", fontSize = 25.sp)
                 }
             }
         }

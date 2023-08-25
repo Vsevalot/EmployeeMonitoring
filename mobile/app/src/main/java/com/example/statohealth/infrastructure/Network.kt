@@ -1,8 +1,7 @@
-package com.example.statohealth
+package com.example.statohealth.infrastructure
 
 import android.content.Context
 import android.util.Log
-import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
@@ -27,7 +26,7 @@ class Network(context: Context) {
         updateProgress(true)
 
         val request = object : JsonObjectRequest(
-            Request.Method.GET, getUrl(endpoint), null,
+            Method.GET, getUrl(endpoint), null,
             { responseJson ->
                 updateProgress(false)
                 val response =
@@ -58,7 +57,7 @@ class Network(context: Context) {
 
         val jsonObject = JSONObject(Gson().toJson(data))
         val request = object : JsonObjectRequest(
-            Request.Method.POST, getUrl(endpoint), jsonObject,
+            Method.POST, getUrl(endpoint), jsonObject,
             { responseJson ->
                 updateProgress(false)
                 val response =

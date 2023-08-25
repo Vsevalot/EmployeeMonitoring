@@ -1,4 +1,4 @@
-package com.example.statohealth.view.model
+package com.example.statohealth.viewmodel
 
 import android.content.Context
 import android.util.Log
@@ -7,13 +7,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.statohealth.Network
 import com.example.statohealth.Pages
 import com.example.statohealth.data.ResultResponse
+import com.example.statohealth.infrastructure.Network
 
 
-class InstructionsViewModel : ViewModel() {
-    var instructionsText by mutableStateOf("")
+class AccountViewModel : ViewModel() {
+    var meText by mutableStateOf("")
     var progressVisible by mutableStateOf(false)
     lateinit var navController: NavHostController
 
@@ -21,10 +21,10 @@ class InstructionsViewModel : ViewModel() {
         progressVisible = state
     }
 
-    fun getInstructions(context: Context) {
+    fun getMe(context: Context) {
         Network(context)
             .sendGetRequest(
-                "instructions",
+                "me",
                 ::updateProgressVisibility,
                 ::successAction
             )
@@ -32,11 +32,11 @@ class InstructionsViewModel : ViewModel() {
 
     fun successAction(response: ResultResponse) {
         Log.d("MyLog", "OnSuccess $response")
-        instructionsText = response.result
+        meText = response.result
     }
 
-    fun start() {
-        navController.navigate(Pages.timePickerPage)
+    fun getRecommendationsClick() {
+        navController.navigate(Pages.recommendationsPage)
     }
 
 }
