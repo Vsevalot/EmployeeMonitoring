@@ -9,7 +9,7 @@ from alembic import op
 import sqlalchemy as sa
 from ports.rdbs.generic import category, factor, user, permission, state
 from contracts import Permissions
-from ports.api.v1.schemas import States
+# from ports.api.v1.schemas import States
 
 
 # revision identifiers, used by Alembic.
@@ -105,9 +105,9 @@ def add_categories():
     )
 
 
-def add_states():
-    states = [m.value for m in States]
-    op.execute(sa.insert(state).values(states))
+def add_states(): ...
+    # states = [m.value for m in States]
+    # op.execute(sa.insert(state).values(states))
 
 
 def upgrade():
