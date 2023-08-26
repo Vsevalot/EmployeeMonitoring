@@ -1,10 +1,12 @@
 package com.example.statohealth.infrastructure
 
+import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import com.android.volley.NetworkResponse
 import com.android.volley.ParseError
 import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -13,7 +15,7 @@ import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 
 
-class Network(context: Context) {
+class Network(val context: Context) {
     private val apiUrl: String = "http://159.223.224.135:8000"
     private val apiVersion: String = "/api/v1/"
 
@@ -38,8 +40,8 @@ class Network(context: Context) {
                 val response =
                     Gson().fromJson(responseJson.toString(), T::class.java)
                 successResponseAction(response)
-            }, {
-                Log.d("MyLog", "VolleyError: $it")
+            }, { volleyError ->
+                handleError(volleyError)
                 updateProgress(false)
             }) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -66,15 +68,14 @@ class Network(context: Context) {
             Method.POST, getUrl(endpoint), jsonObject,
             { responseJson ->
                 var response: T? = null
-                if(responseJson != null)
-                {
-                updateProgress(false)
+                if (responseJson != null) {
+                    updateProgress(false)
                     response =
-                    Gson().fromJson(responseJson.toString(), T::class.java)
+                        Gson().fromJson(responseJson.toString(), T::class.java)
                 }
                 successResponseAction(response)
-            }, {
-                Log.d("MyLog", "VolleyError: $it")
+            }, { volleyError ->
+                handleError(volleyError)
                 updateProgress(false)
             }) {
 
@@ -91,7 +92,8 @@ class Network(context: Context) {
                     } else {
                         Response.success(
                             JSONObject(json),
-                            HttpHeaderParser.parseCacheHeaders(response))
+                            HttpHeaderParser.parseCacheHeaders(response)
+                        )
                     }
                 } catch (e: UnsupportedEncodingException) {
                     Response.error(ParseError(e))
@@ -109,4 +111,16 @@ class Network(context: Context) {
     }
 
     fun getUrl(endpoint: String): String = apiUrl + apiVersion + endpoint
+
+    fun handleError(volleyError: VolleyError) {
+        val statusCode = volleyError.networkResponse.statusCode
+        val messageData = String(volleyError.networkResponse.data)
+        val message = "Code: $statusCode\n\n$messageData"
+        AlertDialog.Builder(context)
+            .setTitle("Ошибка")
+            .setMessage(message)
+            .setPositiveButton("Ок") { _, _ -> }
+            .show()
+        Log.d("MyLog", "VolleyError: $message")
+    }
 }
