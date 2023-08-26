@@ -8,32 +8,7 @@ Token: TypeAlias = str
 
 class UserRole(Enum):
     manager = 'manager'
-    employee = 'employee'
-
-
-Bad = {
-    "id": 1,
-    "name": "Плохо",
-    "value": 100,
-}
-
-Average = {
-    "id": 2,
-    "name": "Средне",
-    "value": 200,
-}
-
-Good = {
-    "id": 3,
-    "name": "Хорошо",
-    "value": 300,
-}
-
-
-class States(Enum):
-    good = Good
-    average = Average
-    bad = Bad
+    participant = 'participant'
 
 
 class FactorType(Enum):
