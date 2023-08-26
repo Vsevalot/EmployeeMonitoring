@@ -3,10 +3,17 @@ package com.example.statohealth.view
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -32,6 +39,26 @@ fun TimePicker(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Выберите время")
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { timePickerViewModel.exit(context) }) {
+                            Icon(Icons.Filled.ExitToApp, "")
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = { timePickerViewModel.goToAccount() }) {
+                            Icon(Icons.Filled.PermIdentity, "")
+                        }
+                    }
+                )
+            }, content = { padd ->
+                padd
+            })
         ProgressIndicator(timePickerViewModel.progressVisible)
         Column(
             modifier = Modifier
@@ -49,7 +76,7 @@ fun TimePicker(
             {
                 Text("Утро", fontSize = 25.sp)
             }
-            Button(enabled = timePickerViewModel.eveningEnabled(),onClick = {
+            Button(enabled = timePickerViewModel.eveningEnabled(), onClick = {
                 timePickerViewModel.eveningClick()
             })
             {

@@ -11,6 +11,7 @@ import com.example.statohealth.Feedbacks
 import com.example.statohealth.Pages
 import com.example.statohealth.data.FeedbackModel
 import com.example.statohealth.data.FeedbacksModelResponse
+import com.example.statohealth.infrastructure.AuthTokenPreference
 import com.example.statohealth.infrastructure.CurrentDate
 import com.example.statohealth.infrastructure.Network
 
@@ -58,5 +59,14 @@ class TimePickerViewModel : ViewModel() {
         morningFeedback = response.morning
         eveningFeedback = response.evening
         Feedbacks.morning = response.morning
+    }
+
+    fun exit(context: Context) {
+        AuthTokenPreference().removeToken(context)
+        navController.navigate(Pages.loginPage)
+    }
+
+    fun goToAccount() {
+        navController.navigate(Pages.accountPage)
     }
 }

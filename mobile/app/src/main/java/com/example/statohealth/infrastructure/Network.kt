@@ -62,7 +62,6 @@ class Network(val context: Context) {
         useAuth: Boolean = true
     ) {
         updateProgress(true)
-
         val jsonObject = JSONObject(Gson().toJson(data))
         val request = object : JsonObjectRequest(
             Method.POST, getUrl(endpoint), jsonObject,

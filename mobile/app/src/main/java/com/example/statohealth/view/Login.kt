@@ -94,9 +94,11 @@ fun UserInputLayer(loginViewModel: LoginViewModel) {
             .fillMaxHeight(0.5f)
             .fillMaxWidth()
     ) {
-        UserCredentials(loginViewModel.email, loginViewModel::setLoginProperty, "Email")
-        UserCredentials(
+        UserEmailCredentials(loginViewModel.email, loginViewModel::setLoginProperty, "Email")
+        UserPasswordCredentials(
             loginViewModel.password,
+            loginViewModel.passwordVisible,
+            loginViewModel::invertPasswordVisible,
             loginViewModel::setPasswordProperty,
             "Пароль"
         )

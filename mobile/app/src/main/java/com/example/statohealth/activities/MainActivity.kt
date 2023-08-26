@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.statohealth.Pages
+import com.example.statohealth.infrastructure.AuthTokenPreference
+import com.example.statohealth.infrastructure.Network
 import com.example.statohealth.ui.theme.StatoHealthTheme
 import com.example.statohealth.view.Account
 import com.example.statohealth.view.EveningState
@@ -44,36 +46,42 @@ class MainActivity : ComponentActivity() {
         setContent {
             val context = this
             val navController = rememberNavController()
-
+            val savedAuthToken = AuthTokenPreference().getToken(context)
+            val startDestination: String = if (savedAuthToken == null)
+                Pages.loginPage
+            else {
+                Network.authorizationToken = savedAuthToken
+                Pages.timePickerPage
+            }
             StatoHealthTheme {
-                NavHost(navController = navController, startDestination = Pages.loginPage)
+                NavHost(navController = navController, startDestination = startDestination)
                 {
                     composable(Pages.loginPage) {
                         Login(loginViewModel, navController, context)
                     }
                     composable(Pages.registerPage) {
-                        Register (registerViewModel, navController, context)
+                        Register(registerViewModel, navController, context)
                     }
                     composable(Pages.instructionsPage) {
-                        Instructions (instructionsViewModel, navController, context)
+                        Instructions(instructionsViewModel, navController, context)
                     }
                     composable(Pages.timePickerPage) {
-                        TimePicker (timePickerViewModel, navController, context)
+                        TimePicker(timePickerViewModel, navController, context)
                     }
                     composable(Pages.morningStatePage) {
-                        MorningState (morningStateViewModel, navController, context)
+                        MorningState(morningStateViewModel, navController, context)
                     }
                     composable(Pages.eveningStatePage) {
-                        EveningState (eveningStateViewModel, navController, context)
+                        EveningState(eveningStateViewModel, navController, context)
                     }
                     composable(Pages.factorsPage) {
-                        Factors (factorsViewModel, navController, context)
+                        Factors(factorsViewModel, navController, context)
                     }
                     composable(Pages.accountPage) {
-                        Account (accountViewModel, navController, context)
+                        Account(accountViewModel, navController, context)
                     }
                     composable(Pages.recommendationsPage) {
-                        Recommendations (recommendationsViewModel, navController, context)
+                        Recommendations(recommendationsViewModel, navController, context)
                     }
                 }
             }
