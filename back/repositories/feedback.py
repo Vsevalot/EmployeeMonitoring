@@ -62,7 +62,6 @@ class FeedbackRepositoryRDBS:
 
     @staticmethod
     def _apply_filters(stmt, filters: Mapping[str, Any]):
-        print(filters)
         for col, value in filters.items():
             column, _, operation = col.partition(":")
             column = getattr(feedback.c, column)

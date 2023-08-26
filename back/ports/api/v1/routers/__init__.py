@@ -8,6 +8,7 @@ from .registration import router as registration_router
 from .instructions import router as instruction_router
 from .recommendations import router as recommendation_router
 from .fill import router as fill_router
+from .cookie import router as cookie_router
 
 
 ROUTERS = (
@@ -21,4 +22,5 @@ ROUTERS = (
     instruction_router,
     recommendation_router,
     fill_router,
+    cookie_router,
 )
