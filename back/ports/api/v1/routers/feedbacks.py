@@ -23,9 +23,7 @@ async def get_date_feedback(
         filters={"user_id": user["id"], "date": date}
     )
     feedbacks = {f["day_time"]: f["state"] for f in feedbacks}
-    return FeedbackResponse(
-        morning=feedbacks.get(DayTime.morning), evening=feedbacks.get(DayTime.evening)
-    )
+    return FeedbackResponse.from_feedbacks(feedbacks)
 
 
 @router.post("/api/v1/feedbacks/{date}/morning")

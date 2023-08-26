@@ -1,6 +1,5 @@
 from collections import defaultdict
-from collections.abc import Sequence
-from enum import Enum
+from collections.abc import Sequence, Mapping
 
 from pydantic import BaseModel
 import datetime
@@ -18,34 +17,28 @@ class EveningBody(BaseModel):
     value: str | None = None
 
 
-Bad = {
-    "id": 1,
-    "name": "Плохо",
-    "value": 100,
-}
-
-Average = {
-    "id": 2,
-    "name": "Средне",
-    "value": 200,
-}
-
-Good = {
-    "id": 3,
-    "name": "Хорошо",
-    "value": 300,
-}
-
-
-class States(Enum):
-    good = Good
-    average = Average
-    bad = Bad
+class State(BaseModel):
+    id: IdentifierType
+    name: str
+    value: int
 
 
 class FeedbackResponse(BaseModel):
-    morning: States | None = None
-    evening: States | None = None
+    morning: State | None = None
+    evening: State | None = None
+
+    @classmethod
+    def from_feedbacks(cls, feedbacks: Mapping[DayTime, Feedback]):
+        morning = None
+        if f := feedbacks.get(DayTime.morning):
+            morning = dict(id=f.id, name=f.name, value=f.value)
+        evening = None
+        if f := feedbacks.get(DayTime.evening):
+            evening = dict(id=f.id, name=f.name, value=f.value)
+        return cls(
+            morning=morning,
+            evening=evening,
+        )
 
 
 class Factor(BaseModel):
