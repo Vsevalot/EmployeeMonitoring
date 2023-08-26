@@ -9,7 +9,7 @@ from alembic import op
 import sqlalchemy as sa
 from ports.rdbs.generic import category, factor, user, permission, state
 from contracts import Permissions
-from domain.contracts import States
+from ports.api.v1.schemas import States
 
 
 # revision identifiers, used by Alembic.

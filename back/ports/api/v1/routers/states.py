@@ -15,5 +15,5 @@ async def get_states(
 ) -> StatesResponse:
     states = await state_service.get_list()
     return StatesResponse(
-        result=[State(id=s["id"], value=s["value"], name=s["name"]) for s in states]
+        result=[State(id=s.id, value=s.value, name=s.name) for s in states]
     )

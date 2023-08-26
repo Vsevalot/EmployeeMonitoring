@@ -1,7 +1,11 @@
+from collections import defaultdict
+from collections.abc import Sequence
+from enum import Enum
+
 from pydantic import BaseModel
 import datetime
-from domain.contracts import IdentifierType, States, FactorType
-from domain.entities import User
+from domain.contracts import IdentifierType, FactorType, DayTime
+from domain.entities import User, Feedback
 
 
 class MorningBody(BaseModel):
@@ -12,6 +16,31 @@ class EveningBody(BaseModel):
     state_id: IdentifierType
     factor_id: IdentifierType | None = None
     value: str | None = None
+
+
+Bad = {
+    "id": 1,
+    "name": "Плохо",
+    "value": 100,
+}
+
+Average = {
+    "id": 2,
+    "name": "Средне",
+    "value": 200,
+}
+
+Good = {
+    "id": 3,
+    "name": "Хорошо",
+    "value": 300,
+}
+
+
+class States(Enum):
+    good = Good
+    average = Average
+    bad = Bad
 
 
 class FeedbackResponse(BaseModel):
@@ -131,3 +160,43 @@ class ManagerResponse(BaseModel):
 
 class RecommendationsResponse(BaseModel):
     result: str
+
+
+class GroupStatItem(BaseModel):
+    category: str
+    voted: int
+
+
+class GroupStatResponse(BaseModel):
+    result: list[GroupStatItem]
+
+    @classmethod
+    def from_feedbacks(cls, feedbacks: Sequence[Feedback]):
+        res = defaultdict(lambda: 0)
+        for f in feedbacks:
+            if f['factor']:
+                res[f['factor']['category']] += 1
+        return cls(result=[GroupStatItem(category=f, voted=v) for f, v in res.items()])
+
+
+class ParticipantStatItem(BaseModel):
+    date: datetime.date
+    morning: State | None = None
+    evening: State | None = None
+
+
+class ParticipantStatResponse(BaseModel):
+    result: list[ParticipantStatItem]
+
+    @classmethod
+    def from_feedbacks(cls, feedbacks: Sequence[Feedback]):
+        res = {}
+        for f in feedbacks:
+            if f['date'] not in res:
+                res[f['date']] = ParticipantStatItem(date=f['date'])
+            if f['day_time'] == DayTime.morning:
+                res[f['date']].morning = f['state']
+            if f['day_time'] == DayTime.evening:
+                res[f['date']].evening = f['state']
+
+        return cls(result=list(res.values()))

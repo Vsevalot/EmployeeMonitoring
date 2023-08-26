@@ -56,7 +56,7 @@ class UserService:
                 permissions=[],
                 organisation_unit_id=manager["business_unit"]["id"],
                 birthdate=data.birthdate,
-                role=UserRole.manager,
+                role=UserRole.participant,
             )
             await self._uow.commit()
         return user_id

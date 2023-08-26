@@ -43,16 +43,30 @@ class Category(TypedDict):
     factors: list[Factor]
 
 
-class State(TypedDict):
-    id: IdentifierType
-    name: str
-    value: int
+class State:
+    def __init__(self, id: IdentifierType, name: str, value: int):
+        self.id = id
+        self.name = name
+        self.value = value
+
+    def __eq__(self, other) -> bool:
+        return self.value == other.value
+
+    def __gt__(self, other) -> bool:
+        return self.value > other.value
+
+    def __lt__(self, other) -> bool:
+        return self.value < other.value
+
+    def __repr__(self) -> str:
+        return f'{self.name}'
 
 
 class FeedbackFactor(TypedDict):
     id: int
-    name: int
+    name: str
     value: str | None
+    category: str
 
 
 class Feedback(TypedDict):
