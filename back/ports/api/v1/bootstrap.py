@@ -6,9 +6,8 @@ from ext.http_tools import handler409, handler404
 from .routers import ROUTERS
 
 
-def get_application() -> Application:
+def get_application(db_config: DBConfig) -> Application:
     app = Application(title="Employee monitoring")
-    db_config = DBConfig()
     app.engine = create_async_engine(db_config.dsn, echo=db_config.echo)
 
     app.add_exception_handler(AlreadyInUse, handler409)

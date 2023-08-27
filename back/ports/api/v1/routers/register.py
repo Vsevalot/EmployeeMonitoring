@@ -8,7 +8,7 @@ from ports.api.v1.dependencies import get_user_service, get_token_service
 router = APIRouter(tags=["Registration"])
 
 
-@router.post("/api/v1/register/managers")
+@router.post("/api/v1/register/managers", status_code=201)
 async def register_manager(
     body: ManagerRegisterBody,
     user_service: UserService = Depends(get_user_service),
@@ -19,7 +19,7 @@ async def register_manager(
     return ManagerResponse(result=token)
 
 
-@router.post("/api/v1/register/participants")
+@router.post("/api/v1/register/participants", status_code=201)
 async def register_participant(
         body: ParticipantRegisterBody,
         user_service: UserService = Depends(get_user_service),

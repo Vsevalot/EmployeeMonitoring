@@ -80,7 +80,7 @@ async def get_participant(
         }
     )
     if not requested_users:
-        raise HTTPException(status_code=403)
+        raise HTTPException(status_code=404)
     return ParticipantSingleResponse(result=Participant.from_user(requested_users[0]))
 
 

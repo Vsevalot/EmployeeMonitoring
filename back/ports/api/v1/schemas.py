@@ -1,5 +1,5 @@
 from collections import defaultdict
-from collections.abc import Sequence, Mapping
+from collections.abc import Sequence
 
 from pydantic import BaseModel
 import datetime
@@ -28,13 +28,19 @@ class FeedbackResponse(BaseModel):
     evening: State | None = None
 
     @classmethod
-    def from_feedbacks(cls, feedbacks: Mapping[DayTime, Feedback]):
-        morning = None
-        if f := feedbacks.get(DayTime.morning):
-            morning = dict(id=f.id, name=f.name, value=f.value)
-        evening = None
-        if f := feedbacks.get(DayTime.evening):
-            evening = dict(id=f.id, name=f.name, value=f.value)
+    def from_feedbacks(cls, morning: Feedback | None, evening: Feedback | None):
+        if morning:
+            morning = State(
+                id=morning["state"].id,
+                name=morning["state"].name,
+                value=morning["state"].value,
+            )
+        if evening:
+            evening = State(
+                id=evening["state"].id,
+                name=evening["state"].name,
+                value=evening["state"].value,
+            )
         return cls(
             morning=morning,
             evening=evening,
@@ -59,12 +65,6 @@ class FactorsResponse(BaseModel):
 
 class InstructionResponse(BaseModel):
     result: str
-
-
-class State(BaseModel):
-    id: IdentifierType
-    name: str
-    value: int
 
 
 class StatesResponse(BaseModel):
@@ -114,15 +114,15 @@ class Participant(BaseModel):
     @classmethod
     def from_user(cls, user: User):
         return cls(
-            id=user['id'],
-            first_name=user['first_name'],
-            last_name=user['last_name'],
-            surname=user['surname'],
-            phone=user['phone'],
-            company=user['business_unit']['company']['name'],
-            position=user['position'],
-            email=user['email'],
-            birthdate=user['birthdate'],
+            id=user["id"],
+            first_name=user["first_name"],
+            last_name=user["last_name"],
+            surname=user["surname"],
+            phone=user["phone"],
+            company=user["business_unit"]["company"]["name"],
+            position=user["position"],
+            email=user["email"],
+            birthdate=user["birthdate"],
         )
 
 
@@ -167,8 +167,8 @@ class GroupStatResponse(BaseModel):
     def from_feedbacks(cls, feedbacks: Sequence[Feedback]):
         res = defaultdict(lambda: 0)
         for f in feedbacks:
-            if f['factor']:
-                res[f['factor']['category']] += 1
+            if f["factor"]:
+                res[f["factor"]["category"]] += 1
         return cls(result=[GroupStatItem(category=f, voted=v) for f, v in res.items()])
 
 
@@ -185,11 +185,11 @@ class ParticipantStatResponse(BaseModel):
     def from_feedbacks(cls, feedbacks: Sequence[Feedback]):
         res = {}
         for f in feedbacks:
-            if f['date'] not in res:
-                res[f['date']] = ParticipantStatItem(date=f['date'])
-            if f['day_time'] == DayTime.morning:
-                res[f['date']].morning = f['state']
-            if f['day_time'] == DayTime.evening:
-                res[f['date']].evening = f['state']
+            if f["date"] not in res:
+                res[f["date"]] = ParticipantStatItem(date=f["date"])
+            if f["day_time"] == DayTime.morning:
+                res[f["date"]].morning = f["state"]
+            if f["day_time"] == DayTime.evening:
+                res[f["date"]].evening = f["state"]
 
         return cls(result=list(res.values()))
