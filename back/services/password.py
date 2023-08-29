@@ -8,8 +8,9 @@ Salt: TypeAlias = bytes
 
 
 class PasswordService:
-    @staticmethod
+    @classmethod
     def hash_password(
+        cls,
         password: str,
         salt: bytes | None = None,
         iterations=100000,

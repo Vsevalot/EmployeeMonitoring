@@ -1,6 +1,7 @@
-from typing import Annotated
+from fastapi import APIRouter, Depends
 
-from fastapi import APIRouter, Header
+from services.state import StateService
+from ports.api.v1.dependencies import get_state_service
 
 from ports.api.v1.schemas import StatesResponse, State
 
@@ -8,8 +9,11 @@ from ports.api.v1.schemas import StatesResponse, State
 router = APIRouter(tags=["States"])
 
 
-@router.get("/v1/states")
+@router.get("/api/v1/states")
 async def get_states(
-    authorization: Annotated[str | None, Header()],
+    state_service: StateService = Depends(get_state_service),
 ) -> StatesResponse:
-    return StatesResponse(res=[State(id=i, value=f"value {i}") for i in range(1, 4)])
+    states = await state_service.get_list()
+    return StatesResponse(
+        result=[State(id=s.id, value=s.value, name=s.name) for s in states]
+    )

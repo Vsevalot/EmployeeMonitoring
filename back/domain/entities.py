@@ -1,6 +1,6 @@
 from typing import TypedDict
 import datetime
-from .contracts import IdentifierType
+from .contracts import IdentifierType, UserRole, FactorType, DayTime
 
 
 class Company(TypedDict):
@@ -16,12 +16,62 @@ class BusinessUnit(TypedDict):
 
 class User(TypedDict):
     id: IdentifierType
+    phone: str
+    email: str
+    permissions: list[str]
+    password: bytes
+    salt: bytes
+
     first_name: str
     last_name: str
-    surname: str
+    surname: str | None
     birthdate: datetime.date
-    phone: str
     position: str
-    email: str
     business_unit: BusinessUnit
-    permissions: list[str]
+    role: UserRole | None
+
+
+class Factor(TypedDict):
+    id: IdentifierType
+    name: str
+    type: FactorType
+
+
+class Category(TypedDict):
+    id: IdentifierType
+    name: str
+    factors: list[Factor]
+
+
+class State:
+    def __init__(self, id: IdentifierType, name: str, value: int):
+        self.id = id
+        self.name = name
+        self.value = value
+
+    def __eq__(self, other) -> bool:
+        return self.value == other.value
+
+    def __gt__(self, other) -> bool:
+        return self.value > other.value
+
+    def __lt__(self, other) -> bool:
+        return self.value < other.value
+
+    def __repr__(self) -> str:
+        return f'{self.name}'
+
+
+class FeedbackFactor(TypedDict):
+    id: int
+    name: str
+    value: str | None
+    category: str
+
+
+class Feedback(TypedDict):
+    user_id: IdentifierType
+    date: datetime.date
+    day_time: DayTime
+    state: State
+    factor: FeedbackFactor | None
