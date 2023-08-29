@@ -3,10 +3,10 @@ from app import App
 
 
 def main(page: ft.Page):
-    page.client_storage.set("access_token", 0)
     app = App(page)
     page.add(app)
-    page.go("/login")
+    #TODO: добавить условие для дефолтной страницы
+    page.go(page.route)
     page.update()
 
 

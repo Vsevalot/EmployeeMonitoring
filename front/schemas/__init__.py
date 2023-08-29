@@ -1,2 +1,2 @@
 from .login import LoginResponseDTO, LoginRequestDTO
-from .register import RegisterDTO
+from .register import ManagerRegisterDTO, ManagerLinkDTO

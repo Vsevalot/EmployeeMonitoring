@@ -6,8 +6,8 @@ from schemas import ManagerRegisterDTO, LoginResponseDTO
 from .base_view import BaseView
 
 
-class ManagerRegister(ft.UserControl, BaseView):
-    REGISTER_ENDPOINT: str = f"http://{Config.BASE_URL}/v1/manager-registration"
+class ManagerSelfRegistration(ft.UserControl, BaseView):
+    REGISTER_ENDPOINT: str = f"http://{Config.BASE_URL}/api/v1/register/managers"
 
     def build(self):
         self.login_button = ft.TextButton(text="Reg", on_click=self.on_reg_click)
@@ -17,7 +17,7 @@ class ManagerRegister(ft.UserControl, BaseView):
         self.surname = ft.TextField(label="surname", on_focus=self.on_focus)
         self.birthdate = ft.TextField(
             label="birthdate",
-            hint_text="DD.MM.YYYY",
+            hint_text="YYYY-MM-DD",
             on_focus=self.on_focus,
         )
         self.phone = ft.TextField(label="phone", on_focus=self.on_focus)
@@ -76,15 +76,15 @@ class ManagerRegister(ft.UserControl, BaseView):
             phone=self.phone.value,
             position=self.position.value,
             email=self.email.value,
-            password_field=self.password_field.value,
+            password=self.password_field.value,
             company=self.company.value,
             department=self.department.value,
         )
-        self.clean()
+        # self.clean()
         response = requests.post(self.REGISTER_ENDPOINT, json=body.dict())
         if response.status_code == 200:
             reg_response = LoginResponseDTO(**response.json())
-            e.page.client_storage.set("access_token", reg_response.res)
+            e.page.client_storage.set("access_token", reg_response.result)
             print(e.page.client_storage.get("access_token"))
             e.page.go("/main")
             e.page.update()

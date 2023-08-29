@@ -7,4 +7,4 @@ class LoginRequestDTO(BaseModel):
 
 
 class LoginResponseDTO(BaseModel):
-    res: str
+    result: str
