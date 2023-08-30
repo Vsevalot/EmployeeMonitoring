@@ -5,8 +5,8 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_PASSWORD: ${RDBS_PASSWORD:-123}
-      POSTGRES_DB: ${RDBS_DATABASE:-monitoring}
+      POSTGRES_PASSWORD: ${RDBS_PASSWORD}
+      POSTGRES_DB: monitoring
     ports:
       - "5432:5432"
     volumes:
