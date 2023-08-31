@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import com.example.statohealth.infrastructure.Network
 import com.example.statohealth.Pages
 import com.example.statohealth.data.ResultResponse
+import com.example.statohealth.infrastructure.Logger
 
 
 class InstructionsViewModel : ViewModel() {
@@ -31,7 +32,7 @@ class InstructionsViewModel : ViewModel() {
     }
 
     fun successAction(response: ResultResponse) {
-        Log.d("MyLog", "OnSuccess $response")
+        Logger.log("OnSuccess $response")
         instructionsText = response.result
     }
 

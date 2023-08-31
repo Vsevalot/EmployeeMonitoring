@@ -1,7 +1,6 @@
 package com.example.statohealth.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,6 +13,7 @@ import com.example.statohealth.data.FeedbackModel
 import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.data.StatesModelResponse
 import com.example.statohealth.infrastructure.CurrentDate
+import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
 import java.security.InvalidParameterException
 
@@ -48,7 +48,7 @@ class EveningStateViewModel : ViewModel() {
     }
 
     fun successPostEveningStateAction(response: ResultResponse?) {
-        Log.d("MyLog", "OnSuccess $response")
+        Logger.log("OnSuccess $response")
         navController.navigate(Pages.accountPage)
     }
 
@@ -62,7 +62,7 @@ class EveningStateViewModel : ViewModel() {
     }
 
     fun successGetStatesAction(response: StatesModelResponse) {
-        Log.d("MyLog", "OnSuccess $response")
+        Logger.log("OnSuccess $response")
         states = response.result
     }
 }

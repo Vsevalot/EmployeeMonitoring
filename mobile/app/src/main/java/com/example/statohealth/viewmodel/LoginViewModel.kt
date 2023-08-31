@@ -11,6 +11,7 @@ import com.example.statohealth.Pages
 import com.example.statohealth.data.LoginModelRequest
 import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.infrastructure.AuthTokenPreference
+import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
 
 
@@ -51,7 +52,7 @@ class LoginViewModel : ViewModel() {
     }
 
     fun successLoginAction(response: ResultResponse?) {
-        Log.d("MyLog", "OnSuccess $response")
+        Logger.log("OnSuccess $response")
         Network.authorizationToken = response?.result ?: throw Exception()
         AuthTokenPreference().setToken(context, Network.authorizationToken)
         navController.navigate(Pages.instructionsPage)

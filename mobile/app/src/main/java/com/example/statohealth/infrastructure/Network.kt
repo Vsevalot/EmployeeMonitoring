@@ -2,7 +2,6 @@ package com.example.statohealth.infrastructure
 
 import android.app.AlertDialog
 import android.content.Context
-import android.util.Log
 import com.android.volley.NetworkResponse
 import com.android.volley.ParseError
 import com.android.volley.Response
@@ -41,7 +40,7 @@ class Network(val context: Context) {
                     Gson().fromJson(responseJson.toString(), T::class.java)
                 successResponseAction(response)
             }, { volleyError ->
-                handleError(volleyError)
+                handleError(volleyError, endpoint)
                 updateProgress(false)
             }) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -74,7 +73,7 @@ class Network(val context: Context) {
                 }
                 successResponseAction(response)
             }, { volleyError ->
-                handleError(volleyError)
+                handleError(volleyError, endpoint)
                 updateProgress(false)
             }) {
 
@@ -111,15 +110,15 @@ class Network(val context: Context) {
 
     fun getUrl(endpoint: String): String = apiUrl + apiVersion + endpoint
 
-    fun handleError(volleyError: VolleyError) {
+    fun handleError(volleyError: VolleyError, endpoint: String) {
         val statusCode = volleyError.networkResponse.statusCode
         val messageData = String(volleyError.networkResponse.data)
-        val message = "Code: $statusCode\n\n$messageData"
+        val message = "Code: $statusCode\n\n$messageData\n\nOn: $endpoint"
         AlertDialog.Builder(context)
             .setTitle("Ошибка")
             .setMessage(message)
             .setPositiveButton("Ок") { _, _ -> }
             .show()
-        Log.d("MyLog", "VolleyError: $message")
+        Logger.log("VolleyError: $message")
     }
 }
