@@ -1,7 +1,6 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
 
 class BaseView(ABC):
-    @abstractmethod
-    def initialize(self):
+    def initialize(self, *args, **kwargs):
         pass

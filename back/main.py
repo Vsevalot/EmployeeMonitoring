@@ -7,9 +7,9 @@ from ports import rdbs, api
 from config import DBConfig
 
 
-def launch():
+def launch(db_config: DBConfig):
     import uvicorn
-    app = api.v1.get_application()
+    app = api.v1.get_application(db_config)
     uvicorn.run(app, host="0.0.0.0", port=80)
 
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     )
     fire.Fire(
         {
-            "api:run": launch,
+            "api:run": lambda: launch(db_config),
             "rdbs:upgrade": functools.partial(
                 alembic_tools.commands.upgrade, **migrations_rdbs_args
             ),

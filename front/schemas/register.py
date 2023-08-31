@@ -1,8 +1,18 @@
 from pydantic import BaseModel
 
 
-class RegisterDTO(BaseModel):
-    admin_login: str
-    admin_password: str
-    new_user_login: str
-    new_user_password: str
+class ManagerRegisterDTO(BaseModel):
+    first_name: str
+    last_name: str
+    surname: str
+    birthdate: str
+    phone: str
+    position: str
+    email: str
+    password: str
+    company: str
+    department: str
+
+
+class ManagerLinkDTO(BaseModel):
+    link: str

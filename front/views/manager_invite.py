@@ -1,8 +1,11 @@
 import flet as ft
 from config import Config
+from schemas import ManagerRegisterDTO, ManagerLinkDTO
+import requests
+from .base_view import BaseView
 
 
-class ManagerInvite(ft.UserControl):
+class ManagerInvite(ft.UserControl, BaseView):
     INVITE_ENDPOINT: str = f"http://{Config.BASE_URL}/v1/manager-invite"
 
     def build(self):
@@ -26,7 +29,7 @@ class ManagerInvite(ft.UserControl):
             on_focus=self.on_focus)
         self.company = ft.TextField(label="company", on_focus=self.on_focus)
         self.department = ft.TextField(label="department", on_focus=self.on_focus)
-        self.link = ft.Text("Тут появится ссылка для приглашения")
+        self.link = ft.TextField(label="Тут появится ссылка для приглашения")
 
         self.view = ft.Column(
             width=600,
@@ -68,5 +71,21 @@ class ManagerInvite(ft.UserControl):
                     control.border_color = ft.colors.RED
                     control.update()
 
-        self.link.value = "link"
-        self.link.update()
+        body = ManagerRegisterDTO(
+            first_name=self.first_name.value,
+            last_name=self.last_name.value,
+            surname=self.surname.value,
+            birthdate=self.birthdate.value,
+            phone=self.phone.value,
+            position=self.position.value,
+            email=self.email.value,
+            password_field=self.password_field.value,
+            company=self.company.value,
+            department=self.department.value,
+        )
+        self.clean()
+        response = requests.post(self.INVITE_ENDPOINT, json=body.dict())
+        if response.status_code == 201:
+            reg_response = ManagerLinkDTO(**response.json())
+            self.link.value = f"http://{Config.BASE_URL}/v1/manager-registration/{reg_response.link}"
+            self.link.update()

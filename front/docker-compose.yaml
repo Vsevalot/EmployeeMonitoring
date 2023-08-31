@@ -4,6 +4,6 @@ services:
   app:
     build: .
     environment:
-      BASE_URL: "host.docker.internal:8000"
+      BASE_URL: "159.223.224.135:8000"
     ports:
       - 8080:8080
