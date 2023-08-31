@@ -100,7 +100,6 @@ class MainActivity : ComponentActivity() {
             // Log and toast
             Logger.log(token)
             var android_id = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
-            Toast.makeText(this, token, Toast.LENGTH_LONG).show()
         })
     }
 

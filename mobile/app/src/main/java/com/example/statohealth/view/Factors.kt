@@ -7,17 +7,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -40,10 +44,18 @@ fun Factors(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Выберите фактор повлиявший на самочувствие")
+                    }
+                )
+            }, content = { padd ->
         ProgressIndicator(factorsViewModel.progressVisible)
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize().padding(top = padd.calculateTopPadding()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(
                 20.dp,
@@ -58,15 +70,15 @@ fun Factors(
                         Alignment.CenterVertically
                     )
                 ) {
-                    factorsViewModel.categories.forEach { factor ->
+                    factorsViewModel.categories.forEach { category ->
                         Button(modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 25.dp)
-                            .height(56.dp), onClick = {
-                            factorsViewModel.choosenCategory = factor
+                            , onClick = {
+                            factorsViewModel.choosenCategory = category
                         })
                         {
-                            Text(factor.name, fontSize = 25.sp)
+                            Text(category.name, fontSize = 25.sp)
                         }
                     }
                 }
@@ -76,13 +88,13 @@ fun Factors(
                         Row(
                             Modifier
                                 .fillMaxWidth()
-                                .height(56.dp),
+                                .height(56.dp).selectable(selected = (subFactor == factorsViewModel.choosenFactor), onClick = { factorsViewModel.choosenFactor = subFactor }, role = Role.RadioButton),
                             verticalAlignment = Alignment.CenterVertically
                         )
                         {
                             RadioButton(
                                 selected = (subFactor == factorsViewModel.choosenFactor),
-                                onClick = { factorsViewModel.choosenFactor = subFactor }
+                                onClick = null
                             )
                             Text(text = subFactor.name, fontSize = 22.sp)
                         }
@@ -109,6 +121,6 @@ fun Factors(
             {
                 Text("Отправить", fontSize = 25.sp)
             }
-        }
+        }})
     }
 }

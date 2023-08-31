@@ -8,8 +8,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -35,10 +37,18 @@ fun Instructions(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Инструкция")
+                    }
+                )
+            }, content = { padd ->
         ProgressIndicator(instructionsViewModel.progressVisible)
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize().padding(top = padd.calculateTopPadding()),
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
@@ -58,6 +68,6 @@ fun Instructions(
                     Text("Старт", fontSize = 25.sp)
                 }
             }
-        }
+        }})
     }
 }

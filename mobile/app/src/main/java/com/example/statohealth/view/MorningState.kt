@@ -6,16 +6,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -37,10 +42,18 @@ fun MorningState(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Выберите утреннее самочувствие")
+                    }
+                )
+            }, content = { padd ->
         ProgressIndicator(morningStateViewModel.progressVisible)
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize().padding(top = padd.calculateTopPadding()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(
                 20.dp,
@@ -50,11 +63,11 @@ fun MorningState(
         {
             Column(Modifier.selectableGroup()) {
                 morningStateViewModel.states.forEach { state ->
-                    Row( Modifier.fillMaxWidth().height(56.dp), verticalAlignment = Alignment.CenterVertically)
+                    Row( Modifier.fillMaxWidth().height(56.dp).selectable(selected = (state == morningStateViewModel.choosenState), onClick = { morningStateViewModel.choosenState = state }, role = Role.RadioButton), verticalAlignment = Alignment.CenterVertically)
                     {
                         RadioButton(
                             selected = (state == morningStateViewModel.choosenState),
-                            onClick = { morningStateViewModel.choosenState = state }
+                            onClick = null
                         )
                         Text( text = state.name, fontSize = 22.sp )
                     }
@@ -66,6 +79,6 @@ fun MorningState(
             {
                 Text("Отправить", fontSize = 25.sp)
             }
-        }
+        }})
     }
 }
