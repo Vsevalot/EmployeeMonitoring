@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -18,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.statohealth.Pages
+import com.example.statohealth.R
 import com.example.statohealth.infrastructure.AuthTokenPreference
 import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
