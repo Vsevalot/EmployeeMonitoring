@@ -1,12 +1,12 @@
 package com.example.statohealth.view
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -17,12 +17,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -43,12 +44,25 @@ fun Login(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        ProgressIndicator(loginViewModel.progressVisible)
-        Column(modifier = Modifier.fillMaxSize())
-        {
-            UserInputLayer(loginViewModel)
-            ButtonsLayer(loginViewModel, context)
-        }
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Авторизация")
+                    }
+                )
+            }, content = { padd ->
+                ProgressIndicator(loginViewModel.progressVisible)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = padd.calculateTopPadding())
+                )
+                {
+                    UserInputLayer(loginViewModel)
+                    ButtonsLayer(loginViewModel, context)
+                }
+            })
     }
 }
 
@@ -110,7 +124,8 @@ fun ProgressIndicator(visible: Boolean) {
     Box(
         modifier = if (!visible) Modifier.fillMaxSize() else Modifier
             .fillMaxSize()
-            .background(color = Color.Gray.copy(0.3f)), contentAlignment = Alignment.Center
+        //.background(color = Color.Gray.copy(0.3f)),
+        , contentAlignment = Alignment.Center
     ) {
         if (visible)
             CircularProgressIndicator()

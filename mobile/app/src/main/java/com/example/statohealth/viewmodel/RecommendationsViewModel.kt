@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.statohealth.data.ResultResponse
+import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
 
 
@@ -30,7 +31,7 @@ class RecommendationsViewModel : ViewModel() {
     }
 
     fun successAction(response: ResultResponse) {
-        Log.d("MyLog", "OnSuccess $response")
+        Logger.log("OnSuccess $response")
         recommendationsText = response.result
     }
 }

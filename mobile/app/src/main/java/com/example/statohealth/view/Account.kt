@@ -8,8 +8,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -35,29 +37,39 @@ fun Account(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        ProgressIndicator(accountViewModel.progressVisible)
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
-            Text(
-                accountViewModel.meText, fontSize = 25.sp, modifier = Modifier
-                    .weight(0.9f)
-                    .padding(32.dp)
-                    .verticalScroll(rememberScrollState())
-            )
-            Box(modifier = Modifier.weight(0.1f) ,contentAlignment = Alignment.Center)
-            {
-
-                Button(onClick = {
-                    accountViewModel.getRecommendationsClick()
-                })
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Личный кабинет")
+                    }
+                )
+            }, content = { padd ->
+                ProgressIndicator(accountViewModel.progressVisible)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = padd.calculateTopPadding()),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                )
                 {
-                    Text("Получить рекомендации", fontSize = 25.sp)
+                    Text(
+                        accountViewModel.meText, fontSize = 25.sp, modifier = Modifier
+                            .weight(0.9f)
+                            .padding(32.dp)
+                            .verticalScroll(rememberScrollState())
+                    )
+                    Box(modifier = Modifier.weight(0.1f), contentAlignment = Alignment.Center)
+                    {
+
+                        Button(onClick = {
+                            accountViewModel.getRecommendationsClick()
+                        })
+                        {
+                            Text("Получить рекомендации", fontSize = 25.sp)
+                        }
+                    }
                 }
-            }
-        }
+            })
     }
 }

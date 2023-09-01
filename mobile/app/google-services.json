@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "476423562573",
+    "project_id": "stat-o-health",
+    "storage_bucket": "stat-o-health.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476423562573:android:e816ffe32b564b1cb00304",
+        "android_client_info": {
+          "package_name": "com.example.statohealth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476423562573-5tj48ollk02qh91tsh7de90r358qv666.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWuy5pbLWr53VJZJ6POUQK9ZkVoMEjEhc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476423562573-5tj48ollk02qh91tsh7de90r358qv666.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

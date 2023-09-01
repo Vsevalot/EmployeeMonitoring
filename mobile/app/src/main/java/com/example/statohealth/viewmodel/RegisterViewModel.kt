@@ -1,7 +1,6 @@
 package com.example.statohealth.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +11,7 @@ import com.example.statohealth.data.ManagerModel
 import com.example.statohealth.data.ManagersModelResponse
 import com.example.statohealth.data.RegisterModelRequest
 import com.example.statohealth.data.ResultResponse
+import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
 
 class RegisterViewModel : ViewModel() {
@@ -106,7 +106,7 @@ class RegisterViewModel : ViewModel() {
     }
 
     fun successRegisterAction(response: ResultResponse?) {
-        Log.d("MyLog", "OnSuccess $response")
+        Logger.log("OnSuccess $response")
         navController.navigate(Pages.loginPage)
     }
 
@@ -121,7 +121,7 @@ class RegisterViewModel : ViewModel() {
     }
 
     fun successGetManagersAction(response: ManagersModelResponse) {
-        Log.d("MyLog", "OnSuccessGetManagers $response")
+        Logger.log("OnSuccessGetManagers $response")
         managers = response.result
     }
 }

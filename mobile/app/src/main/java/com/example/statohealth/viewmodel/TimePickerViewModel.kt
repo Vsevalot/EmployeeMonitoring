@@ -1,7 +1,6 @@
 package com.example.statohealth.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +12,7 @@ import com.example.statohealth.data.FeedbackModel
 import com.example.statohealth.data.FeedbacksModelResponse
 import com.example.statohealth.infrastructure.AuthTokenPreference
 import com.example.statohealth.infrastructure.CurrentDate
+import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
 
 
@@ -55,7 +55,7 @@ class TimePickerViewModel : ViewModel() {
     }
 
     fun successAction(response: FeedbacksModelResponse) {
-        Log.d("MyLog", "OnSuccess $response")
+        Logger.log("OnSuccess $response")
         morningFeedback = response.morning
         eveningFeedback = response.evening
         Feedbacks.morning = response.morning

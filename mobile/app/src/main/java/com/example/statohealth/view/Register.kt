@@ -14,8 +14,10 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -40,106 +42,117 @@ fun Register(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        ProgressIndicator(registerViewModel.progressVisible)
-        Column(
-            verticalArrangement = Arrangement.spacedBy(
-                10.dp,
-                Alignment.CenterVertically
-            ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(bottom = 40.dp)
-                .fillMaxHeight()
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-        ) {
-            UserCredentials(
-                registerViewModel.firstName,
-                registerViewModel::setFirstNameProperty,
-                "Имя"
-            )
-            UserCredentials(
-                registerViewModel.lastName,
-                registerViewModel::setLastNameProperty,
-                "Фамилия"
-            )
-            UserCredentials(
-                registerViewModel.surname,
-                registerViewModel::setSurnameProperty,
-                "Отчество"
-            )
-            UserCredentials(
-                registerViewModel.birthdate,
-                registerViewModel::setBirthdateProperty,
-                "Дата рождения"
-            )
-            //manager
-            ExposedDropdownMenuBox(
-                expanded = registerViewModel.expanded,
-                onExpandedChange = { registerViewModel.expanded = !registerViewModel.expanded }
-            ) {
-                OutlinedTextField(
-                    value = registerViewModel.choosenManager.firstName,
-                    onValueChange = {},
-                    singleLine = true,
-                    readOnly = true,
-                    label = {Text(text = "Руководитель")},
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = registerViewModel.expanded) },
-                    modifier = Modifier.menuAnchor()
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Регистрация")
+                    }
                 )
-
-                ExposedDropdownMenu(
-                    expanded = registerViewModel.expanded,
-                    onDismissRequest = { registerViewModel.expanded = false }
+            }, content = { padd ->
+                ProgressIndicator(registerViewModel.progressVisible)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        Alignment.CenterVertically
+                    ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(bottom = 10.dp, top = padd.calculateTopPadding())
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    registerViewModel.managers.forEach { manager ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = manager.firstName)
-                            },
-                            onClick = {
-                                registerViewModel.choosenManager = manager
-                                registerViewModel.expanded = false
-                            }
+                    UserCredentials(
+                        registerViewModel.firstName,
+                        registerViewModel::setFirstNameProperty,
+                        "Имя"
+                    )
+                    UserCredentials(
+                        registerViewModel.lastName,
+                        registerViewModel::setLastNameProperty,
+                        "Фамилия"
+                    )
+                    UserCredentials(
+                        registerViewModel.surname,
+                        registerViewModel::setSurnameProperty,
+                        "Отчество"
+                    )
+                    UserCredentials(
+                        registerViewModel.birthdate,
+                        registerViewModel::setBirthdateProperty,
+                        "Дата рождения"
+                    )
+                    //manager
+                    ExposedDropdownMenuBox(
+                        expanded = registerViewModel.expanded,
+                        onExpandedChange = {
+                            registerViewModel.expanded = !registerViewModel.expanded
+                        }
+                    ) {
+                        OutlinedTextField(
+                            value = registerViewModel.choosenManager.firstName,
+                            onValueChange = {},
+                            singleLine = true,
+                            readOnly = true,
+                            label = { Text(text = "Руководитель") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = registerViewModel.expanded) },
+                            modifier = Modifier.menuAnchor()
                         )
+
+                        ExposedDropdownMenu(
+                            expanded = registerViewModel.expanded,
+                            onDismissRequest = { registerViewModel.expanded = false }
+                        ) {
+                            registerViewModel.managers.forEach { manager ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(text = manager.firstName)
+                                    },
+                                    onClick = {
+                                        registerViewModel.choosenManager = manager
+                                        registerViewModel.expanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    UserCredentials(
+                        registerViewModel.position,
+                        registerViewModel::setPositionProperty,
+                        "Должность"
+                    )
+                    UserPhoneCredentials(
+                        registerViewModel.phone,
+                        registerViewModel::setPhoneProperty,
+                        "Номер телефона"
+                    )
+                    UserEmailCredentials(
+                        registerViewModel.email,
+                        registerViewModel::setEmailProperty,
+                        "Email"
+                    )
+                    UserPasswordCredentials(
+                        registerViewModel.password,
+                        registerViewModel.passwordVisible,
+                        registerViewModel::invertPasswordVisible,
+                        registerViewModel::setPasswordProperty,
+                        "Пароль"
+                    )
+                    UserPasswordCredentials(
+                        registerViewModel.passwordRepeat,
+                        registerViewModel.passwordRepeatVisible,
+                        registerViewModel::invertPasswordRepeatVisible,
+                        registerViewModel::setPasswordRepeatProperty,
+                        "Введите пароль еще раз"
+                    )
+                    Button(
+                        enabled = registerViewModel.isCorrectInput(),
+                        onClick = { registerViewModel.register(context) }) {
+                        Text("Зарегистрироваться", fontSize = 25.sp)
                     }
                 }
-            }
-
-            UserCredentials(
-                registerViewModel.position,
-                registerViewModel::setPositionProperty,
-                "Должность"
-            )
-            UserPhoneCredentials(
-                registerViewModel.phone,
-                registerViewModel::setPhoneProperty,
-                "Номер телефона"
-            )
-            UserEmailCredentials(
-                registerViewModel.email,
-                registerViewModel::setEmailProperty,
-                "Email"
-            )
-            UserPasswordCredentials(
-                registerViewModel.password,
-                registerViewModel.passwordVisible,
-                registerViewModel::invertPasswordVisible,
-                registerViewModel::setPasswordProperty,
-                "Пароль"
-            )
-            UserPasswordCredentials(
-                registerViewModel.passwordRepeat,
-                registerViewModel.passwordRepeatVisible,
-                registerViewModel::invertPasswordRepeatVisible,
-                registerViewModel::setPasswordRepeatProperty,
-                "Введите пароль еще раз"
-            )
-            Button(
-                enabled = registerViewModel.isCorrectInput(),
-                onClick = { registerViewModel.register(context) }) {
-                Text("Зарегистрироваться", fontSize = 25.sp)
-            }
-        }
+            })
     }
 }

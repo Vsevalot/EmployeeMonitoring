@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.statohealth.Pages
 import com.example.statohealth.data.MeResponse
+import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
 
 
@@ -31,7 +32,7 @@ class AccountViewModel : ViewModel() {
     }
 
     fun successAction(response: MeResponse) {
-        Log.d("MyLog", "OnSuccess $response")
+        Logger.log("OnSuccess $response")
         meText = response.result.firstName + response.result.lastName
     }
 
