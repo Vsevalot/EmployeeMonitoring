@@ -8,11 +8,13 @@ class ParticipantsStat(ft.UserControl, BaseView):
     GROUP_STATS_ENDPOINT: str = f"http://{Config.BASE_URL}/api/v1/participants/stats"
 
     def build(self):
+        self.date_from = ft.TextField(label="date from", hint_text="YYYY-MM-DD")
+        self.date_to = ft.TextField(label="date to", hint_text="YYYY-MM-DD")
         self.view = ft.Column(controls=[
             ft.Row(
                 controls=[
-                    ft.TextField(label="date from"),
-                    ft.TextField(label="date to"),
+                    self.date_from,
+                    self.date_to,
                     ft.TextButton(text="Show", on_click=self.fill_chart)
                 ]
             ),
@@ -23,8 +25,12 @@ class ParticipantsStat(ft.UserControl, BaseView):
         pass
 
     def clean(self):
-        # self.page.controls.pop()
-        pass
+        try:
+            if self.chart:
+                self.page.controls.pop()
+                self.chart = None
+        except Exception:
+            pass
 
     def fill_chart(self, e: ft.ControlEvent, date_from: str = "2000-01-01", date_to: str = "2025-01-01"):
         response = requests.get(
@@ -33,8 +39,8 @@ class ParticipantsStat(ft.UserControl, BaseView):
                 "Authorization": self.page.client_storage.get('access_token')
             },
             params={
-                "date_from": date_from,
-                "date_to": date_to,
+                "date_from": self.date_from.value,
+                "date_to": self.date_to.value,
             }
         )
         chart = ft.BarChart(
@@ -79,6 +85,20 @@ class ParticipantsStat(ft.UserControl, BaseView):
                 )
             chart.bar_groups = bar_groups
             chart.bottom_axis = ft.ChartAxis(labels=labels, labels_size=40)
+
+            is_exists = False
+            try:
+                if self.chart:
+                    is_exists = True
+            except Exception:
+                pass
+
+            if is_exists:
+                self.clean()
+
+            self.chart = chart
+
             self.page.add(ft.Container(chart))
+
             self.update()
             self.page.update()

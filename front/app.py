@@ -166,11 +166,11 @@ class App(UserControl):
                 self.page.route = "/login"
             self.page.update()
 
-        if troute.match("/participants/:participant_id"):
+        if troute.match("/participants/:participant_id/stats"):
             try:
                 participant_id = int(getattr(troute, "participant_id"))
                 if self.is_authorize():
-                    self.show_view(ParticipantCard, self.page, participant_id)
+                    self.show_view(ParticipantCard, self.page, participant_id=participant_id)
                 else:
                     self.page.route = "/login"
                 self.page.update()
