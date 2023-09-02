@@ -6,6 +6,7 @@ from config import Config
 
 class ParticipantsStat(ft.UserControl, BaseView):
     GROUP_STATS_ENDPOINT: str = f"http://{Config.BASE_URL}/api/v1/participants/stats"
+    PARTICIPANT_ME_ENDPOINT: str = f"http://{Config.BASE_URL}/api/v1/participants/me"
 
     def build(self):
         self.date_from = ft.TextField(label="date from", hint_text="YYYY-MM-DD")
@@ -96,9 +97,24 @@ class ParticipantsStat(ft.UserControl, BaseView):
             if is_exists:
                 self.clean()
 
-            self.chart = chart
+            participant_response = requests.get(
+                self.PARTICIPANT_ME_ENDPOINT,
+                headers={
+                    "Authorization": self.page.client_storage.get('access_token')
+                }
+            )
+            me = participant_response.json()
+            me = me.get("result")
 
-            self.page.add(ft.Container(chart))
+            self.chart = ft.Container(chart)
+            self.chart = ft.Container(ft.Column(controls=[
+                ft.Row(controls=[
+                    ft.Text(me.get("company"), size=25),
+                ], alignment=ft.MainAxisAlignment.CENTER),
+                ft.Container(chart),
+            ]))
+
+            self.page.add(self.chart)
 
             self.update()
             self.page.update()

@@ -136,7 +136,22 @@ class ParticipantCard(ft.UserControl, BaseView):
             if is_exists:
                 self.clean()
 
+            participant_response = requests.get(
+                self.PARTICIPANT_STATS_ENDPOINT + f"/{self._participant_id}",
+                headers={
+                    "Authorization": self.page.client_storage.get('access_token')
+                }
+            )
+            participant = participant_response.json()
+            participant = participant.get("result")
+
             self.chart = ft.Container(ft.Column(controls=[
+                ft.Row(controls=[
+                    ft.Text(participant.get("first_name"), size=25),
+                    ft.Text(participant.get("last_name"), size=25),
+                    ft.Text(participant.get("surname"), size=25),
+                    ft.Text(participant.get("position"), size=25),
+                ], alignment=ft.MainAxisAlignment.CENTER),
                 ft.Text("Утро", size=70, color=ft.colors.LIGHT_GREEN),
                 ft.Text("Вечер", size=70, color=ft.colors.PINK),
                 ft.Container(chart),
