@@ -9,5 +9,3 @@ COPY poetry.lock pyproject.toml /usr/src/app/
 RUN poetry config virtualenvs.create false && poetry install --no-dev
 
 COPY . /usr/src/app/
-
-CMD ["python", "main.py"]
