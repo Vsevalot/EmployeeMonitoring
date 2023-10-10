@@ -27,7 +27,7 @@ class Participants(ft.UserControl, BaseView):
         e.page.go("/participants/stats")
 
     def on_participant_click(self, e: ft.ControlEvent):
-        e.page.go(f"/participants/{e.control.data}")
+        e.page.go(f"/participants/{e.control.data}/stats")
 
     def set_all_participants(self, page: ft.Page):
         response = requests.get(
