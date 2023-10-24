@@ -31,6 +31,7 @@ class RegisterViewModel : ViewModel() {
     var progressVisible by mutableStateOf(false)
     var passwordVisible by mutableStateOf(false)
     var passwordRepeatVisible by mutableStateOf(false)
+    var personalDataAgreement by mutableStateOf(false)
 
     fun setFirstNameProperty(value: String) {
         firstName = value
@@ -68,6 +69,10 @@ class RegisterViewModel : ViewModel() {
         passwordRepeat = value
     }
 
+    fun updatePersonalDataAgreement(value: Boolean) {
+        personalDataAgreement = value
+    }
+
     fun updateProgressVisibility(state: Boolean) {
         progressVisible = state
     }
@@ -93,6 +98,7 @@ class RegisterViewModel : ViewModel() {
                 && password.isNotEmpty()
                 && passwordRepeat.isNotEmpty()
                 && birthdate.length == 8
+                && personalDataAgreement == true
     }
 
     fun register(context: Context) {
@@ -108,7 +114,8 @@ class RegisterViewModel : ViewModel() {
                     phone,
                     email,
                     password,
-                    choosenManager.id
+                    choosenManager.id,
+                    personalDataAgreement
                 ) as Any,
                 ::updateProgressVisibility,
                 ::successRegisterAction,

@@ -2,6 +2,7 @@ package com.example.statohealth.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -156,6 +158,14 @@ fun Register(
                         registerViewModel::setPasswordRepeatProperty,
                         "Введите пароль еще раз"
                     )
+                    Row(modifier = Modifier
+                        .padding(horizontal = 30.dp)){
+                        Checkbox(
+                            checked = registerViewModel.personalDataAgreement,
+                            onCheckedChange = { newState -> registerViewModel.updatePersonalDataAgreement(newState) }
+                        )
+                        Text("Согласен с правилами обработки персональных данных", maxLines = 2)
+                    }
                     Button(
                         enabled = registerViewModel.isCorrectInput(),
                         onClick = { registerViewModel.register(context) }) {
