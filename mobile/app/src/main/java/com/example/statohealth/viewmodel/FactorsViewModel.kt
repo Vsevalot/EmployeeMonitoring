@@ -11,7 +11,6 @@ import com.example.statohealth.Pages
 import com.example.statohealth.data.CategoryModel
 import com.example.statohealth.data.EveningFeedbackModelRequest
 import com.example.statohealth.data.FactorModel
-import com.example.statohealth.data.FactorType
 import com.example.statohealth.data.FactorsModelResponse
 import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.infrastructure.CurrentDate
@@ -20,10 +19,9 @@ import com.example.statohealth.infrastructure.Network
 
 class FactorsViewModel : ViewModel() {
     var progressVisible by mutableStateOf(false)
-    var categories by mutableStateOf(arrayOf(CategoryModel(-1, "", arrayOf(FactorModel(-1, "", FactorType.SINGLE)))))
+    var categories by mutableStateOf(arrayOf(CategoryModel(-1, "", arrayOf(FactorModel(-1, "")))))
     var choosenCategory by mutableStateOf(categories[0])
     var choosenFactor by mutableStateOf(categories[0].factors[0])
-    var factorText by mutableStateOf("")
 
     lateinit var navController: NavHostController
 
@@ -32,8 +30,7 @@ class FactorsViewModel : ViewModel() {
     }
 
     fun sendButtonEnabled(): Boolean {
-        return choosenFactor.id != -1 && (choosenFactor.type == FactorType.SINGLE
-                || (choosenFactor.type == FactorType.TEXT && factorText.isNotEmpty()))
+        return choosenFactor.id != -1
     }
 
     fun sendButtonClick(context: Context) {
@@ -43,8 +40,7 @@ class FactorsViewModel : ViewModel() {
                 "feedbacks/${currentdate.toStringDate()}/evening",
                 EveningFeedbackModelRequest(
                     Feedbacks.evening?.id ?: throw Exception("Feedbacks.evening was null"),
-                    choosenFactor.id,
-                    factorText.ifEmpty { null }
+                    choosenFactor.id
                 ),
                 ::updateProgressVisibility,
                 ::successPostEveningStateAction
