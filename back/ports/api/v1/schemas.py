@@ -1,7 +1,7 @@
 from collections import defaultdict
 from collections.abc import Sequence
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 import datetime
 from domain.contracts import IdentifierType, FactorType, DayTime
 from domain.entities import User, Feedback
@@ -79,6 +79,16 @@ class RegisterBodyBase(BaseModel):
     position: str
     email: str
     password: str
+    personal_data_confirmed: bool
+
+    @field_validator('personal_data_confirmed')
+    @classmethod
+    def personal_data_confirmed_validator(cls, v: bool) -> bool:
+        if not v:
+            raise ValueError("personal_data_confirmed must be set to true")
+        return v
+
+
 
 
 class ManagerRegisterBody(RegisterBodyBase):
