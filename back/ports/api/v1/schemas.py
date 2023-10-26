@@ -14,7 +14,6 @@ class MorningBody(BaseModel):
 class EveningBody(BaseModel):
     state_id: IdentifierType
     factor_id: IdentifierType | None = None
-    value: str | None = None
 
 
 class State(BaseModel):

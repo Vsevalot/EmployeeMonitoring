@@ -13,8 +13,7 @@ def get_categories_and_factors() -> tuple[list, list]:
     оказывает психологическое давление
     показывает неуважение
     отказывается решать проблемы
-    принуждает к сверхнормативной работе
-    другое""".split(
+    принуждает к сверхнормативной работе""".split(
         "\n"
     )
     manager_factor_names = [n.strip() for n in manager_factor_names]
@@ -28,8 +27,7 @@ def get_categories_and_factors() -> tuple[list, list]:
     не желают конструктивно взаимодействовать
     оказывают психологическое давление
     показывают неуважение
-    отказываются сотрудничать
-    другое""".split(
+    отказываются сотрудничать""".split(
         "\n"
     )
     colleague_factor_names = [n.strip() for n in colleague_factor_names]
@@ -43,8 +41,7 @@ def get_categories_and_factors() -> tuple[list, list]:
     высокий уровень стресса
     необходимость работать сверхурочно
     простой из-за поломки оборудования или оргтехники
-    плохая организация рабочего процесса
-    другое""".split(
+    плохая организация рабочего процесса""".split(
         "\n"
     )
     work_factor_names = [n.strip() for n in work_factor_names]
@@ -58,8 +55,7 @@ def get_categories_and_factors() -> tuple[list, list]:
     усталость и упадок сил
     плохое физическое самочувствие (нездоровится)
     плохое эмоциональное самочувствие (переживания, нет настроения и т.п.)
-    необходимость работать, несмотря на болезнь
-    другое""".split(
+    необходимость работать, несмотря на болезнь""".split(
         "\n"
     )
     personal_factor_names = [n.strip() for n in personal_factor_names]

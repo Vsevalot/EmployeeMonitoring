@@ -65,7 +65,6 @@ class State:
 class FeedbackFactor(TypedDict):
     id: int
     name: str
-    value: str | None
     category: str
 
 

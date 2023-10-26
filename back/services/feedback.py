@@ -22,7 +22,6 @@ class FeedbackService:
         state_id: IdentifierType,
         day_time: DayTime,
         factor_id: IdentifierType | None = None,
-        value: str | None = None,
     ) -> None:
         async with self._uow:
             await self._uow.feedback.save(
@@ -31,6 +30,5 @@ class FeedbackService:
                 state_id=state_id,
                 day_time=day_time,
                 factor_id=factor_id,
-                value=value,
             )
             await self._uow.commit()

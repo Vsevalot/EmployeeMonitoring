@@ -113,7 +113,6 @@ feedback = factory.table(
         factory.string(name="day_time", length=20),
         factory.foreign_key(to_=state, type_=sqlalchemy.INTEGER, name="state_id", nullable=False),
         factory.foreign_key(to_=factor, type_=sqlalchemy.INTEGER, name="factor_id", nullable=True),
-        factory.string(name='value', length=200, nullable=True),
     ),
     constraints=[sqlalchemy.UniqueConstraint("user_id", "date", "day_time")],
 )
