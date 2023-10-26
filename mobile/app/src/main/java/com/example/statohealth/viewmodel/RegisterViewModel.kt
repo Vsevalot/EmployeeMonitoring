@@ -16,7 +16,7 @@ import com.example.statohealth.infrastructure.Network
 
 class RegisterViewModel : ViewModel() {
     lateinit var navController: NavHostController
-    var managers by mutableStateOf(arrayOf(ManagerModel(-1,"","","","","")))
+    var managers by mutableStateOf(arrayOf(ManagerModel(-1, "", "", "", "", "")))
     var choosenManager by mutableStateOf(managers[0])
     var expanded by mutableStateOf(false)
     var firstName by mutableStateOf("")
@@ -31,6 +31,7 @@ class RegisterViewModel : ViewModel() {
     var progressVisible by mutableStateOf(false)
     var passwordVisible by mutableStateOf(false)
     var passwordRepeatVisible by mutableStateOf(false)
+    var personalDataAgreement by mutableStateOf(false)
 
     fun setFirstNameProperty(value: String) {
         firstName = value
@@ -68,6 +69,10 @@ class RegisterViewModel : ViewModel() {
         passwordRepeat = value
     }
 
+    fun updatePersonalDataAgreement(value: Boolean) {
+        personalDataAgreement = value
+    }
+
     fun updateProgressVisibility(state: Boolean) {
         progressVisible = state
     }
@@ -82,23 +87,36 @@ class RegisterViewModel : ViewModel() {
 
     fun isCorrectInput(): Boolean {
         return password == passwordRepeat
-            && firstName.isNotEmpty()
-            && lastName.isNotEmpty()
-            && surname.isNotEmpty()
-            && birthdate.isNotEmpty()
-            && choosenManager.id != -1
-            && position.isNotEmpty()
-            && phone.isNotEmpty()
-            && email.isNotEmpty()
-            && password.isNotEmpty()
-            && passwordRepeat.isNotEmpty()
+                && firstName.isNotEmpty()
+                && lastName.isNotEmpty()
+                && surname.isNotEmpty()
+                && birthdate.isNotEmpty()
+                && choosenManager.id != -1
+                && position.isNotEmpty()
+                && phone.isNotEmpty()
+                && email.isNotEmpty()
+                && password.isNotEmpty()
+                && passwordRepeat.isNotEmpty()
+                && birthdate.length == 8
+                && personalDataAgreement == true
     }
 
     fun register(context: Context) {
         Network(context)
             .sendPostRequest(
                 "register/participants",
-                RegisterModelRequest(firstName,lastName,surname,birthdate,position,phone,email,password,choosenManager.id) as Any,
+                RegisterModelRequest(
+                    firstName,
+                    lastName,
+                    surname,
+                    "${birthdate.take(4)}-${birthdate.drop(4).take(2)}-${birthdate.takeLast(2)}",
+                    position,
+                    phone,
+                    email,
+                    password,
+                    choosenManager.id,
+                    personalDataAgreement
+                ) as Any,
                 ::updateProgressVisibility,
                 ::successRegisterAction,
                 false
