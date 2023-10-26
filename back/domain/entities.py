@@ -30,6 +30,8 @@ class User(TypedDict):
     business_unit: BusinessUnit
     role: UserRole | None
 
+    code: str
+
 
 class Factor(TypedDict):
     id: IdentifierType

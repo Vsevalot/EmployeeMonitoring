@@ -110,6 +110,8 @@ class Participant(BaseModel):
     phone: str | None
     email: str
 
+    code: str | None
+
     @classmethod
     def from_user(cls, user: User):
         return cls(
@@ -122,6 +124,7 @@ class Participant(BaseModel):
             position=user["position"],
             email=user["email"],
             birthdate=user["birthdate"],
+            code=user["code"],
         )
 
 
@@ -133,7 +136,7 @@ class ParticipantSingleResponse(BaseModel):
     result: Participant
 
 
-class ManagerListItem(BaseModel):
+class ManagerItem(BaseModel):
     id: IdentifierType
     first_name: str
     last_name: str
@@ -142,11 +145,11 @@ class ManagerListItem(BaseModel):
     company: str
 
 
-class ManagerListResponse(BaseModel):
-    result: list[ManagerListItem]
-
-
 class ManagerResponse(BaseModel):
+    result: ManagerItem
+
+
+class RegistrationResponse(BaseModel):
     result: str
 
 

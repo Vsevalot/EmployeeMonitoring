@@ -50,6 +50,7 @@ user = factory.table(
         factory.string(name="position", length=150, nullable=True),
         factory.string(name="phone", length=100, nullable=True),
         factory.string(name="role", length=20, nullable=True),
+        factory.string(name="code", length=20, nullable=True, unique=True),
     ),
 )
 
@@ -75,33 +76,33 @@ session = factory.table(
 )
 
 category = factory.table(
-    name='categories',
+    name="categories",
     db_metadata=db_metadata,
     columns=(
         factory.integer_primary_key(),
         factory.string(name="name", length=50, nullable=False),
-    )
+    ),
 )
 
 factor = factory.table(
-    name='factors',
+    name="factors",
     db_metadata=db_metadata,
     columns=(
         factory.integer_primary_key(),
         factory.foreign_key(to_=category, type_=sqlalchemy.INTEGER, name="category_id"),
         factory.string(name="name", length=100, nullable=False),
         factory.string(name="type", length=20, nullable=False),
-    )
+    ),
 )
 
 state = factory.table(
-    name='states',
+    name="states",
     db_metadata=db_metadata,
     columns=(
         factory.integer_primary_key(),
         factory.integer(name="value"),
         factory.string(name="name", length=20, nullable=False),
-    )
+    ),
 )
 
 feedback = factory.table(
@@ -111,8 +112,12 @@ feedback = factory.table(
         factory.foreign_key(to_=user, type_=sqlalchemy.INTEGER, name="user_id"),
         factory.date(name="date"),
         factory.string(name="day_time", length=20),
-        factory.foreign_key(to_=state, type_=sqlalchemy.INTEGER, name="state_id", nullable=False),
-        factory.foreign_key(to_=factor, type_=sqlalchemy.INTEGER, name="factor_id", nullable=True),
+        factory.foreign_key(
+            to_=state, type_=sqlalchemy.INTEGER, name="state_id", nullable=False,
+        ),
+        factory.foreign_key(
+            to_=factor, type_=sqlalchemy.INTEGER, name="factor_id", nullable=True,
+        ),
     ),
     constraints=[sqlalchemy.UniqueConstraint("user_id", "date", "day_time")],
 )
