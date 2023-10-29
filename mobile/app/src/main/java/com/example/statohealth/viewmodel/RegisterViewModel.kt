@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.statohealth.Pages
 import com.example.statohealth.data.ManagerModel
-import com.example.statohealth.data.ManagersModelResponse
 import com.example.statohealth.data.RegisterModelRequest
 import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.infrastructure.Logger
@@ -16,9 +15,7 @@ import com.example.statohealth.infrastructure.Network
 
 class RegisterViewModel : ViewModel() {
     lateinit var navController: NavHostController
-    var managers by mutableStateOf(arrayOf(ManagerModel(-1, "", "", "", "", "")))
-    var choosenManager by mutableStateOf(managers[0])
-    var expanded by mutableStateOf(false)
+    var manager by mutableStateOf(ManagerModel(-1, "", "", "", "", ""))
     var firstName by mutableStateOf("")
     var lastName by mutableStateOf("")
     var surname by mutableStateOf("")
@@ -91,7 +88,6 @@ class RegisterViewModel : ViewModel() {
                 && lastName.isNotEmpty()
                 && surname.isNotEmpty()
                 && birthdate.isNotEmpty()
-                && choosenManager.id != -1
                 && position.isNotEmpty()
                 && phone.isNotEmpty()
                 && email.isNotEmpty()
@@ -114,7 +110,7 @@ class RegisterViewModel : ViewModel() {
                     phone,
                     email,
                     password,
-                    choosenManager.id,
+                    manager.id,
                     personalDataAgreement
                 ) as Any,
                 ::updateProgressVisibility,
@@ -126,20 +122,5 @@ class RegisterViewModel : ViewModel() {
     fun successRegisterAction(response: ResultResponse?) {
         Logger.log("OnSuccess $response")
         navController.navigate(Pages.loginPage)
-    }
-
-    fun getManagers(context: Context) {
-        Network(context)
-            .sendGetRequest(
-                "managers",
-                ::updateProgressVisibility,
-                ::successGetManagersAction,
-                false
-            )
-    }
-
-    fun successGetManagersAction(response: ManagersModelResponse) {
-        Logger.log("OnSuccessGetManagers $response")
-        managers = response.result
     }
 }

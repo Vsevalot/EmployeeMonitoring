@@ -12,9 +12,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -29,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.statohealth.Manager
 import com.example.statohealth.activities.MainActivity
 import com.example.statohealth.infrastructure.MaskFormatter
 import com.example.statohealth.viewmodel.RegisterViewModel
@@ -41,7 +39,7 @@ fun Register(
 ) {
     registerViewModel.navController = navController
     LaunchedEffect(Unit) {
-        registerViewModel.getManagers(context)
+        registerViewModel.manager = Manager.choosenManager
     }
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -68,6 +66,9 @@ fun Register(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
+
+                    Text("Руководитель:")
+                    Text("${registerViewModel.manager.firstName + registerViewModel.manager.lastName + registerViewModel.manager.surname}", maxLines = 2)
                     UserCredentials(
                         registerViewModel.firstName,
                         registerViewModel::setFirstNameProperty,
@@ -94,40 +95,6 @@ fun Register(
                         label = { Text(text = "Дата рождения")},
                         visualTransformation =  MaskFormatter("0000-00-00", '0'),
                     )
-                    //manager
-                    ExposedDropdownMenuBox(
-                        expanded = registerViewModel.expanded,
-                        onExpandedChange = {
-                            registerViewModel.expanded = !registerViewModel.expanded
-                        }
-                    ) {
-                        OutlinedTextField(
-                            value = registerViewModel.choosenManager.firstName,
-                            onValueChange = {},
-                            singleLine = true,
-                            readOnly = true,
-                            label = { Text(text = "Руководитель") },
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = registerViewModel.expanded) },
-                            modifier = Modifier.menuAnchor()
-                        )
-
-                        ExposedDropdownMenu(
-                            expanded = registerViewModel.expanded,
-                            onDismissRequest = { registerViewModel.expanded = false }
-                        ) {
-                            registerViewModel.managers.forEach { manager ->
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(text = manager.firstName)
-                                    },
-                                    onClick = {
-                                        registerViewModel.choosenManager = manager
-                                        registerViewModel.expanded = false
-                                    }
-                                )
-                            }
-                        }
-                    }
 
                     UserCredentials(
                         registerViewModel.position,

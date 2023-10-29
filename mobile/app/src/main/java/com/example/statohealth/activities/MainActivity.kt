@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +16,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.statohealth.Pages
-import com.example.statohealth.R
 import com.example.statohealth.infrastructure.AuthTokenPreference
 import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
@@ -27,6 +25,7 @@ import com.example.statohealth.view.EveningState
 import com.example.statohealth.view.Factors
 import com.example.statohealth.view.Instructions
 import com.example.statohealth.view.Login
+import com.example.statohealth.view.ManagerKey
 import com.example.statohealth.view.MorningState
 import com.example.statohealth.view.Recommendations
 import com.example.statohealth.view.Register
@@ -36,6 +35,7 @@ import com.example.statohealth.viewmodel.EveningStateViewModel
 import com.example.statohealth.viewmodel.FactorsViewModel
 import com.example.statohealth.viewmodel.InstructionsViewModel
 import com.example.statohealth.viewmodel.LoginViewModel
+import com.example.statohealth.viewmodel.ManagerKeyViewModel
 import com.example.statohealth.viewmodel.MorningStateViewModel
 import com.example.statohealth.viewmodel.RecommendationsViewModel
 import com.example.statohealth.viewmodel.RegisterViewModel
@@ -46,6 +46,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val registerViewModel: RegisterViewModel by viewModels()
+    private val managerKeyViewModel: ManagerKeyViewModel by viewModels()
     private val instructionsViewModel: InstructionsViewModel by viewModels()
     private val timePickerViewModel: TimePickerViewModel by viewModels()
     private val morningStateViewModel: MorningStateViewModel by viewModels()
@@ -148,6 +149,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Pages.recommendationsPage) {
                         Recommendations(recommendationsViewModel, navController, context)
+                    }
+                    composable(Pages.managerKeyPage) {
+                        ManagerKey(managerKeyViewModel, navController, context)
                     }
                 }
             }

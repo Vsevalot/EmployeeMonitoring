@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
@@ -63,7 +62,7 @@ fun MorningState(
         {
             Column(Modifier.selectableGroup()) {
                 morningStateViewModel.states.forEach { state ->
-                    Row( Modifier.fillMaxWidth().height(56.dp).selectable(selected = (state == morningStateViewModel.choosenState), onClick = { morningStateViewModel.choosenState = state }, role = Role.RadioButton), verticalAlignment = Alignment.CenterVertically)
+                    Row( Modifier.height(56.dp).selectable(selected = (state == morningStateViewModel.choosenState), onClick = { morningStateViewModel.choosenState = state }, role = Role.RadioButton), verticalAlignment = Alignment.CenterVertically)
                     {
                         RadioButton(
                             selected = (state == morningStateViewModel.choosenState),

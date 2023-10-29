@@ -85,7 +85,6 @@ fun Factors(
                     factorsViewModel.choosenCategory.factors.forEach { subFactor ->
                         Row(
                             Modifier
-                                .fillMaxWidth()
                                 .height(56.dp).selectable(selected = (subFactor == factorsViewModel.choosenFactor), onClick = { factorsViewModel.choosenFactor = subFactor }, role = Role.RadioButton),
                             verticalAlignment = Alignment.CenterVertically
                         )
