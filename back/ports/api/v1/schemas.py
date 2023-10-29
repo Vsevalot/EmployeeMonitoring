@@ -1,7 +1,7 @@
 from collections import defaultdict
 from collections.abc import Sequence
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 import datetime
 from domain.contracts import IdentifierType, FactorType, DayTime
 from domain.entities import User, Feedback
@@ -14,7 +14,6 @@ class MorningBody(BaseModel):
 class EveningBody(BaseModel):
     state_id: IdentifierType
     factor_id: IdentifierType | None = None
-    value: str | None = None
 
 
 class State(BaseModel):
@@ -80,6 +79,16 @@ class RegisterBodyBase(BaseModel):
     position: str
     email: str
     password: str
+    personal_data_confirmed: bool
+
+    @field_validator('personal_data_confirmed')
+    @classmethod
+    def personal_data_confirmed_validator(cls, v: bool) -> bool:
+        if not v:
+            raise ValueError("personal_data_confirmed must be set to true")
+        return v
+
+
 
 
 class ManagerRegisterBody(RegisterBodyBase):
@@ -111,6 +120,8 @@ class Participant(BaseModel):
     phone: str | None
     email: str
 
+    code: str | None
+
     @classmethod
     def from_user(cls, user: User):
         return cls(
@@ -123,6 +134,7 @@ class Participant(BaseModel):
             position=user["position"],
             email=user["email"],
             birthdate=user["birthdate"],
+            code=user["code"],
         )
 
 
@@ -134,7 +146,7 @@ class ParticipantSingleResponse(BaseModel):
     result: Participant
 
 
-class ManagerListItem(BaseModel):
+class ManagerItem(BaseModel):
     id: IdentifierType
     first_name: str
     last_name: str
@@ -143,11 +155,11 @@ class ManagerListItem(BaseModel):
     company: str
 
 
-class ManagerListResponse(BaseModel):
-    result: list[ManagerListItem]
-
-
 class ManagerResponse(BaseModel):
+    result: ManagerItem
+
+
+class RegistrationResponse(BaseModel):
     result: str
 
 

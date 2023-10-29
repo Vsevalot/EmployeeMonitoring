@@ -1,3 +1,5 @@
+import random
+import string
 from collections.abc import Mapping
 from typing import Any
 
@@ -7,12 +9,17 @@ from domain.entities import User
 from ports.api.v1.schemas import ManagerRegisterBody, ParticipantRegisterBody
 from utils import UnitOfWorkRDBS
 from services import PasswordService
+from config import MANAGER_CODE_LENGTH
 
 
 class UserService:
     def __init__(self, uow: UnitOfWorkRDBS, password_service: PasswordService):
         self._uow = uow
         self._password_service = password_service
+
+    @staticmethod
+    def _get_random_manager_code(length: int = MANAGER_CODE_LENGTH) -> str:
+        return "".join(random.choice(string.ascii_uppercase) for _ in range(length))
 
     async def add_one_manager(self, data: ManagerRegisterBody) -> IdentifierType:
         hashed_pwd, salt = self._password_service.hash_password(data.password)
@@ -34,6 +41,7 @@ class UserService:
                 organisation_unit_id=organisation_unit_id,
                 birthdate=data.birthdate,
                 role=UserRole.manager,
+                code=self._get_random_manager_code(),
             )
             await self._uow.commit()
         return user_id
@@ -43,7 +51,7 @@ class UserService:
     ) -> IdentifierType:
         hashed_pwd, salt = self._password_service.hash_password(data.password)
         async with self._uow:
-            manager = await self._uow.user.get(data.manager_id)
+            manager = await self._uow.user.get(user_id=data.manager_id)
             user_id = await self._uow.user.add_one(
                 phone=data.phone,
                 email=data.email,
