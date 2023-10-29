@@ -26,7 +26,8 @@ import com.example.statohealth.viewmodel.InstructionsViewModel
 fun Instructions(
     instructionsViewModel: InstructionsViewModel,
     navController: NavHostController,
-    context: MainActivity
+    context: MainActivity,
+    allowNavigation: String?
 ) {
     instructionsViewModel.navController = navController
 
@@ -45,29 +46,33 @@ fun Instructions(
                     }
                 )
             }, content = { padd ->
-        ProgressIndicator(instructionsViewModel.progressVisible)
-        Column(
-            modifier = Modifier
-                .fillMaxSize().padding(top = padd.calculateTopPadding()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
-            Text(
-                instructionsViewModel.instructionsText, fontSize = 25.sp, modifier = Modifier
-                    .weight(0.9f)
-                    .padding(32.dp)
-                    .verticalScroll(rememberScrollState())
-            )
-            Box(modifier = Modifier.weight(0.1f) ,contentAlignment = Alignment.Center)
-            {
-
-                Button(onClick = {
-                    instructionsViewModel.start()
-                })
+                ProgressIndicator(instructionsViewModel.progressVisible)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = padd.calculateTopPadding()),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                )
                 {
-                    Text("Старт", fontSize = 25.sp)
+                    Text(
+                        instructionsViewModel.instructionsText,
+                        fontSize = 25.sp,
+                        modifier = Modifier
+                            .weight(0.9f)
+                            .padding(32.dp)
+                            .verticalScroll(rememberScrollState())
+                    )
+                    Box(modifier = Modifier.weight(0.1f), contentAlignment = Alignment.Center)
+                    {
+                        if (allowNavigation == "true")
+                            Button(onClick = {
+                                instructionsViewModel.start()
+                            })
+                            {
+                                Text("Старт", fontSize = 25.sp)
+                            }
+                    }
                 }
-            }
-        }})
+            })
     }
 }

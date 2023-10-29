@@ -12,9 +12,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.statohealth.Pages
 import com.example.statohealth.infrastructure.AuthTokenPreference
 import com.example.statohealth.infrastructure.Logger
@@ -100,14 +102,15 @@ class MainActivity : ComponentActivity() {
 
             // Log and toast
             Logger.log(token)
-            var android_id = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+            var android_id =
+                Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         askNotificationPermission()
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
             getToken()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         setContent {
@@ -115,7 +118,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val savedAuthToken = AuthTokenPreference().getToken(context)
             val startDestination: String = if (savedAuthToken == null)
-                Pages.loginPage
+                Pages.instructionsPage+"/true"
             else {
                 Network.authorizationToken = savedAuthToken
                 Pages.timePickerPage
@@ -129,8 +132,13 @@ class MainActivity : ComponentActivity() {
                     composable(Pages.registerPage) {
                         Register(registerViewModel, navController, context)
                     }
-                    composable(Pages.instructionsPage) {
-                        Instructions(instructionsViewModel, navController, context)
+                    composable(
+                        Pages.instructionsPage + "/{tallowNavigation}",
+                        arguments = listOf(navArgument("tallowNavigation") {
+                            type = NavType.StringType
+                        })
+                    ) {
+                        Instructions(instructionsViewModel, navController, context, it.arguments?.getString("tallowNavigation") ?: "true")
                     }
                     composable(Pages.timePickerPage) {
                         TimePicker(timePickerViewModel, navController, context)

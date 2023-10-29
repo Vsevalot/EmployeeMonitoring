@@ -54,7 +54,7 @@ class LoginViewModel : ViewModel() {
         Logger.log("OnSuccess $response")
         Network.authorizationToken = response?.result ?: throw Exception()
         AuthTokenPreference().setToken(context, Network.authorizationToken)
-        navController.navigate(Pages.instructionsPage)
+        navController.navigate(Pages.timePickerPage)
     }
 
     fun register() {

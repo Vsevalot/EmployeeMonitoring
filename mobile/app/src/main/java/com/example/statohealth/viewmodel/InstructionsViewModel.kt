@@ -1,16 +1,15 @@
 package com.example.statohealth.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.statohealth.infrastructure.Network
 import com.example.statohealth.Pages
 import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.infrastructure.Logger
+import com.example.statohealth.infrastructure.Network
 
 
 class InstructionsViewModel : ViewModel() {
@@ -37,7 +36,7 @@ class InstructionsViewModel : ViewModel() {
     }
 
     fun start() {
-        navController.navigate(Pages.timePickerPage)
+        navController.navigate(Pages.loginPage)
     }
 
 }
