@@ -91,7 +91,8 @@ factor = factory.table(
         factory.integer_primary_key(),
         factory.foreign_key(to_=category, type_=sqlalchemy.INTEGER, name="category_id"),
         factory.string(name="name", length=100, nullable=False),
-        factory.string(name="type", length=20, nullable=False),
+        factory.string(name="manager_recommendation", length=1000, nullable=False),
+        factory.string(name="personal_recommendation", length=1000, nullable=False),
     ),
 )
 

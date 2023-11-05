@@ -68,6 +68,8 @@ class FeedbackFactor(TypedDict):
     id: int
     name: str
     category: str
+    manager_recommendation: str
+    personal_recommendation: str
 
 
 class Feedback(TypedDict):
