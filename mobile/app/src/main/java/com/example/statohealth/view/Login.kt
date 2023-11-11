@@ -1,5 +1,6 @@
 package com.example.statohealth.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,16 +21,18 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.statohealth.R
 import com.example.statohealth.activities.MainActivity
 import com.example.statohealth.viewmodel.LoginViewModel
 
@@ -45,20 +48,16 @@ fun Login(
         color = MaterialTheme.colorScheme.background
     ) {
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(text = "Авторизация")
-                    }
-                )
-            }, content = { padd ->
+            content = { padd ->
                 ProgressIndicator(loginViewModel.progressVisible)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = padd.calculateTopPadding())
+                        .padding(top = padd.calculateTopPadding() + 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
+                    Image(painter = painterResource(R.drawable.urfulogo_full_russian), contentDescription = "urfu_logo")
                     UserInputLayer(loginViewModel)
                     ButtonsLayer(loginViewModel, context)
                 }
@@ -130,6 +129,25 @@ fun ProgressIndicator(visible: Boolean) {
         if (visible)
             CircularProgressIndicator()
     }
+}
+
+@Composable
+fun CapitalizedUserCredentials(
+    name: String,
+    setPropertyAction: (String) -> Unit,
+    placeholder: String
+) {
+    OutlinedTextField(
+        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
+        value = name,
+        onValueChange = { newText -> setPropertyAction(newText) },
+        singleLine = true,
+        label = {
+            Text(text = placeholder)
+        },
+        placeholder = {
+            Text(text = placeholder)
+        })
 }
 
 @Composable

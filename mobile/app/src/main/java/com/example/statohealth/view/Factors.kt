@@ -81,7 +81,7 @@ fun Factors(
                     }
                 }
             else
-                Column(Modifier.selectableGroup(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(Modifier.selectableGroup()) {
                     factorsViewModel.choosenCategory.factors.forEach { subFactor ->
                         Row(
                             Modifier

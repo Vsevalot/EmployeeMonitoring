@@ -56,10 +56,10 @@ fun Instructions(
                 {
                     Text(
                         instructionsViewModel.instructionsText,
-                        fontSize = 25.sp,
+                        fontSize = 22.sp,
                         modifier = Modifier
                             .weight(0.9f)
-                            .padding(32.dp)
+                            .padding(16.dp)
                             .verticalScroll(rememberScrollState())
                     )
                     Box(modifier = Modifier.weight(0.1f), contentAlignment = Alignment.Center)

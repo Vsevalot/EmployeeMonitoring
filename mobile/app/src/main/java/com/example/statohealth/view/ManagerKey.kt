@@ -55,7 +55,7 @@ fun ManagerKey(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    UserCredentials(
+                    CapitalizedUserCredentials(
                         managerKeyViewModel.managerKey,
                         managerKeyViewModel::setManagerKeyProperty,
                         "Ключ"
