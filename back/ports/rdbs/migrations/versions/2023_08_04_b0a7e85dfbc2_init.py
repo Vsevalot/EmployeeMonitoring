@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 8f4d065be343
+Revision ID: b0a7e85dfbc2
 Revises: 
-Create Date: 2023-08-25 11:46:52.503607
+Create Date: 2023-11-04 16:10:44.869961
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '8f4d065be343'
+revision = 'b0a7e85dfbc2'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -38,7 +38,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('category_id', sa.INTEGER(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
-    sa.Column('type', sa.String(length=20), nullable=False),
+    sa.Column('manager_recommendation', sa.String(length=1000), nullable=False),
+    sa.Column('personal_recommendation', sa.String(length=1000), nullable=False),
     sa.ForeignKeyConstraint(['category_id'], ['categories.id'], name=op.f('fk__factors__category_id__categories')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk__factors'))
     )
@@ -64,8 +65,10 @@ def upgrade():
     sa.Column('position', sa.String(length=150), nullable=True),
     sa.Column('phone', sa.String(length=100), nullable=True),
     sa.Column('role', sa.String(length=20), nullable=True),
+    sa.Column('code', sa.String(length=20), nullable=True),
     sa.ForeignKeyConstraint(['organisation_unit_id'], ['organisation_units.id'], name=op.f('fk__users__organisation_unit_id__organisation_units')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk__users')),
+    sa.UniqueConstraint('code', name=op.f('uq__users__code')),
     sa.UniqueConstraint('email', name=op.f('uq__users__email'))
     )
     op.create_index(op.f('ix__users__organisation_unit_id'), 'users', ['organisation_unit_id'], unique=False)
@@ -75,7 +78,6 @@ def upgrade():
     sa.Column('day_time', sa.String(length=20), nullable=True),
     sa.Column('state_id', sa.INTEGER(), nullable=False),
     sa.Column('factor_id', sa.INTEGER(), nullable=True),
-    sa.Column('value', sa.String(length=200), nullable=True),
     sa.ForeignKeyConstraint(['factor_id'], ['factors.id'], name=op.f('fk__feedbacks__factor_id__factors')),
     sa.ForeignKeyConstraint(['state_id'], ['states.id'], name=op.f('fk__feedbacks__state_id__states')),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk__feedbacks__user_id__users')),
