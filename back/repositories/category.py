@@ -1,7 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy import select
 from domain.entities import Factor, Category
-from domain.contracts import FactorType
 from ports.rdbs.generic import factor, category
 
 

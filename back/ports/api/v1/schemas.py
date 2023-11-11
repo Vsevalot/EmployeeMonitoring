@@ -3,7 +3,7 @@ from collections.abc import Sequence
 
 from pydantic import BaseModel, field_validator
 import datetime
-from domain.contracts import IdentifierType, FactorType, DayTime
+from domain.contracts import IdentifierType, DayTime
 from domain.entities import User, Feedback
 
 
@@ -49,7 +49,6 @@ class FeedbackResponse(BaseModel):
 class Factor(BaseModel):
     id: IdentifierType
     name: str
-    type: FactorType
 
 
 class Category(BaseModel):
