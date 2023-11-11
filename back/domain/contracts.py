@@ -11,11 +11,6 @@ class UserRole(Enum):
     participant = 'participant'
 
 
-class FactorType(Enum):
-    text = 'text'
-    single = 'single'
-
-
 class DayTime(Enum):
     morning = 'morning'
     evening = 'evening'

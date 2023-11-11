@@ -1,6 +1,6 @@
 from typing import TypedDict
 import datetime
-from .contracts import IdentifierType, UserRole, FactorType, DayTime
+from .contracts import IdentifierType, UserRole, DayTime
 
 
 class Company(TypedDict):
@@ -36,7 +36,6 @@ class User(TypedDict):
 class Factor(TypedDict):
     id: IdentifierType
     name: str
-    type: FactorType
 
 
 class Category(TypedDict):

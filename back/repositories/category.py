@@ -14,7 +14,6 @@ class CategoryRepositoryRDBS:
         stmt = select(
             factor.c.id,
             factor.c.name,
-            factor.c.type,
             factor.c.category_id,
             category.c.name.label("category_name"),
         ).select_from(joined)
@@ -37,7 +36,7 @@ class CategoryRepositoryRDBS:
                 Category(
                     id=category_id,
                     name=factors[0].category_name,
-                    factors=[Factor(id=f.id, name=f.name, type=FactorType(f.type)) for f in factors],
+                    factors=[Factor(id=f.id, name=f.name) for f in factors],
                 )
             )
         return res
