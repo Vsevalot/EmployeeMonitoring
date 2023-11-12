@@ -226,7 +226,7 @@ class GroupStatResponse(BaseModel):
             ))
 
         happiness = None
-        if (last_date - first_date).days >= DAYS_FOR_GROUP_STAT:
+        if first_date and last_date and ((last_date - first_date).days >= DAYS_FOR_GROUP_STAT):
             happiness = cls._get_happiness(feedbacks)
         return cls(result=result, happiness=happiness)
 
