@@ -3,8 +3,13 @@ from collections.abc import Sequence
 
 from pydantic import BaseModel, field_validator
 import datetime
+
+from config import DAYS_FOR_GROUP_STAT
 from domain.contracts import IdentifierType, DayTime
 from domain.entities import User, Feedback
+
+
+GOOD_VALUE = 300
 
 
 class MorningBody(BaseModel):
@@ -176,13 +181,25 @@ class GroupStatItem(BaseModel):
     factors: list[GroupFactor]
 
 
+class Happiness(BaseModel):
+    percent: int
+    recommendation: str
+
+
 class GroupStatResponse(BaseModel):
     result: list[GroupStatItem]
+    happiness: Happiness | None
 
     @classmethod
-    def from_feedbacks(cls, feedbacks: Sequence[Feedback]):
+    def from_feedbacks(cls, feedbacks: Sequence[Feedback]) -> "GroupStatResponse":
         res = defaultdict(lambda: defaultdict(lambda: dict()))
+        first_date = None
+        last_date = None
         for f in feedbacks:
+            if first_date is None or f['date'] < first_date:
+                first_date = f['date']
+            if last_date is None or f['date'] > last_date:
+                last_date = f['date']
             if not f["factor"]:
                 continue
             category = f["factor"]["category"]
@@ -207,7 +224,28 @@ class GroupStatResponse(BaseModel):
                 category=category,
                 factors=factors,
             ))
-        return cls(result=result)
+
+        happiness = None
+        if (last_date - first_date).days >= DAYS_FOR_GROUP_STAT:
+            happiness = cls._get_happiness(feedbacks)
+        return cls(result=result, happiness=happiness)
+
+    @classmethod
+    def _get_happiness(cls, feedbacks: Sequence[Feedback]) -> Happiness:
+        good_feedbacks = [f for f in feedbacks if f['state'].value == GOOD_VALUE]
+        percent = int(len(good_feedbacks) * 100 / len(feedbacks))
+        recommendation = cls._get_happiness_recommendation(percent)
+        return Happiness(percent=percent, recommendation=recommendation)
+
+    @staticmethod
+    def _get_happiness_recommendation(percent: int) -> str:
+        if percent > 76:
+            return "Наличие причин для возникновения конфликтных ситуаций, способных привести к возникновению микрокризиса персонала, выражаемого в форме снижения продуктивности и повышения презентеизма. Ситуация требует дальнейшего наблюдения и тематических бесед с линейным руководителем для обсуждения проблем в трудовом коллективе."
+        if percent > 50:
+            return "Наличие симптомов кризиса персонала, сигнализирующих о заметном снижении мотивации и продуктивности работников, и повышении уровня презентеизма вследствие эмоциональной нестабильности сотрудников на рабочем месте, обусловленной рядом факторов. Ситуация требует дальнейшего наблюдения и тематических бесед с линейным руководителем, менеджером по персоналу и работниками для обсуждения проблем в трудовом коллективе, проведения опросов персонала, привлечения внешних экспертов для проведения консультаций и поиска управленческих решений, разработки и реализации плана мероприятий по повышению уровня здоровья и благополучия работников, а также снижения уровня презентеизма на рабочем месте."
+        if percent > 25:
+            return "Наличие кризиса персонала, сопровождаемого значительным снижением мотивации и продуктивности работников, и повышением уровня презентеизма, дестабилизации работы трудового коллектива, обусловленных рядом факторов. Ситуация требует дальнейшего наблюдения, проведения опросов персонала в форме анкетирования и интервьюирования, привлечения внешних экспертов для проведения консультаций и поиска управленческих решений, разработки и внедрения долгосрочной программы «Здоровье и благополучие персонала»."
+        return "Наличие ярко выраженного кризиса персонала с полным несоответствием мотивации и результативности работников, а также условий труда требованиям организационных целей и задач. Существует угроза дальнейшей нежизнеспособности существующей системы управления трудовым коллективом. Ситуация требует привлечения внешних экспертов для поиска управленческих и кадровых решений, проведения кадрового аудита, совершенствования стратегии управления человеческими ресурсами и кадровой политики организации."
 
 
 class ParticipantFactor(BaseModel):

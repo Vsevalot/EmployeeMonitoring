@@ -3,7 +3,10 @@ from collections import defaultdict
 from collections.abc import Mapping
 from typing import Any
 
-from config import NOT_ENOUGH_FEEDBACKS_RECOMMENDATION, PERSONAL_RECOMMENDATION_MIN_FEEDBACKS
+from config import (
+    NOT_ENOUGH_FEEDBACKS_RECOMMENDATION,
+    PERSONAL_RECOMMENDATION_MIN_FEEDBACKS,
+)
 from domain.entities import Feedback
 from domain.contracts import IdentifierType, DayTime
 from utils import UnitOfWorkRDBS
@@ -36,7 +39,11 @@ class FeedbackService:
             recommendations[recommendation] += 1
         if not recommendations:
             return NOT_ENOUGH_FEEDBACKS_RECOMMENDATION
-        most_frequent, *_ = sorted(recommendations.items(), key=lambda x: x[1], reverse=True)
+        most_frequent, *_ = sorted(
+            recommendations.items(),
+            key=lambda x: x[1],
+            reverse=True,
+        )
         return most_frequent[0]
 
     async def save(

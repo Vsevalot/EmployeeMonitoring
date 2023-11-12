@@ -28,3 +28,4 @@ NOT_ENOUGH_FEEDBACKS_RECOMMENDATION = (
     "Пожалуйста, продолжайте отмечать свое самочувствие в приложении."
 )
 PERSONAL_RECOMMENDATION_MIN_FEEDBACKS = 10
+DAYS_FOR_GROUP_STAT = 30
