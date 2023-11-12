@@ -3,7 +3,7 @@ from ports.api.v1.schemas import (
     Participant,
     ParticipantSingleResponse,
     GroupStatResponse,
-    ParticipantStatResponse,
+    ParticipantStatResponse, RecommendationsResponse,
 )
 import datetime
 
@@ -40,6 +40,15 @@ async def get_me(
     user: User = Depends(get_current_user),
 ) -> ParticipantSingleResponse:
     return ParticipantSingleResponse(result=Participant.from_user(user))
+
+
+@router.get("/api/v1/participants/me/recommendations")
+async def get_me(
+        user: User = Depends(get_current_user),
+        feedback_service: FeedbackService = Depends(get_feedback_service),
+) -> RecommendationsResponse:
+    recommendation = await feedback_service.get_user_recommendation(user_id=user['id'])
+    return RecommendationsResponse(result=recommendation)
 
 
 @router.get("/api/v1/participants/stats")
