@@ -266,21 +266,25 @@ class ParticipantStatResponse(BaseModel):
     result: list[ParticipantStatItem]
 
     @classmethod
-    def from_feedbacks(cls, feedbacks: Sequence[Feedback]):
-        res = {}
-        for f in feedbacks:
-            if f["date"] not in res:
-                res[f["date"]] = ParticipantStatItem(date=f["date"])
-            if f["day_time"] == DayTime.morning:
-                res[f["date"]].morning = f["state"]
-            if f["day_time"] == DayTime.evening:
-                res[f["date"]].evening = f["state"]
-                if f["factor"]:
-                    res[f["date"]].factor = ParticipantFactor(
-                        id=f["factor"]["id"],
-                        name=f["factor"]["name"],
-                        category=f["factor"]["category"],
-                        recommendation=f["factor"]["manager_recommendation"],
-                    )
+    def from_feedback_range(cls, feedback_range: dict[datetime.date, dict[DayTime, Feedback | None]]):
+        res = []
+        for d, feedbacks in feedback_range.items():
+            stat_item = ParticipantStatItem(date=d)
 
-        return cls(result=list(res.values()))
+            morning = feedbacks[DayTime.morning]
+            if morning:
+                stat_item.morning = morning["state"]
+
+            evening = feedbacks[DayTime.evening]
+            if evening:
+                stat_item.evening = evening["state"]
+
+            if evening["factor"]:
+                stat_item.factor = ParticipantFactor(
+                    id=evening["factor"]["id"],
+                    name=evening["factor"]["name"],
+                    category=evening["factor"]["category"],
+                    recommendation=evening["factor"]["manager_recommendation"],
+                )
+            res.append(stat_item)
+        return cls(result=res)

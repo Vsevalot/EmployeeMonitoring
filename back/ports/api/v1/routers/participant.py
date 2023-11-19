@@ -110,11 +110,9 @@ async def get_participants(
     )
     if participant_id not in [u["id"] for u in users]:
         raise HTTPException(status_code=403)
-    feedbacks = await feedback_service.get_list(
-        filters={
-            "user_id": participant_id,
-            "date:ge": date_from,
-            "date:le": date_to,
-        }
+    feedback_range = await feedback_service.get_range(
+        date_from=date_from,
+        date_to=date_to,
+        user_id=participant_id,
     )
-    return ParticipantStatResponse.from_feedbacks(feedbacks)
+    return ParticipantStatResponse.from_feedback_range(feedback_range)
