@@ -1,3 +1,5 @@
+from fastapi.responses import FileResponse, Response
+
 from ports.api.v1.schemas import (
     ParticipantListResponse,
     Participant,
@@ -9,9 +11,9 @@ from ports.api.v1.schemas import (
 import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
-from domain.entities import User
-from domain.contracts import IdentifierType
-from contracts import PARTICIPANT_READ_SELF
+from domain.entities import User, Feedback
+from domain.contracts import IdentifierType, DayTime
+from contracts import PARTICIPANT_READ_ORGANISATION
 from services import UserService, FeedbackService
 from ports.api.v1.dependencies import (
     get_current_user,
@@ -28,7 +30,7 @@ async def get_participants(
     user: User = Depends(get_current_user),
     user_service: UserService = Depends(get_user_service),
 ) -> ParticipantListResponse:
-    if PARTICIPANT_READ_SELF not in user["permissions"]:
+    if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
         raise HTTPException(status_code=403)
     users = await user_service.get_list(
         {"organisation_unit_id": user["business_unit"]["id"]}
@@ -60,7 +62,7 @@ async def get_group_stat(
     user: User = Depends(get_current_user),
     user_service: UserService = Depends(get_user_service),
 ) -> GroupStatResponse:
-    if PARTICIPANT_READ_SELF not in user["permissions"]:
+    if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
         raise HTTPException(status_code=403)
     users = await user_service.get_list(
         {"organisation_unit_id": user["business_unit"]["id"]}
@@ -81,7 +83,7 @@ async def get_participant(
     user: User = Depends(get_current_user),
     user_service: UserService = Depends(get_user_service),
 ) -> ParticipantSingleResponse:
-    if PARTICIPANT_READ_SELF not in user["permissions"]:
+    if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
         raise HTTPException(status_code=403)
     requested_users = await user_service.get_list(
         {
@@ -103,7 +105,7 @@ async def get_participants(
     user_service: UserService = Depends(get_user_service),
     feedback_service: FeedbackService = Depends(get_feedback_service),
 ) -> ParticipantStatResponse:
-    if PARTICIPANT_READ_SELF not in user["permissions"]:
+    if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
         raise HTTPException(status_code=403)
     users = await user_service.get_list(
         {"organisation_unit_id": user["business_unit"]["id"]}
@@ -116,3 +118,54 @@ async def get_participants(
         user_id=participant_id,
     )
     return ParticipantStatResponse.from_feedback_range(feedback_range)
+
+
+def _csv_from_feedback_range(
+        feedback_range: dict[datetime.date, dict[DayTime, Feedback | None]],
+) -> str:
+    res = ["Дата,Утро,Вечер,Категория ухудшения,Фактор ухудшения"]
+    for date in feedback_range:
+        morning = ""
+        if feedback := feedback_range[date][DayTime.morning]:
+            morning = feedback['state'].name
+        evening = ""
+        category = ""
+        factor = ""
+        if feedback := feedback_range[date][DayTime.evening]:
+            evening = feedback['state'].name
+            if _factor := feedback_range[date][DayTime.evening]["factor"]:
+                factor = _factor["name"]
+                category = _factor["category"]
+        res.append(f"{date},{morning},{evening},{category},{factor}")
+    return "\n".join(res)
+
+
+@router.get("/api/v1/participants/{participant_id}/stats/download-csv")
+async def download_csv(
+        participant_id: IdentifierType,
+        date_from: datetime.date,
+        date_to: datetime.date,
+        user: User = Depends(get_current_user),
+        user_service: UserService = Depends(get_user_service),
+        feedback_service: FeedbackService = Depends(get_feedback_service),
+):
+    if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
+        raise HTTPException(status_code=403)
+    users = await user_service.get_list(
+        {"organisation_unit_id": user["business_unit"]["id"]}
+    )
+    if participant_id not in [u["id"] for u in users]:
+        raise HTTPException(status_code=403)
+    feedback_range = await feedback_service.get_range(
+        date_from=date_from,
+        date_to=date_to,
+        user_id=participant_id,
+    )
+    participant = await user_service.get_user(user_id=participant_id)
+    headers = {
+        "Content-Disposition": f"attachment; filename={participant['last_name']}-{date_from}-{date_to}.csv",
+        "Content-Type": "text/csv",
+    }
+    csv_content = _csv_from_feedback_range(feedback_range)
+
+    return Response(content=csv_content, headers=headers)
