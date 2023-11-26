@@ -20,7 +20,7 @@ from ports.api.v1.dependencies import (
     get_user_service,
     get_feedback_service,
 )
-
+from urllib.parse import quote
 
 router = APIRouter(tags=["Participants"])
 
@@ -164,8 +164,10 @@ async def download_csv(
 
     participant = await user_service.get_user(user_id=participant_id)
     media_type = "text/csv"
+    filename = f"{participant['last_name']}-{date_from}-{date_to}.csv"
+    encoded_filename = quote(filename.encode('utf-8'))
     headers = {
-        "Content-Disposition": f"attachment; filename*=utf-8''{participant['last_name']}-{date_from}-{date_to}.csv",
+        "Content-Disposition": f"attachment; filename*=utf-8''{encoded_filename}",
         "Content-Type": media_type,
     }
     csv_content = _csv_from_feedback_range(feedback_range)
