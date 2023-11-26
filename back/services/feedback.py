@@ -37,52 +37,13 @@ class FeedbackService:
         }
         async with self._uow:
             feedbacks = await self._uow.feedback.get_list(filters)
-        feedback_range = [
-            {DayTime.morning: None, DayTime.evening: None}
-            for _ in range((date_to - date_from).days + 1)
-        ]
         feedback_date_range = {
-            date_from + datetime.timedelta(days=d): d
+            date_from + datetime.timedelta(days=d): {DayTime.morning: None, DayTime.evening: None}
             for d in range((date_to - date_from).days + 1)
         }
-        for f in feedbacks:
-            date_position = feedback_date_range[f['date']]
-            feedback_range[date_position][f["day_time"]] = f
-
-        try:
-            for i in range(len(feedback_range)):
-                morning = feedback_range[i][DayTime.morning]
-                evening = feedback_range[i][DayTime.evening]
-                if morning is None:
-                    self._approximate(
-                        current_index=i,
-                        feedback_range=feedback_range,
-                        day_time=DayTime.morning,
-                    )
-                if evening is None:
-                    self._approximate(
-                        current_index=i,
-                        feedback_range=feedback_range,
-                        day_time=DayTime.evening,
-                    )
-        except ApproximationError:
-            return {date: feedbacks for date, feedbacks in zip(feedback_date_range, feedback_range)}
-        return {date: feedbacks for date, feedbacks in zip(feedback_date_range, feedback_range)}
-
-    def _approximate(
-            self,
-            current_index: int,
-            feedback_range: list[dict[DayTime, Feedback | None]],
-            day_time: DayTime,
-    ):
-        if current_index == 0 or feedback_range[current_index - 1][day_time] is None:
-            self._set_as_closest_in_the_future(
-                current=current_index,
-                feedback_range=feedback_range,
-                day_time=day_time,
-            )
-        else:
-            feedback_range[current_index][day_time] = feedback_range[current_index - 1][day_time]
+        for feedback in feedbacks:
+            feedback_date_range[feedback['date']][feedback['day_time']] = feedback
+        return feedback_date_range
 
     @staticmethod
     def _set_as_closest_in_the_future(
