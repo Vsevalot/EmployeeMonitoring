@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 from fastapi.responses import StreamingResponse
 
 from ports.api.v1.schemas import (
@@ -77,6 +79,55 @@ async def get_group_stat(
     return GroupStatResponse.from_feedbacks(feedbacks)
 
 
+def _get_group_csv(feedbacks: Sequence[Feedback]) -> str:
+    res = ["Фактор,Количество упоминаний"]
+    factors = {}
+    for f in feedbacks:
+        factor = f['factor']
+        if not factor:
+            continue
+        if factor['name'] not in factors:
+            factors[factor['name']] = 0
+        factors[factor['name']] += 1
+    for f, num in factors.items():
+        res.append(f"{f},{num}")
+    return "\n".join(res)
+
+
+@router.get("/api/v1/participants/stats/download-csv")
+async def get_grop_stat_csv(
+        date_from: datetime.date,
+        date_to: datetime.date,
+        feedback_service: FeedbackService = Depends(get_feedback_service),
+        user: User = Depends(get_current_user),
+        user_service: UserService = Depends(get_user_service),
+) -> StreamingResponse:
+    if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
+        raise HTTPException(status_code=403)
+    users = await user_service.get_list(
+        {"organisation_unit_id": user["business_unit"]["id"]}
+    )
+    feedbacks = await feedback_service.get_list(
+        filters={
+            "date:ge": date_from,
+            "date:le": date_to,
+            "user_id:contains": [u["id"] for u in users],
+        }
+    )
+    media_type = "text/csv"
+    headers = {
+        "Content-Disposition": f"attachment; filename*=utf-8''{date_from}-{date_to}.csv",
+        "Content-Type": media_type,
+    }
+    csv_content = _get_group_csv(feedbacks)
+
+    return StreamingResponse(
+        content=iter(csv_content),
+        headers=headers,
+        media_type=media_type
+    )
+
+
 @router.get("/api/v1/participants/{participant_id}")
 async def get_participant(
     participant_id: IdentifierType,
@@ -141,21 +192,21 @@ def _csv_from_feedback_range(
 
 
 @router.get("/api/v1/participants/{participant_id}/stats/download-csv")
-async def download_csv(
+async def get_single_stat_csv(
         participant_id: IdentifierType,
         date_from: datetime.date,
         date_to: datetime.date,
-        user: User = Depends(get_current_user),
+        # user: User = Depends(get_current_user),
         user_service: UserService = Depends(get_user_service),
         feedback_service: FeedbackService = Depends(get_feedback_service),
-):
-    if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
-        raise HTTPException(status_code=403)
-    users = await user_service.get_list(
-        {"organisation_unit_id": user["business_unit"]["id"]}
-    )
-    if participant_id not in [u["id"] for u in users]:
-        raise HTTPException(status_code=403)
+) -> StreamingResponse:
+    # if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
+    #     raise HTTPException(status_code=403)
+    # users = await user_service.get_list(
+    #     {"organisation_unit_id": user["business_unit"]["id"]}
+    # )
+    # if participant_id not in [u["id"] for u in users]:
+    #     raise HTTPException(status_code=403)
     feedback_range = await feedback_service.get_range(
         date_from=date_from,
         date_to=date_to,
