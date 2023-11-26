@@ -90,7 +90,7 @@ def _get_group_csv(feedbacks: Sequence[Feedback]) -> str:
             factors[factor['name']] = 0
         factors[factor['name']] += 1
     for f, num in factors.items():
-        res.append(f"{f},{num}")
+        res.append(f'"{f}",{num}')
     return "\n".join(res)
 
 
@@ -196,17 +196,17 @@ async def get_single_stat_csv(
         participant_id: IdentifierType,
         date_from: datetime.date,
         date_to: datetime.date,
-        # user: User = Depends(get_current_user),
+        user: User = Depends(get_current_user),
         user_service: UserService = Depends(get_user_service),
         feedback_service: FeedbackService = Depends(get_feedback_service),
 ) -> StreamingResponse:
-    # if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
-    #     raise HTTPException(status_code=403)
-    # users = await user_service.get_list(
-    #     {"organisation_unit_id": user["business_unit"]["id"]}
-    # )
-    # if participant_id not in [u["id"] for u in users]:
-    #     raise HTTPException(status_code=403)
+    if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
+        raise HTTPException(status_code=403)
+    users = await user_service.get_list(
+        {"organisation_unit_id": user["business_unit"]["id"]}
+    )
+    if participant_id not in [u["id"] for u in users]:
+        raise HTTPException(status_code=403)
     feedback_range = await feedback_service.get_range(
         date_from=date_from,
         date_to=date_to,
