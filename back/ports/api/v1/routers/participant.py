@@ -161,9 +161,8 @@ async def download_csv(
         date_to=date_to,
         user_id=participant_id,
     )
-    participant = await user_service.get_user(user_id=participant_id)
     headers = {
-        "Content-Disposition": f"attachment; filename={participant['last_name']}-{date_from}-{date_to}.csv",
+        "Content-Disposition": f"attachment; filename=user{participant_id}-{date_from}-{date_to}.csv",
         "Content-Type": "text/csv",
     }
     csv_content = _csv_from_feedback_range(feedback_range)
