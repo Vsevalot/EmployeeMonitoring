@@ -279,7 +279,7 @@ class ParticipantStatResponse(BaseModel):
             if evening:
                 stat_item.evening = evening["state"]
 
-            if evening["factor"]:
+            if evening and evening["factor"]:
                 stat_item.factor = ParticipantFactor(
                     id=evening["factor"]["id"],
                     name=evening["factor"]["name"],
