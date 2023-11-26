@@ -1,4 +1,4 @@
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import StreamingResponse
 
 from ports.api.v1.schemas import (
     ParticipantListResponse,
@@ -161,10 +161,17 @@ async def download_csv(
         date_to=date_to,
         user_id=participant_id,
     )
+
+    participant = await user_service.get_user(user_id=participant_id)
+    media_type = "text/csv"
     headers = {
-        "Content-Disposition": f"attachment; filename=user{participant_id}-{date_from}-{date_to}.csv",
-        "Content-Type": "text/csv",
+        "Content-Disposition": f"attachment; filename*=utf-8''{participant['last_name']}-{date_from}-{date_to}.csv",
+        "Content-Type": media_type,
     }
     csv_content = _csv_from_feedback_range(feedback_range)
 
-    return Response(content=csv_content, headers=headers)
+    return StreamingResponse(
+        content=iter(csv_content),
+        headers=headers,
+        media_type=media_type
+    )
