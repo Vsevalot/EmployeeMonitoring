@@ -34,8 +34,7 @@ const actions = {
       email: user.get('email'),
       password: user.get('password')
     }
-    debugger
-    const response = await axios.post('login', userData);
+    const response = await axios.post('login', userData, {withCredentials: true});
     Cookies.set('token', response.data.result);
     commit('setToken', response.data.result)
   },
