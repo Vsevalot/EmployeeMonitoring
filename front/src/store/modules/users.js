@@ -35,7 +35,7 @@ const actions = {
       password: user.get('password')
     }
     //const response = await axios.post('login', userData, {withCredentials: true});
-    const response = await fetch('http://159.223.224.135:8000/api/v1/login', {body: JSON.stringify(userData), headers: {'Content-Type': 'application/json;charset=utf-8'}, method: 'post'})
+    const response = await fetch('http://159.223.224.135:8000/api/v1/login', {body: JSON.stringify(userData), headers: {'Content-Type': 'application/json;charset=utf-8'}, method: 'post', credentials: "include"})
     const result = await response.json()
     Cookies.set('token', result.result);
     commit('setToken', result.result)
