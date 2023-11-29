@@ -63,6 +63,7 @@ class UserRepositoryRDBS(UserRepository):
         position: str,
         organisation_unit_id: IdentifierType,
         role: UserRole,
+        code: str | None = None,
     ) -> IdentifierType:
         insert_user_stmt = (
             user.insert()
@@ -78,6 +79,7 @@ class UserRepositoryRDBS(UserRepository):
                 position=position,
                 organisation_unit_id=organisation_unit_id,
                 role=role.value,
+                code=code,
             )
             .returning(user.c.id)
         )
@@ -200,6 +202,7 @@ class UserRepositoryRDBS(UserRepository):
             organisation_unit.c.name.label("organisation_unit_name"),
             company.c.id.label("company_id"),
             company.c.name.label("company_name"),
+            user.c.code,
         )
 
     @staticmethod
@@ -222,4 +225,5 @@ class UserRepositoryRDBS(UserRepository):
             ),
             password=row.password,
             salt=row.salt,
+            code=row.code,
         )

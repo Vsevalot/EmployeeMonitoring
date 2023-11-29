@@ -16,6 +16,16 @@ class DBConfig(BaseSettings):
 
     class Config:
         case_sensitive = False
-        env_file = '.env'
-        secrets_dir = '/run/secrets'
+        env_file = ".env"
+        secrets_dir = "/run/secrets"
         env_prefix = "rdbs_"
+
+
+MANAGER_CODE_LENGTH = 5
+NOT_ENOUGH_FEEDBACKS_RECOMMENDATION = (
+    "Для получения персональных рекоммендаций необходимо "
+    "проанализировать ваши ответы за последний месяц. "
+    "Пожалуйста, продолжайте отмечать свое самочувствие в приложении."
+)
+PERSONAL_RECOMMENDATION_MIN_FEEDBACKS = 10
+DAYS_FOR_GROUP_STAT = 30

@@ -11,4 +11,5 @@ data class RegisterModelRequest(
     val position: String,
     val email: String,
     val password: String,
-    @SerializedName("manager_id") val managerId: Int)
+    @SerializedName("manager_id") val managerId: Int,
+    @SerializedName("personal_data_confirmed") val consent: Boolean)

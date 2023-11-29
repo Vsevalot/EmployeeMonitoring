@@ -58,6 +58,5 @@ async def save_evening(
         date=date,
         day_time=DayTime.evening,
         factor_id=body.factor_id,
-        value=body.value,
     )
     return Response(status_code=204)

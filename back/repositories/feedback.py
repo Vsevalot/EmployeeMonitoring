@@ -23,9 +23,10 @@ class FeedbackRepositoryRDBS:
             feedback.c.user_id,
             feedback.c.date,
             feedback.c.day_time,
-            feedback.c.value,
             factor.c.id.label("factor_id"),
             factor.c.name.label("factor_name"),
+            factor.c.manager_recommendation.label("manager_recommendation"),
+            factor.c.personal_recommendation.label("personal_recommendation"),
             category.c.name.label("category_name"),
             state.c.id.label("state_id"),
             state.c.name.label("state_name"),
@@ -45,13 +46,11 @@ class FeedbackRepositoryRDBS:
         state_id: IdentifierType,
         day_time: DayTime,
         factor_id: IdentifierType | None,
-        value: str | None,
     ) -> None:
         stmt = feedback.insert().values(
             date=date,
             user_id=user_id,
             day_time=day_time.value,
-            value=value,
             factor_id=factor_id,
             state_id=state_id,
         )
@@ -78,8 +77,9 @@ class FeedbackRepositoryRDBS:
             f = FeedbackFactor(
                 id=row.factor_id,
                 name=row.factor_name,
-                value=row.value,
                 category=row.category_name,
+                manager_recommendation=row.manager_recommendation,
+                personal_recommendation=row.personal_recommendation,
             )
         return Feedback(
             user_id=row.user_id,

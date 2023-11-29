@@ -11,7 +11,6 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.statohealth.activities.MainActivity
-import com.example.statohealth.data.FactorType
 import com.example.statohealth.viewmodel.FactorsViewModel
 
 @Composable
@@ -83,11 +81,10 @@ fun Factors(
                     }
                 }
             else
-                Column(Modifier.selectableGroup(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(Modifier.selectableGroup()) {
                     factorsViewModel.choosenCategory.factors.forEach { subFactor ->
                         Row(
                             Modifier
-                                .fillMaxWidth()
                                 .height(56.dp).selectable(selected = (subFactor == factorsViewModel.choosenFactor), onClick = { factorsViewModel.choosenFactor = subFactor }, role = Role.RadioButton),
                             verticalAlignment = Alignment.CenterVertically
                         )
@@ -97,21 +94,6 @@ fun Factors(
                                 onClick = null
                             )
                             Text(text = subFactor.name, fontSize = 22.sp)
-                        }
-                        if (subFactor.type == FactorType.TEXT) {
-                            OutlinedTextField(
-                                value = factorsViewModel.factorText,
-                                enabled = factorsViewModel.choosenFactor.type == FactorType.TEXT,
-                                onValueChange = { newText ->
-                                    factorsViewModel.factorText = newText
-                                },
-                                singleLine = true,
-                                label = {
-                                    Text(text = "Введите текст")
-                                },
-                                placeholder = {
-                                    Text(text = "Введите текст")
-                                })
                         }
                     }
                 }

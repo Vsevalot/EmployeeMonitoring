@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
@@ -61,15 +60,21 @@ fun EveningState(
             ),
         )
         {
-            Column(Modifier.selectableGroup()) {
+            Column(modifier = Modifier.selectableGroup()) {
                 eveningStateViewModel.states.forEach { state ->
-                    Row( Modifier.fillMaxWidth().height(56.dp).selectable(selected = (state == eveningStateViewModel.choosenState), onClick = { eveningStateViewModel.choosenState = state }, role = Role.RadioButton), verticalAlignment = Alignment.CenterVertically)
+                    Row(
+                        Modifier.height(56.dp).selectable(
+                            selected = (state == eveningStateViewModel.choosenState),
+                            onClick = { eveningStateViewModel.choosenState = state },
+                            role = Role.RadioButton
+                        ), verticalAlignment = Alignment.CenterVertically
+                    )
                     {
                         RadioButton(
                             selected = (state == eveningStateViewModel.choosenState),
                             onClick = null
                         )
-                        Text( text = state.name, fontSize = 22.sp )
+                        Text(text = state.name, fontSize = 22.sp)
                     }
                 }
             }
