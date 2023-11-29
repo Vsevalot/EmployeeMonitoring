@@ -28,7 +28,7 @@ def get_application(db_config: DBConfig) -> Application:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
-        # allow_credentials=True,
+        allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
         expose_headers=["*"]
