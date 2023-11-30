@@ -37,8 +37,7 @@
           User.append('password', this.form.password);
           const response = await this.logIn(User);
           debugger
-          this.$router.go('/');
-          this.$router.push('/participants');
+          this.$router.go('/participants');
           this.$forceUpdate();
         } catch {
           alert("Не верный логин или пароль!")

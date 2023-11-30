@@ -93,11 +93,24 @@
           User.append('company', this.form.company);
           User.append('department', this.form.department);
           await this.register(User);
-          this.$router.push('/');
+          
+          this.$router.go('/');
+          this.$forceUpdate();
         } catch {
           alert("Проверьте все данные на корректность! Возможно такой login уже существует")
         }
       },
+    },
+    computed : {
+      isLoggedIn: async function() {
+        return await this.$store.getters.isAuthenticated;
+      }
+    },
+    async created() {
+      if (await this.isLoggedIn) {
+        this.$router.push("/")
+        return
+      }
     }
   });
   </script>
