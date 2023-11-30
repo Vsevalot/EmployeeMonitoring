@@ -49,6 +49,7 @@
       </div>
 
       <div style="text-align:center">
+        <div v-if="!users.length">У вас пока не зарегистрировался ни один сотрудник</div>
         <f7-list>
           <tr v-for="user in users">
             <div class="costomcontainer">
@@ -101,19 +102,26 @@
       },
     },
     methods: {
-      ...mapActions(['participantsList']),
+      ...mapActions(['participantsList', 'sendMeRequest']),
       async getMessage() {
         console.log(this.isLoggedIn)
-        if (this.isLoggedIn) {
-          debugger
-          const response = await this.participantsList()
+        if (await this.isLoggedIn) {
           
+          let response = null
+          let me_response = null
+          try {
+            response = await this.participantsList()
+            me_response = await this.sendMeRequest()
+          } catch {
+            alert("Ошибка при получении списка участников.")
+            return
+          }
           this.users = response.data.result;
+          this.users = this.users.filter(value => value.id != me_response.data.result.id)
           this.saved_users = response.data.result;
         }
       },
       async userClick(user_id) {
-        debugger
         this.$router.push({name: 'current_participants', params: {id: user_id}});
       },
       async groupClick() {
@@ -121,13 +129,17 @@
       }
     },
     computed : {
-    isLoggedIn: function() {
-      return this.$store.getters.isAuthenticated;
+    isLoggedIn: async function() {
+      return await this.$store.getters.isAuthenticated;
     }
   },
-    created() {
-      this.getMessage();
-    },
+  async created() {
+    if (!await this.isLoggedIn) {
+      this.$router.push("/login")
+      return
+    }
+    this.getMessage();
+  },
   };
   </script>
 

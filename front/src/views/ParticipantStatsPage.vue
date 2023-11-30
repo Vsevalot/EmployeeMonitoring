@@ -155,11 +155,11 @@ export default {
       const Data = new FormData();
       Data.append('date_from', this.form.start_date);
       Data.append('date_to', this.form.end_date);
+      Data.append('company', this.company);
       await this.downloadFileForGroup(Data);
     },
     handleChartClick(evt, array) {
       try {
-        debugger
         let test = this.chartDataStore[array[0].index]["factors"]
         const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
         this.pieOptions["plugins"]["title"]["text"] =  this.chartDataStore[array[0].index]["category"]
@@ -200,7 +200,6 @@ export default {
       }
     },
     async groupClick() {
-      debugger
       this.clicked = false;
       this.pieClicked = false;
       this.is_exists = false;
@@ -210,7 +209,13 @@ export default {
       const Dates = new FormData();
       Dates.append('date_from', this.form.start_date);
       Dates.append('date_to', this.form.end_date);
-      const response = await this.participantsStats(Dates);
+      let response = null
+      try {
+        response = await this.participantsStats(Dates);
+      } catch {
+        alert("Введите корректные даты!")
+        return
+      }
       const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
       this.chartDataStore = response.data["result"]
       const happines = response.data["happiness"]
@@ -222,7 +227,6 @@ export default {
       }
 
       let current_data = {}
-      debugger
       for(let i = 0; i < this.chartDataStore.length; i++) {
         let cat_data = this.chartDataStore[i];
         current_data[cat_data["category"]] = Array.from(cat_data["factors"]).reduce((acc, c_v) => acc + c_v["voted"], 0);
@@ -240,18 +244,21 @@ export default {
       this.loaded = true
   },
     async getMe() {
-      debugger
       const response = await this.sendMeRequest();
       this.company = response.data.result.company;
     },
   },
   
   computed : {
-    isLoggedIn: function() {
-      return this.$store.getters.isAuthenticated;
+    isLoggedIn: async function() {
+      return await this.$store.getters.isAuthenticated;
     }
   },
-  created() {
+  async created() {
+    if (!await this.isLoggedIn) {
+      this.$router.push("/login")
+      return
+    }
     this.getMe();
   },
 };

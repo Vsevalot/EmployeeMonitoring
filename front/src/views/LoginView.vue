@@ -35,12 +35,25 @@
           const User = new FormData();
           User.append('email', this.form.email);
           User.append('password', this.form.password);
-          debugger
           const response = await this.logIn(User);
+          debugger
+          this.$router.go('/');
           this.$router.push('/participants');
+          this.$forceUpdate();
         } catch {
           alert("Не верный логин или пароль!")
         }
+      }
+    },
+    computed : {
+      isLoggedIn: async function() {
+        return await this.$store.getters.isAuthenticated;
+      }
+    },
+    async created() {
+      if (await this.isLoggedIn) {
+        this.$router.push("/participants")
+        return
       }
     }
   });

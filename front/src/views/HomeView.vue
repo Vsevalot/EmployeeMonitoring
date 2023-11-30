@@ -1,7 +1,6 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="home" style="text-align:center">
+    <HelloWorld msg="Приложение для мониторинга состояния сотрудников на рабочем месте."/>
   </div>
 </template>
 
@@ -13,6 +12,16 @@ export default {
   name: 'HomeView',
   components: {
     HelloWorld
+  },
+  computed : {
+    isLoggedIn: function() {
+      return this.$store.getters.isAuthenticated;
+    }
+  },
+  created() {
+    if (!this.isLoggedIn) {
+      this.$router.push('/login');
+    }
   }
 }
 </script>

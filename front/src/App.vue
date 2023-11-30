@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <NavBar />
-    <div class="main">
+    <div class="main page">
       <router-view/>
     </div>
     <Footer class="footer"/>
@@ -32,8 +32,9 @@ export default {
   padding-top: 5em;
 }
 .footer{
- position:fixed;
- bottom:0;
  width: 100%;
+}
+.page{
+ min-height: 1000px;
 }
 </style>

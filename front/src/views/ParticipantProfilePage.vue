@@ -232,16 +232,21 @@
         Data.append('date_from', this.form.start_date);
         Data.append('date_to', this.form.end_date);
         Data.append('id', this.id);
+        Data.append('fio', this.first_name + '_' + this.last_name);
         await this.downloadFileForOne(Data);
       },
       async groupClick() {
-        debugger
         const Data = new FormData();
         Data.append('date_from', this.form.start_date);
         Data.append('date_to', this.form.end_date);
         Data.append('id', this.id)
-        const response = await this.participantStats(Data);
-        console.log(response.data["result"])
+        let response = null
+        try {
+          response = await this.participantStats(Data);
+        } catch {
+          alert("Введите корректные даты!")
+          return
+        }
         this.chartDataStore = response.data["result"]
         const dates = this.chartDataStore.map(item => item["date"])
         const morning = []
@@ -286,7 +291,6 @@
             }
           ],
         }
-        debugger
         const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
         const unpacked_data = this.chartDataStore.filter(value => value.factor).map((value) => ({morning: value.morningm, evening: value.evening, date: value.date, factor_id: value.factor.id, factor_name: value.factor.name, factor_cat: value.factor.category}))
         const grouped_data = Object.entries(unpacked_data.groupBy(item => item.factor_cat)).map((item, key) => ({
@@ -307,7 +311,6 @@
       },
       async getUser() {
         console.log(this.isLoggedIn)
-        debugger
         const Data = new FormData();
         Data.append('user_id', this.id);
         const response = await this.sendGetUserRequest(Data);
@@ -322,11 +325,15 @@
       }
     },
     computed : {
-    isLoggedIn: function() {
-      return this.$store.getters.isAuthenticated;
+    isLoggedIn: async function() {
+      return await this.$store.getters.isAuthenticated;
     }
   },
-    created() {
+    async created() {
+      if (!await this.isLoggedIn) {
+        this.$router.push("/login")
+        return
+      }
       this.getUser();
     },
   };

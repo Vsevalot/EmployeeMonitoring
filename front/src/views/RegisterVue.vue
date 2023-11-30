@@ -93,7 +93,7 @@
           User.append('company', this.form.company);
           User.append('department', this.form.department);
           await this.register(User);
-          this.$router.push('/participants');
+          this.$router.push('/');
         } catch {
           alert("Проверьте все данные на корректность! Возможно такой login уже существует")
         }

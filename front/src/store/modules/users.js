@@ -6,7 +6,14 @@ const state = {
 };
 
 const getters = {
-  isAuthenticated: state => !!state.token,
+  isAuthenticated: async (state) => {
+    try {
+      const response = await axios.get('participants/me', {headers: { Authorization: state.token }})
+      return !!state.token
+    } catch {
+      return false
+    }
+  },
   userToken: state => state.token,
 };
 
@@ -34,11 +41,12 @@ const actions = {
       email: user.get('email'),
       password: user.get('password')
     }
-    //const response = await axios.post('login', userData, {withCredentials: true});
-    const response = await fetch('http://159.223.224.135:8000/api/v1/login', {body: JSON.stringify(userData), headers: {'Content-Type': 'application/json;charset=utf-8'}, method: 'post', credentials: "include"})
-    const result = await response.json()
-    Cookies.set('token', result.result);
-    commit('setToken', result.result)
+    debugger
+    const response = await axios.post('login', userData);
+    //const response = await fetch('http://159.223.224.135:8000/api/v1/login', {body: JSON.stringify(userData), headers: {'Content-Type': 'application/json;charset=utf-8'}, method: 'post', credentials: "include"})
+    //const result = await response.json()
+    Cookies.set('token', response.data.result);
+    commit('setToken', response.data.result)
   },
   async logOut({commit}) {
     Cookies.remove('token')
@@ -54,12 +62,10 @@ const actions = {
     return response
   },
   async participantsList({commit}, dates) {
-    debugger
     const response = await axios.get('/participants', {headers: { Authorization: this.getters.userToken }})
     return response;
   },
   async participantStats({commit}, data) {
-    debugger
     const datesBody = {
       date_from: data.get('date_from'),
       date_to: data.get('date_to'),
@@ -68,7 +74,6 @@ const actions = {
     return response
   },
   async sendMeRequest({commit}) {
-    debugger
     const response = await axios.get('participants/me', {headers: { Authorization: this.getters.userToken }});
     return response
   },
@@ -78,40 +83,40 @@ const actions = {
     return response
   },
   async getGroupScore({commit}) {
-    debugger
     //const response =await axios.get('participants/stats/score', { headers: { Authorization: this.getters.userToken }});
     return { percent: 25, recommendation: "Что-то там" }
   },
   async getUserScore({commit}, data) {
-    debugger
     //const response =await axios.get('participants/' + data.get('id') + '/stats/score', { headers: { Authorization: this.getters.userToken }});
     return { percent: 25, recommendation: "Что-то там" }
   },
   async downloadFileForOne({commit}, data) {
-    debugger
     const datesBody = {
       date_from: data.get('date_from'),
       date_to: data.get('date_to'),
     }
+    const file_name = data.get('fio') + '_' + data.get('date_from') + '_' + data.get('date_to')
     const response = await axios.get('participants/' + data.get('id') + '/stats/download-csv', { params: datesBody, responseType: 'json', headers: { Authorization: this.getters.userToken, 'Accept': 'application/json'}})
     const anchor = document.createElement('a');
     anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(response["data"]);
     anchor.target = '_blank';
-    anchor.download = 'nameYourFileHere.csv';
+    anchor.download = file_name + '.csv';
     anchor.click();
     return response
   },
   async downloadFileForGroup({commit}, data) {
-    debugger
     const datesBody = {
       date_from: data.get('date_from'),
       date_to: data.get('date_to'),
     }
+
+    const file_name = data.get('company') + '_' + data.get('date_from') + '_' + data.get('date_to')
+
     const response =await axios.get('participants/stats/download-csv', { params: datesBody, headers: { Authorization: this.getters.userToken }});
     const anchor = document.createElement('a');
     anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(response["data"]);
     anchor.target = '_blank';
-    anchor.download = 'nameYourFileHere.csv';
+    anchor.download = file_name + '.csv';
     anchor.click();
     return response
   }

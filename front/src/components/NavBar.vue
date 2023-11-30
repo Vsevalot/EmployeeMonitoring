@@ -32,14 +32,14 @@
                 <a class="nav-link buttontest text" @click="logout">Выйти</a>
               </close>
             </ul>
-            <ul v-else class="navbar-nav me-auto mb-2 mb-md-0">
+            <ul v-else class="navbar-nav me-auto mb-2 mb-md-0 backtest raz">
               <li class="nav-item">
                 <router-link class="nav-link buttontest text" to="/">Главная</router-link>
               </li>
               <li class="nav-item">
                 <router-link class="nav-link buttontest text" to="/register/managers">Зарегистрироваться</router-link>
               </li>
-              <li class="nav-item text">
+              <li class="nav-item logout">
                 <router-link class="nav-link buttontest text" to="/login">Войти</router-link>
               </li>
             </ul>
@@ -59,21 +59,19 @@
     data() {
     return {
       seen: true,
-      code: ""
+      code: "",
+      isLoggedIn: false,
     };
   },
-    computed: {
-      isLoggedIn: function() {
-        debugger
-        console.log(this.$store.getters.isAuthenticated)
-        return this.$store.getters.isAuthenticated;
-      }
+    created: async function() {
+      this.isLoggedIn = await this.$store.getters.isAuthenticated;
     },
     methods: {
       ...mapActions(['sendMeRequest']),
       async logout () {
         await this.$store.dispatch('logOut');
-        this.$router.push('/login');
+        this.$router.go('/login');
+        this.$forceUpdate();
       },
       async getMe () {
         const response = await this.sendMeRequest();
@@ -96,6 +94,10 @@
   .code {
     margin-left: auto;
     margin-right: auto;
+  } 
+
+  .logout {
+    margin-left: auto;
   } 
 
   .backtest {

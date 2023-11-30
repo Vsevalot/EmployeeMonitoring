@@ -1,32 +1,20 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+  <div class="description" style="align-items: center;">
+    <h2>{{ msg }}</h2>
+    <p align="justify">
+      Данное приложение отображает статистику по сотрудникам в виде графиков и диаграмм
     </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <h2>Регистрация</h2>
+    <p align="justify">
+      Для начала необходимо зарегистрироваться в качестве руководителя.
+      Для этого нужно нажать кнопку "Зарегистрироваться" и ввести все нужные данные.
+    </p>
+    <h2>Код для сотрудников</h2>
+    <p align="justify">
+      После авторизации будет доступен код, который необходимо сообщить сотрудникам для их регистрации.
+      При регистрации сотрудником по коду, он будет привязан к руководителю, который его сообщил.
+      Руководитель будет иметь возможность смотреть статискику по этому сотруднику.
+    </p>
   </div>
 </template>
 
@@ -54,5 +42,10 @@ li {
 }
 a {
   color: #42b983;
+}
+.description {
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
