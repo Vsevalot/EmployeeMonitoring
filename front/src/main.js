@@ -13,7 +13,7 @@ import Button from "primevue/button"
 import ToastService from 'primevue/toastservice';
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://159.223.224.135/api/v1';
+axios.defaults.baseURL = 'http://159.223.224.135:8080/api/v1';
 // http://159.223.224.135:8000/api/v1
 // http://127.0.0.1:8000/api/v1
 const app = createApp(App)
