@@ -13,8 +13,8 @@ class CurrentDate {
     val minute = now.get(Calendar.MINUTE)
     val second = now.get(Calendar.SECOND)
 
-    fun isMorning(): Boolean = hour in 6..11
-    fun isEvening(): Boolean = hour in 18..24
+    fun isMorning(): Boolean = hour in 7..11
+    fun isEvening(): Boolean = hour in 16..20
 
     fun toStringDate(): String {
         var formattedMonth = if(month<10)
@@ -27,5 +27,18 @@ class CurrentDate {
         else
             day.toString()
         return "${year}-${formattedMonth}-${formattedDay}"
+    }
+
+    fun toStringDateRu(): String {
+        var formattedMonth = if(month<10)
+            "0$month"
+        else
+            month.toString()
+
+        var formattedDay = if(day<10)
+            "0$day"
+        else
+            day.toString()
+        return "${formattedDay}.${formattedMonth}.${year}"
     }
 }

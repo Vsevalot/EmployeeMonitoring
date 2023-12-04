@@ -68,16 +68,16 @@ fun Register(
                 ) {
 
                     Text("Руководитель:")
-                    Text("${registerViewModel.manager.firstName + registerViewModel.manager.lastName + registerViewModel.manager.surname}", maxLines = 2)
-                    UserCredentials(
-                        registerViewModel.firstName,
-                        registerViewModel::setFirstNameProperty,
-                        "Имя"
-                    )
+                    Text("${registerViewModel.manager.firstName + " "+ registerViewModel.manager.lastName + " "+ registerViewModel.manager.surname}", maxLines = 2)
                     UserCredentials(
                         registerViewModel.lastName,
                         registerViewModel::setLastNameProperty,
                         "Фамилия"
+                    )
+                    UserCredentials(
+                        registerViewModel.firstName,
+                        registerViewModel::setFirstNameProperty,
+                        "Имя"
                     )
                     UserCredentials(
                         registerViewModel.surname,
@@ -87,13 +87,13 @@ fun Register(
                     OutlinedTextField(
                         value = registerViewModel.birthdate,
                         onValueChange = { newText ->
-                            registerViewModel.setBirthdateProperty(newText.take("0000-00-00".count { it == '0' }))
+                            registerViewModel.setBirthdateProperty(newText.take("00.00.0000".count { it == '0' }))
                         },
                         singleLine = true,
-                        placeholder = { Text(text = "2000-01-01")},
+                        placeholder = { Text(text = "01.01.2000")},
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         label = { Text(text = "Дата рождения")},
-                        visualTransformation =  MaskFormatter("0000-00-00", '0'),
+                        visualTransformation =  MaskFormatter("00.00.0000", '0'),
                     )
 
                     UserCredentials(

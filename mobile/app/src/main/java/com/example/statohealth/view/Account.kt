@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckBox
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.IndeterminateCheckBox
 import androidx.compose.material.icons.filled.IntegrationInstructions
 import androidx.compose.material.icons.filled.Nightlight
@@ -58,6 +59,11 @@ fun Account(
                         IconButton(onClick = { accountViewModel.navigateToInstructions() }) {
                             Icon(Icons.Filled.IntegrationInstructions, "")
                         }
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { accountViewModel.exit(context) }) {
+                            Icon(Icons.Filled.ExitToApp, "")
+                        }
                     }
                 )
             }, content = { padd ->
@@ -77,27 +83,7 @@ fun Account(
                     )
                     {
                         Text(
-                            "Пользователь: " + accountViewModel.me.firstName + " " + accountViewModel.me.lastName + " " + accountViewModel.me.surname,
-                            fontSize = 22.sp,
-                            modifier = Modifier.padding(start = 10.dp, end = 10.dp).align(Start)
-                        )
-                        Text(
-                            "Почта: " + accountViewModel.me.email, fontSize = 22.sp, modifier = Modifier.padding(start = 10.dp, end = 10.dp).align(Start)
-                        )
-                        Text(
-                            "День рождения: " + accountViewModel.me.birthdate, fontSize = 22.sp, modifier = Modifier.padding(start = 10.dp, end = 10.dp).align(Start)
-                        )
-                        Text(
-                            "Компания: " + accountViewModel.me.company, fontSize = 22.sp, modifier = Modifier.padding(start = 10.dp, end = 10.dp).align(Start)
-                        )
-                        Text(
-                            "Телефон: " + accountViewModel.me.phone, fontSize = 22.sp, modifier = Modifier.padding(start = 10.dp, end = 10.dp).align(Start)
-                        )
-                        Text(
-                            "Должность: " + accountViewModel.me.position, fontSize = 22.sp, modifier = Modifier.padding(start = 10.dp, end = 10.dp).align(Start)
-                        )
-                        Text(
-                            "Состояние на сегодня (${accountViewModel.currentDay.toStringDate()}):", fontSize = 25.sp, modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp).align(Start)
+                            "Состояние на сегодня (${accountViewModel.currentDay.toStringDateRu()}):", fontSize = 25.sp, modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp).align(Start)
                         )
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.align(Start).padding(start = 20.dp)) {
                             Icon(Icons.Filled.WbSunny, "", tint = Color.Yellow)
