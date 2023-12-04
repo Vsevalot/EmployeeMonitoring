@@ -7,8 +7,6 @@ services:
     environment:
       POSTGRES_PASSWORD: ${RDBS_PASSWORD}
       POSTGRES_DB: monitoring
-    ports:
-      - "5432:5432"
     volumes:
       - monitoring-db:/var/lib/postgresql/data
 

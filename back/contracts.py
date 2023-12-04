@@ -1,6 +1,6 @@
 from enum import Enum
 
-PARTICIPANT_READ_SELF = "participants:read?scope=organisation_unit"
+PARTICIPANT_READ_ORGANISATION = "participants:read?scope=organisation_unit"
 
 
 class Permissions(Enum):

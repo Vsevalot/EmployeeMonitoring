@@ -1,11 +1,19 @@
-# Frontend
-Запуск командой 
+# urfu-app
 
-`docker compose up --build`
+## Project setup
+```
+npm install
+```
 
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-После запуска можно открыть приложение в браузере [127.0.0.1:8080](http://127.0.0.1:8080)
+### Compiles and minifies for production
+```
+npm run build
+```
 
-Если сервис развернут локально, то в docker-compose оставляем BASE_URL без изменения
-
-Если сервис находится на удаленном сервере, то указываем ip адрес этого сервера и нужный порт <ip:port>
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

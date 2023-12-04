@@ -20,6 +20,10 @@ def get_application(db_config: DBConfig) -> Application:
         "http://localhost:8080",
         "http://127.0.0.1",
         "http://127.0.0.1:8080",
+        "http://159.223.224.135:8080",
+        "http://159.223.224.135:8080/",
+        # "http://159.223.224.135:8080/login",
+        # "http://159.223.224.135:8080/login/",
     ]
 
     app.add_middleware(

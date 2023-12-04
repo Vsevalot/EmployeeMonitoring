@@ -1,0 +1,42 @@
+{
+  "name": "urfu-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@coreui/coreui": "^4.3.2",
+    "axios": "^1.5.0",
+    "bootstrap": "^5.3.1",
+    "chart.js": "^4.4.0",
+    "core-js": "^3.33.2",
+    "cors": "^2.8.5",
+    "floating-vue": "^2.0.0-beta.24",
+    "flowbite": "^2.0.0",
+    "flowbite-vue": "^0.1.0",
+    "js-cookie": "^3.0.5",
+    "primevue": "^3.38.1",
+    "sass": "^1.68.0",
+    "sass-loader": "^13.3.2",
+    "vue": "^3.2.13",
+    "vue-chartjs": "^5.2.0",
+    "vue-cookie": "^1.1.4",
+    "vue-cookies": "^1.8.3",
+    "vue-router": "^4.0.3",
+    "vue3-cookies": "^1.0.6",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-service": "~5.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}

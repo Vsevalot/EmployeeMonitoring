@@ -4,7 +4,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from domain.contracts import IdentifierType, UserRole
-from contracts import PARTICIPANT_READ_SELF
+from contracts import PARTICIPANT_READ_ORGANISATION
 from domain.entities import User
 from ports.api.v1.schemas import ManagerRegisterBody, ParticipantRegisterBody
 from utils import UnitOfWorkRDBS
@@ -37,7 +37,7 @@ class UserService:
                 surname=data.surname,
                 password=hashed_pwd,
                 salt=salt,
-                permissions=[PARTICIPANT_READ_SELF],
+                permissions=[PARTICIPANT_READ_ORGANISATION],
                 organisation_unit_id=organisation_unit_id,
                 birthdate=data.birthdate,
                 role=UserRole.manager,

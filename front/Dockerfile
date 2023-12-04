@@ -1,11 +1,15 @@
-FROM python:3.11.2
+FROM node:14.16.0
 
-RUN mkdir -p /usr/src/app/
-WORKDIR /usr/src/app/
+WORKDIR /app
+COPY package*.json /app
+RUN npm install -g @vue/cli
+RUN npm install @vue/compiler-sfc
+RUN npm install @vitejs/plugin-vue
+RUN npm install
 
-RUN pip3 install poetry
+# Bundle app source
+COPY . /app
 
-COPY poetry.lock pyproject.toml /usr/src/app/
-RUN poetry config virtualenvs.create false && poetry install --no-dev
+EXPOSE 8080
 
-COPY . /usr/src/app/
+CMD [ "npm", "run", "serve"]
