@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import datetime
 from collections.abc import Sequence, Mapping
 from typing import Any
-from operator import eq
+from operator import eq, ne
 
 from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.exc import IntegrityError
@@ -12,6 +12,12 @@ from domain.entities import User, UserRole, BusinessUnit, Company
 from domain.contracts import IdentifierType
 from ports.rdbs.generic import user, permission, company, organisation_unit
 from .common import NotFoundError, AlreadyInUse
+
+
+OPERATION_MAP = {
+    "eq": eq,
+    "ne": ne,
+}
 
 
 class UserRepository(ABC):
@@ -149,9 +155,16 @@ class UserRepositoryRDBS(UserRepository):
         _filters = {k: v for k, v in filters.items()}
         if "role" in _filters:
             _filters["role"] = _filters["role"].value
-        return [
-            eq(getattr(user.c, column), value) for column, value in _filters.items()
-        ]
+
+        res_filters = []
+        for f, value in _filters.items():
+            operation = "eq"
+            column, *_operation = f.split(':')
+            if _operation:
+                operation = _operation[0]
+            operation = OPERATION_MAP[operation]
+            res_filters.append(operation(getattr(user.c, column), value))
+        return res_filters
 
     @property
     def joined(self):

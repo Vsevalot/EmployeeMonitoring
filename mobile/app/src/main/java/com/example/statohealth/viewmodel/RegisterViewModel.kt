@@ -105,7 +105,7 @@ class RegisterViewModel : ViewModel() {
                     firstName,
                     lastName,
                     surname,
-                    "${birthdate.take(4)}-${birthdate.drop(4).take(2)}-${birthdate.takeLast(2)}",
+                    "${birthdate.takeLast(4)}-${birthdate.drop(2).take(2)}-${birthdate.take(2)}",
                     phone,
                     position,
                     email,

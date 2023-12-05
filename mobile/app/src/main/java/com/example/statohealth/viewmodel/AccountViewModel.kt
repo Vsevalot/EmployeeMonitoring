@@ -11,6 +11,7 @@ import com.example.statohealth.Pages
 import com.example.statohealth.data.FeedbacksModelResponse
 import com.example.statohealth.data.MeModel
 import com.example.statohealth.data.MeResponse
+import com.example.statohealth.infrastructure.AuthTokenPreference
 import com.example.statohealth.infrastructure.CurrentDate
 import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
@@ -62,5 +63,10 @@ class AccountViewModel : ViewModel() {
         Logger.log("OnSuccess $response")
         Feedbacks.morning = response.morning
         Feedbacks.evening = response.evening
+    }
+
+    fun exit(context: Context) {
+        AuthTokenPreference().removeToken(context)
+        navController.navigate(Pages.loginPage)
     }
 }

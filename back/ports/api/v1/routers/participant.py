@@ -35,7 +35,7 @@ async def get_participants(
     if PARTICIPANT_READ_ORGANISATION not in user["permissions"]:
         raise HTTPException(status_code=403)
     users = await user_service.get_list(
-        {"organisation_unit_id": user["business_unit"]["id"]}
+        {"organisation_unit_id": user["business_unit"]["id"], "id:ne": user["id"]},
     )
     return ParticipantListResponse(result=[Participant.from_user(u) for u in users])
 
@@ -187,7 +187,7 @@ def _csv_from_feedback_range(
             if _factor := feedback_range[date][DayTime.evening]["factor"]:
                 factor = _factor["name"]
                 category = _factor["category"]
-        res.append(f"{date},{morning},{evening},{category},{factor}")
+        res.append(f'{date},{morning},{evening},"{category}","{factor}"')
     return "\n".join(res)
 
 
