@@ -33,7 +33,6 @@
   },
     computed: {
       isLoggedIn: function() {
-        debugger
         console.log(this.$store.getters.isAuthenticated)
         return this.$store.getters.isAuthenticated;
       }

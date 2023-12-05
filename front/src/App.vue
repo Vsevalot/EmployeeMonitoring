@@ -36,5 +36,6 @@ export default {
 }
 .page{
  min-height: 1000px;
+ height: 100%;
 }
 </style>
