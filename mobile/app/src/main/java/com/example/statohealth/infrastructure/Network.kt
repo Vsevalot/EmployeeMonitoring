@@ -70,8 +70,12 @@ class Network(val context: Context) {
                 }
                 successResponseAction(response)
             }, { volleyError ->
-                val messageData = String(volleyError.networkResponse.data)
-                Logger.log("VolleyError: $messageData")
+                if (volleyError.networkResponse != null) {
+                    val messageData = String(volleyError.networkResponse.data)
+                    Logger.log("VolleyError: $messageData")
+                }
+                else
+                    Logger.log("VolleyError: $volleyError")
             }) {
 
             override fun parseNetworkResponse(response: NetworkResponse): Response<JSONObject?>? {
@@ -163,14 +167,27 @@ class Network(val context: Context) {
     fun getUrl(endpoint: String): String = apiUrl + apiVersion + endpoint
 
     fun handleError(volleyError: VolleyError, endpoint: String) {
-        if(volleyError.message != null && volleyError.message!!.contains("Failed to connect to", ignoreCase = true))
-        {
+        if (volleyError.message != null && volleyError.message!!.contains(
+                "Failed to connect to",
+                ignoreCase = true
+            )
+        ) {
             AlertDialog.Builder(context)
                 .setTitle("Ошибка")
                 .setMessage("Нет связи с сервером")
                 .setPositiveButton("Ок") { _, _ -> }
                 .show()
             Logger.log("VolleyError: Нет связи с сервером")
+            return
+        }
+        if(volleyError.networkResponse == null)
+        {
+            AlertDialog.Builder(context)
+                .setTitle("Ошибка")
+                .setMessage(volleyError.toString())
+                .setPositiveButton("Ок") { _, _ -> }
+                .show()
+            Logger.log("VolleyError: $volleyError")
             return
         }
         val statusCode = volleyError.networkResponse.statusCode
