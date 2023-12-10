@@ -14,5 +14,5 @@ async def set_device_token(
         payload: DeviceTokenPayload,
         device_service: DeviceService = Depends(get_device_service),
 ):
-    await device_service.set_device_token(device_id=device_id, token=payload.token)
+    await device_service.set_device_token(device_id=device_id, token=payload.push_token)
     return {"ok": True}
