@@ -291,4 +291,4 @@ class ParticipantStatResponse(BaseModel):
 
 
 class DeviceTokenPayload(BaseModel):
-    token: str
+    push_token: str
