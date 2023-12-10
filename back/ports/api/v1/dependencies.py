@@ -8,6 +8,7 @@ from services.user import UserService
 from services.category import CategoryService
 from services.state import StateService
 from services.feedback import FeedbackService
+from services.device import DeviceService
 from domain.entities import User
 
 from .definitions import Request
@@ -51,3 +52,8 @@ async def get_current_user(
     if not user_id:
         raise HTTPException(status_code=401)
     return await user_service.get_user(user_id)
+
+
+async def get_device_service(request: Request) -> DeviceService:
+    uow = UnitOfWorkRDBS(connection_fabric=request.app.engine)
+    return DeviceService(uow)

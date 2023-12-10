@@ -1,47 +1,41 @@
 <template>
-  <div>
-    <div style="text-align:center">
-      <h1>{{first_name}} {{ last_name }}</h1>
-    </div>
-    <div style="text-align:center">
-      
-      <div class="FormDate" style="display: inline-block">
-          <input placeholder="Начало периода" required onfocus="(this.type='date')" name="start_date" v-model="form.start_date" class="form-control inline-item" />
-      </div>
-      <div class="FormDate" style="display: inline-block">
-          <input placeholder="Конец периода" required onfocus="(this.type='date')" name="end_date" v-model="form.end_date" class="form-control inline-item" />
-      </div>
-    </div>
+  <div style="text-align:center">
+    <h1>{{first_name}} {{ last_name }}</h1>
+  </div>
+  <div style="text-align:center">
     
-    <div style="text-align:center">
-      <button class="btn btn-primary hover:bg-gray-800 mb-5 ms-4 me-4" @click="groupClick()">
-        Применить
-      </button>
+    <div class="FormDate" style="display: inline-block">
+        <input placeholder="Начало периода" required onfocus="(this.type='date')" name="start_date" v-model="form.start_date" class="form-control inline-item" />
     </div>
-    
-    <div style="text-align:center">
-      <button v-if="loaded" class="btn btn-primary hover:bg-gray-800 mb-5 ms-4 me-4" @click="downloadClick()">
-        Скачать
-      </button>
+    <div class="FormDate" style="display: inline-block">
+        <input placeholder="Конец периода" required onfocus="(this.type='date')" name="end_date" v-model="form.end_date" class="form-control inline-item" />
     </div>
+  </div>
+  
+  <div style="text-align:center">
+    <button class="btn btn-primary hover:bg-gray-800 mb-5 ms-4 me-4" @click="groupClick()">
+      Применить
+    </button>
+  </div>
+  
+  <div style="text-align:center">
+    <button v-if="loaded" class="btn btn-primary hover:bg-gray-800 mb-5 ms-4 me-4" @click="downloadClick()">
+      Скачать
+    </button>
+  </div>
 
-    <div style="align-content: center;" class="column-container chart-block">
-      <div class="column-item max-width">
-        <Bar v-if="loaded" :data="barChartData" :options="barOptions" class="max-width"/>
-      </div>
-      <div class="column-item max-width">
-        <Pie v-if="clicked" :data="pieChartData" :options="pieOptions" class="max-width"/>
-      </div>
+  <div class="inline-container" style="display: inline-block">
+    <div class="charts-container">
+      <Bar v-if="loaded" :data="barChartData" :options="barOptions"/>
+      <Pie v-if="clicked" :data="pieChartData" :options="pieOptions"/>
     </div>
-    <div style="align-content: center;" class="recom-block">
-      <Line v-if="loaded" :data="chartData" :options="chartOptions" :type="line" class="liner-block"/>
-      
-      <DataTable v-if="pieClicked" :value="tableValues" class="recomm-block">
-          <Column field="factor" header="Фактор"></Column>
-          <Column field="recommendation" header="Рекомендация"></Column>
-      </DataTable>
+    <div class="recom-block" style="text-align:justify">
+      <Line v-if="loaded" :data="chartData" :options="chartOptions" :type="line"/>
+
+      <h3 style="margin-top: 200px; font-weight: bold;">{{ factor }}</h3>
+      <h4>{{ recommendation }}</h4>
     </div>
-</div>
+  </div>
 </template>
   
   <script>
@@ -53,6 +47,7 @@
   import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement, PointElement, LineElement} from 'chart.js';
 
   ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement, PointElement, LineElement);
+
   
   export default {
     props: ['id', 'first_name', 'last_name'],
@@ -73,6 +68,8 @@
       first_name: "",
       pieClicked: false,
       tableValues: null,
+      factor: "",
+      recommendation: "",
       last_name: "",
       percent_lvl: 0,
       chartData: null,
@@ -117,6 +114,15 @@
               font: {
                 size: 18
               },
+              generateLabels: function(chart, qwe) {
+                const datasets = chart.data.datasets;
+                return datasets[0].data.map((data, i) => ({
+                  text: chart.data.labels[i].length < 23 ? chart.data.labels[i] : chart.data.labels[i].slice(0, 23) + '...',
+                  fillStyle: datasets[0].backgroundColor[i],
+                  index: i,
+                  hidden: !chart.getDataVisibility(i),
+                }))
+              },
               boxWidth: 10,
               fullSize: false,
               display: true,
@@ -149,7 +155,13 @@
             max: 400,
             ticks: {
               font: {
-                size: 18
+                size: 14
+              },
+              callback: function(value, index, values) {
+                var yLabels = {
+                    0: 'Все очень плохо', 100: 'Плохо', 200: 'Нормально', 300: 'Хорошо', 400: 'Все очень хорошо',
+                }
+                return yLabels[value];
               }
             }
           },
@@ -190,7 +202,8 @@
           let factor = this.pieChartData.labels[array[0].index]
           let needed_id = this.pieChartData.datasets[0].ids_data[array[0].index]
           let recommendation = this.pieChartData.datasets[0].recommendation[array[0].index];
-          
+          this.factor = "Фактор - " + factor
+          this.recommendation = "Рекомендация - " + recommendation
           this.tableValues = [{ factor: factor, recommendation: recommendation}];
           this.pieClicked = true;
         } catch {
@@ -201,7 +214,7 @@
       handleChartClick(evt, array) {
         try {
           let test = this.chartDataStore[array[0].index]["factors"]
-          const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
+          const colors = ["#A101A6", "#E20048", "#510FAD", "#CFF700", "#68006C", "#93002F", "#8144D6"]
           const unpacked_data = this.chartDataStore.filter(value => value.factor).map((value) => ({morning: value.morningm, evening: value.evening, date: value.date, factor_id: value.factor.id, factor_name: value.factor.name, factor_cat: value.factor.category, factor_recommendation: value.factor.recommendation}))
           const grouped_data = Object.entries(unpacked_data.groupBy(item => item.factor_name)).filter(value => value[1][0].factor_cat == this.barChartData.labels[array[0].index]).map((item, key) => ({
             factor_name: item[1][0].factor_name,
@@ -240,6 +253,7 @@
         Data.append('date_from', this.form.start_date);
         Data.append('date_to', this.form.end_date);
         Data.append('id', this.id)
+        this.$router.replace({ name: "current_participants", query: {date_from: this.form.start_date, date_to: this.form.end_date} })
         let response = null
         try {
           response = await this.participantStats(Data);
@@ -291,7 +305,7 @@
             }
           ],
         }
-        const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
+        const colors = ["#191970", "#00BFFF", "#008B8B", "#FFA07A"]
         const unpacked_data = this.chartDataStore.filter(value => value.factor).map((value) => ({morning: value.morningm, evening: value.evening, date: value.date, factor_id: value.factor.id, factor_name: value.factor.name, factor_cat: value.factor.category}))
         const grouped_data = Object.entries(unpacked_data.groupBy(item => item.factor_cat)).map((item, key) => ({
           category_name: item[1][0].factor_cat,
@@ -333,6 +347,17 @@
       if (!await this.isLoggedIn) {
         this.$router.push("/login")
         return
+      }
+      if (this.$route.query.date_from) {
+        this.form.start_date = this.$route.query.date_from
+      }
+
+      if (this.$route.query.date_to) {
+        this.form.end_date = this.$route.query.date_to
+      }
+
+      if (this.$route.query.date_from && this.$route.query.date_to) {
+        this.groupClick();
       }
       this.getUser();
     },
@@ -420,6 +445,8 @@
 }
 
 .max-width {
-  width: max-content;
+  width: 100%;
+  height: 100%;
 }
+
 </style>

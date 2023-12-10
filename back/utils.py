@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncEngine
+
+from repositories.device import DeviceRepositoryRDBS
 from repositories.user import UserRepositoryRDBS
 from repositories.company import CompanyRepositoryRDBS
 from repositories.business_unit import BusinessUnitRepositoryRDBS
@@ -31,6 +33,7 @@ class UnitOfWorkRDBS(UnitOfWork):
     category: CategoryRepositoryRDBS
     state: StateRepositoryRDBS
     feedback: FeedbackRepositoryRDBS
+    device: DeviceRepositoryRDBS
 
     def __init__(self, connection_fabric: AsyncEngine):
         self._connection_fabric = connection_fabric
@@ -43,6 +46,7 @@ class UnitOfWorkRDBS(UnitOfWork):
         self.session = SessionRepositoryRDBS(self._conn)
         self.category = CategoryRepositoryRDBS(self._conn)
         self.state = StateRepositoryRDBS(self._conn)
+        self.device = DeviceRepositoryRDBS(self._conn)
         self.feedback = FeedbackRepositoryRDBS(self._conn)
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

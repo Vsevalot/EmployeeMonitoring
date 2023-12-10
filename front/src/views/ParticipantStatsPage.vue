@@ -2,7 +2,7 @@
   <div style="text-align:center">
     <h1>Организация: {{ company }}</h1>
     <div v-if="is_exists" style="text-align:center">
-    <VDropdown :showTriggers="triggers => [...triggers, 'hover']">
+    <VDropdown :showTriggers="triggers => [...triggers, 'hover']" class="conditionLvl">
       <h1>Уровень благополучия: {{ percent_lvl }}%</h1>
       <template #popper>
         <h5 class="customtooltip" v-close-popper>{{ description }}</h5>
@@ -36,22 +36,16 @@
       Скачать
     </button>
   </div>
-
-  <div>
-    <div style="align-content: center;" class="column-container chart-block">
-      <div class="column-item">
-        <Bar v-if="loaded" :data="chartData" :options="barOptions"/>
-      </div>
-      <div class="column-item">
-        <Pie v-if="clicked" :data="chartPieData" :options="pieOptions"/>
-      </div>
+  <div class="inline-container" style="display: inline-block">
+    <div class="charts-container">
+      <Bar v-if="loaded" :data="chartData" :options="barOptions"/>
+      <Pie v-if="clicked" :data="chartPieData" :options="pieOptions"/>
     </div>
-    
-    <DataTable v-if="pieClicked" :value="tableValues" class="recom-block">
-        <Column field="factor" header="Фактор"></Column>
-        <Column field="recommendation" header="Рекомендация"></Column>
-    </DataTable>
-</div>
+    <div class="recom-block" style="text-align:justify">
+      <h3 style="font-weight: bold;">{{ factor }}</h3>
+      <h4>{{ recommendation }}</h4>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -110,16 +104,23 @@ export default {
               font: {
                 size: 18
               },
+              generateLabels: function(chart, qwe) {
+                const datasets = chart.data.datasets;
+                return datasets[0].data.map((data, i) => ({
+                  text: chart.data.labels[i].length < 23 ? chart.data.labels[i] : chart.data.labels[i].slice(0, 23) + '...',
+                  fillStyle: datasets[0].backgroundColor[i],
+                  index: i,
+                  hidden: !chart.getDataVisibility(i),
+                }))
+              },
               boxWidth: 10,
               fullSize: false,
               display: true,
               position: 'right',
             },
             fullSize: false,
-            fullSize: true,
             display: true,
             position: 'right',
-            fullSize: true,
           },
           title: {
             display: true,
@@ -133,7 +134,9 @@ export default {
           }
         },
       },
-      tableValues: null
+      tableValues: null,
+      factor: "",
+      recommendation: "",
     };
   },
   mounted() {
@@ -161,7 +164,7 @@ export default {
     handleChartClick(evt, array) {
       try {
         let test = this.chartDataStore[array[0].index]["factors"]
-        const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
+        const colors = ["#A101A6", "#E20048", "#510FAD", "#CFF700", "#68006C", "#93002F", "#8144D6"]
         this.pieOptions["plugins"]["title"]["text"] =  this.chartDataStore[array[0].index]["category"]
         this.chartPieData = {
           labels: test.map((value) => value["name"]),
@@ -194,12 +197,15 @@ export default {
           }
         }
         this.tableValues = [{ factor: factor, recommendation: recommendation}];
+        this.factor = "Фактор - " + factor
+        this.recommendation = "Рекомендация - " + recommendation
         this.pieClicked = true;
       } catch {
         
       }
     },
     async groupClick() {
+      console.log(this.$router)
       this.clicked = false;
       this.pieClicked = false;
       this.is_exists = false;
@@ -209,6 +215,7 @@ export default {
       const Dates = new FormData();
       Dates.append('date_from', this.form.start_date);
       Dates.append('date_to', this.form.end_date);
+      this.$router.replace({ name: "participants_stats", query: {date_from: this.form.start_date, date_to: this.form.end_date} })
       let response = null
       try {
         response = await this.participantsStats(Dates);
@@ -216,7 +223,7 @@ export default {
         alert("Введите корректные даты!")
         return
       }
-      const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
+      const colors = ["#191970", "#00BFFF", "#008B8B", "#FFA07A"]
       this.chartDataStore = response.data["result"]
       const happines = response.data["happiness"]
       
@@ -259,6 +266,18 @@ export default {
       this.$router.push("/login")
       return
     }
+    if (this.$route.query.date_from) {
+      this.form.start_date = this.$route.query.date_from
+    }
+
+    if (this.$route.query.date_to) {
+      this.form.end_date = this.$route.query.date_to
+    }
+
+    if (this.$route.query.date_from && this.$route.query.date_to) {
+      this.groupClick();
+    }
+
     this.getMe();
   },
 };
@@ -318,19 +337,14 @@ export default {
   }
 }
 
-.inline-container {
-    display: inline-block; 
-    text-align: center; /* выравнивание по центру */
-    margin-bottom: 20px;
-    width: 100%; /* отступ снизу */
-}
+
 
 .recom-block {
     vertical-align:top;
-    display: inline-block; /* отобразить элементы в строку */
-    width: 35%; /* ширина блока */
-    height: 35%; /* высота блока */
-    margin-left: 20px; /* промежутки между блоками */
+    display: inline-block;
+    width: 46%; /* ширина блока */
+    height: 50%; /* высота блока */
+    margin-left: 200px; /* промежутки между блоками */
 }
 
 .chart-block {
@@ -351,4 +365,33 @@ export default {
 .column-container {
     flex-direction: column;
 }
+
+.conditionLvl {
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
+.charts-container {
+  width: 33%;
+  height: 100%;
+  display: inline-block; /* отобразить элементы в строку */
+  margin-left: auto;
+  margin-right: auto;
+}
+.chart-container {
+  width: 100%;
+  height: 100%;
+}
+
+.inline-container {
+  width: 100%;
+  height: 100%;
+}
+
+.inline-item {
+  display: inline;
+  widows: 30%;
+}
+
 </style>

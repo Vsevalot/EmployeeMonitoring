@@ -122,3 +122,13 @@ feedback = factory.table(
     ),
     constraints=[sqlalchemy.UniqueConstraint("user_id", "date", "day_time")],
 )
+
+
+device = factory.table(
+    name="devices",
+    db_metadata=db_metadata,
+    columns=(
+        factory.string_primary_key(length=50),
+        factory.string(name="token", length=200),
+    ),
+)

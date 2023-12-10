@@ -24,12 +24,14 @@ const routes = [
   },
   {
     path: '/participants/stats',
+    query: { date_from: 'date_from', date_to: 'date_to' },
     name: 'participants_stats',
     component: ParticipantStatsPage
   },
   {
     path: '/participants/:id',
     name: 'current_participants',
+    query: { date_from: 'date_from', date_to: 'date_to' },
     component: ParticipantProfilePage,
     props: true
   },
