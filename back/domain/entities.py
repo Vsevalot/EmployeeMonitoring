@@ -77,3 +77,8 @@ class Feedback(TypedDict):
     day_time: DayTime
     state: State
     factor: FeedbackFactor | None
+
+
+class Device(TypedDict):
+    id: str
+    token: str

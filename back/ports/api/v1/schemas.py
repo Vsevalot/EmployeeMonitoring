@@ -288,3 +288,7 @@ class ParticipantStatResponse(BaseModel):
                 )
             res.append(stat_item)
         return cls(result=res)
+
+
+class DeviceTokenPayload(BaseModel):
+    token: str

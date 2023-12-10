@@ -38,7 +38,7 @@ def uuid_primary_key(autogenerate: bool = False) -> sqlalchemy.Column:
     )
 
 
-def string_primary_key(length: str = 20) -> sqlalchemy.Column:
+def string_primary_key(length: int = 20) -> sqlalchemy.Column:
     return sqlalchemy.Column(
         "id", sqlalchemy.String(length=length), primary_key=True, nullable=False
     )
