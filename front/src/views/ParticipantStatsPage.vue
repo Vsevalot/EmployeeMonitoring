@@ -119,10 +119,8 @@ export default {
               position: 'right',
             },
             fullSize: false,
-            fullSize: true,
             display: true,
             position: 'right',
-            fullSize: true,
           },
           title: {
             display: true,
@@ -166,7 +164,7 @@ export default {
     handleChartClick(evt, array) {
       try {
         let test = this.chartDataStore[array[0].index]["factors"]
-        const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
+        const colors = ["#A101A6", "#E20048", "#510FAD", "#CFF700", "#68006C", "#93002F", "#8144D6"]
         this.pieOptions["plugins"]["title"]["text"] =  this.chartDataStore[array[0].index]["category"]
         this.chartPieData = {
           labels: test.map((value) => value["name"]),
@@ -225,7 +223,7 @@ export default {
         alert("Введите корректные даты!")
         return
       }
-      const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
+      const colors = ["#191970", "#00BFFF", "#008B8B", "#FFA07A"]
       this.chartDataStore = response.data["result"]
       const happines = response.data["happiness"]
       
@@ -344,8 +342,8 @@ export default {
 .recom-block {
     vertical-align:top;
     display: inline-block;
-    width: 40%; /* ширина блока */
-    height: 35%; /* высота блока */
+    width: 46%; /* ширина блока */
+    height: 50%; /* высота блока */
     margin-left: 200px; /* промежутки между блоками */
 }
 
@@ -394,7 +392,6 @@ export default {
 .inline-item {
   display: inline;
   widows: 30%;
-  background-color: aqua;
 }
 
 </style>

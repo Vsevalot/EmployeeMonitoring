@@ -1,12 +1,13 @@
 <template>
     <section class="container">
       <form @submit.prevent="submit">
-        <div class="mb-3 inline-container">
-          <input type="text" name="first_name" required placeholder="Имя" v-model="form.first_name" class="form-control inline-item" />
-        </div>
         
         <div class="mb-3 inline-container">
           <input type="text" name="last_name" required placeholder="Фамилия" v-model="form.last_name" class="form-control inline-item" />
+        </div>
+
+        <div class="mb-3 inline-container">
+          <input type="text" name="first_name" required placeholder="Имя" v-model="form.first_name" class="form-control inline-item" />
         </div>
         
         <div class="mb-3 inline-container">
@@ -26,7 +27,7 @@
         </div>
         
         <div class="mb-3 inline-container">
-          <input type="text" name="email" required placeholder="Почта" v-model="form.email" class="form-control inline-item" />
+          <input type="text" name="email" required placeholder="Логин" v-model="form.email" class="form-control inline-item" />
         </div>
         
         <div class="mb-3 inline-container">

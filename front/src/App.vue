@@ -27,15 +27,16 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  height: 100vh;
 }
 .main {
   padding-top: 5em;
 }
 .footer{
  width: 100%;
+ margin-top: 500px;
 }
 .page{
- min-height: 1000px;
  height: 100%;
 }
 </style>

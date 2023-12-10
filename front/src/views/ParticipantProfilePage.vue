@@ -158,7 +158,6 @@
                 size: 14
               },
               callback: function(value, index, values) {
-                debugger
                 var yLabels = {
                     0: 'Все очень плохо', 100: 'Плохо', 200: 'Нормально', 300: 'Хорошо', 400: 'Все очень хорошо',
                 }
@@ -205,7 +204,6 @@
           let recommendation = this.pieChartData.datasets[0].recommendation[array[0].index];
           this.factor = "Фактор - " + factor
           this.recommendation = "Рекомендация - " + recommendation
-          debugger
           this.tableValues = [{ factor: factor, recommendation: recommendation}];
           this.pieClicked = true;
         } catch {
@@ -216,7 +214,7 @@
       handleChartClick(evt, array) {
         try {
           let test = this.chartDataStore[array[0].index]["factors"]
-          const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
+          const colors = ["#A101A6", "#E20048", "#510FAD", "#CFF700", "#68006C", "#93002F", "#8144D6"]
           const unpacked_data = this.chartDataStore.filter(value => value.factor).map((value) => ({morning: value.morningm, evening: value.evening, date: value.date, factor_id: value.factor.id, factor_name: value.factor.name, factor_cat: value.factor.category, factor_recommendation: value.factor.recommendation}))
           const grouped_data = Object.entries(unpacked_data.groupBy(item => item.factor_name)).filter(value => value[1][0].factor_cat == this.barChartData.labels[array[0].index]).map((item, key) => ({
             factor_name: item[1][0].factor_name,
@@ -307,7 +305,7 @@
             }
           ],
         }
-        const colors = ["#8bf759", "#d8f759", "#f75976", "#f7d559", "#59edf7", "#5998f7"]
+        const colors = ["#191970", "#00BFFF", "#008B8B", "#FFA07A"]
         const unpacked_data = this.chartDataStore.filter(value => value.factor).map((value) => ({morning: value.morningm, evening: value.evening, date: value.date, factor_id: value.factor.id, factor_name: value.factor.name, factor_cat: value.factor.category}))
         const grouped_data = Object.entries(unpacked_data.groupBy(item => item.factor_cat)).map((item, key) => ({
           category_name: item[1][0].factor_cat,
@@ -447,7 +445,8 @@
 }
 
 .max-width {
-  width: max-content;
+  width: 100%;
+  height: 100%;
 }
 
 </style>
