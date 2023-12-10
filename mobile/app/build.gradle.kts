@@ -54,6 +54,7 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
+    implementation("com.airbnb.android:lottie-compose:6.0.1")
     implementation("com.google.gms:google-services:4.3.15")
     val navVersion = "2.6.0"
     val composeVersion = "1.4.3"

@@ -16,9 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.statohealth.R
 import com.example.statohealth.activities.MainActivity
 import com.example.statohealth.viewmodel.InstructionsViewModel
 
@@ -46,31 +50,41 @@ fun Instructions(
                     }
                 )
             }, content = { padd ->
-                ProgressIndicator(instructionsViewModel.progressVisible)
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = padd.calculateTopPadding()),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
+                Box(
+                    modifier = with(Modifier) {
+                        fillMaxSize()
+                            .paint(
+                                painterResource(id = R.drawable.urfu),
+                                contentScale = ContentScale.FillHeight
+                            )
+                    })
                 {
-                    Text(
-                        instructionsViewModel.instructionsText,
-                        fontSize = 22.sp,
+                    ProgressIndicator(instructionsViewModel.progressVisible)
+                    Column(
                         modifier = Modifier
-                            .weight(0.9f)
-                            .padding(16.dp)
-                            .verticalScroll(rememberScrollState())
+                            .fillMaxSize()
+                            .padding(top = padd.calculateTopPadding()),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     )
-                    Box(modifier = Modifier.weight(0.1f), contentAlignment = Alignment.Center)
                     {
-                        if (allowNavigation == "true")
-                            Button(onClick = {
-                                instructionsViewModel.start()
-                            })
-                            {
-                                Text("Старт", fontSize = 25.sp)
-                            }
+                        Text(
+                            instructionsViewModel.instructionsText,
+                            fontSize = 22.sp,
+                            modifier = Modifier
+                                .weight(0.9f)
+                                .padding(16.dp)
+                                .verticalScroll(rememberScrollState())
+                        )
+                        Box(modifier = Modifier.weight(0.1f), contentAlignment = Alignment.Center)
+                        {
+                            if (allowNavigation == "true")
+                                Button(onClick = {
+                                    instructionsViewModel.start()
+                                })
+                                {
+                                    Text("Старт", fontSize = 25.sp)
+                                }
+                        }
                     }
                 }
             })

@@ -1,6 +1,8 @@
 package com.example.statohealth.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,10 +21,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.statohealth.R
 import com.example.statohealth.activities.MainActivity
 import com.example.statohealth.viewmodel.EveningStateViewModel
 
@@ -49,41 +56,67 @@ fun EveningState(
                     }
                 )
             }, content = { padd ->
-        ProgressIndicator(eveningStateViewModel.progressVisible)
-        Column(
-            modifier = Modifier
-                .fillMaxSize().padding(top = padd.calculateTopPadding()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(
-                20.dp,
-                Alignment.CenterVertically
-            ),
-        )
-        {
-            Column(modifier = Modifier.selectableGroup()) {
-                eveningStateViewModel.states.forEach { state ->
-                    Row(
-                        Modifier.height(56.dp).selectable(
-                            selected = (state == eveningStateViewModel.choosenState),
-                            onClick = { eveningStateViewModel.choosenState = state },
-                            role = Role.RadioButton
-                        ), verticalAlignment = Alignment.CenterVertically
+                Box(
+                    modifier = with(Modifier) {
+                        fillMaxSize()
+                            .paint(
+                                painterResource(id = R.drawable.urfu),
+                                contentScale = ContentScale.FillHeight
+                            )
+                    })
+                {
+                    ProgressIndicator(eveningStateViewModel.progressVisible)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = padd.calculateTopPadding()),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(
+                            20.dp,
+                            Alignment.CenterVertically
+                        ),
                     )
                     {
-                        RadioButton(
-                            selected = (state == eveningStateViewModel.choosenState),
-                            onClick = null
-                        )
-                        Text(text = state.name, fontSize = 22.sp)
+                        Column(modifier = Modifier.selectableGroup()) {
+                            eveningStateViewModel.states.forEach { state ->
+                                Row(
+                                    Modifier
+                                        .height(56.dp)
+                                        .selectable(
+                                            selected = (state == eveningStateViewModel.choosenState),
+                                            onClick = {
+                                                eveningStateViewModel.choosenState = state
+                                            },
+                                            role = Role.RadioButton
+                                        ), verticalAlignment = Alignment.CenterVertically
+                                )
+                                {
+                                    RadioButton(
+                                        selected = (state == eveningStateViewModel.choosenState),
+                                        onClick = null
+                                    )
+                                    Text(text = state.name, fontSize = 22.sp)
+                                }
+                            }
+                        }
+                        Button(enabled = eveningStateViewModel.sendButtonEnabled(), onClick = {
+                            eveningStateViewModel.sendButtonClick(context)
+                        })
+                        {
+                            Text("Отправить", fontSize = 25.sp)
+                        }
+                    }
+                    Box(
+                        modifier = if (!eveningStateViewModel.success) Modifier.fillMaxSize() else Modifier
+                            .fillMaxSize()
+                            .background(color = Color.Gray.copy(0.3f)),
+                        contentAlignment = Alignment.Center
+                    )
+                    {
+                        if (eveningStateViewModel.success)
+                            OkAnimation()
                     }
                 }
-            }
-            Button(enabled = eveningStateViewModel.sendButtonEnabled(),onClick = {
-                eveningStateViewModel.sendButtonClick(context)
             })
-            {
-                Text("Отправить", fontSize = 25.sp)
-            }
-        }})
     }
 }

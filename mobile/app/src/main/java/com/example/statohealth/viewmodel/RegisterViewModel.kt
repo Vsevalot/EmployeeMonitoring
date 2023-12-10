@@ -1,6 +1,8 @@
 package com.example.statohealth.viewmodel
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,8 +14,11 @@ import com.example.statohealth.data.RegisterModelRequest
 import com.example.statohealth.data.ResultResponse
 import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class RegisterViewModel : ViewModel() {
+    var success by mutableStateOf(false)
     lateinit var navController: NavHostController
     var manager by mutableStateOf(ManagerModel(-1, "", "", "", "", ""))
     var firstName by mutableStateOf("")
@@ -121,6 +126,12 @@ class RegisterViewModel : ViewModel() {
 
     fun successRegisterAction(response: ResultResponse?) {
         Logger.log("OnSuccess $response")
-        navController.navigate(Pages.loginPage)
+        updateProgressVisibility(false)
+        success = true
+        val uiHandler = Handler(Looper.getMainLooper())
+        val runnable = Runnable() { navController.navigate(Pages.loginPage)}
+        Timer().schedule(3000) {
+            uiHandler.post(runnable);
+        }
     }
 }

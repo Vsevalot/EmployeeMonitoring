@@ -13,5 +13,6 @@ class Pages
         const val factorsPage: String = "FactorsPage"
         const val accountPage: String = "AccountPage"
         const val recommendationsPage: String = "RecommendationsPage"
+        const val welcomePage: String = "WelcomePage"
     }
 }

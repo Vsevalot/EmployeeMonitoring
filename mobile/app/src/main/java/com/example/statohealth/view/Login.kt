@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -49,17 +51,30 @@ fun Login(
     ) {
         Scaffold(
             content = { padd ->
-                ProgressIndicator(loginViewModel.progressVisible)
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = padd.calculateTopPadding() + 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
+                Box(
+                    modifier = with(Modifier) {
+                        fillMaxSize()
+                            .paint(
+                                painterResource(id = R.drawable.urfu),
+                                contentScale = ContentScale.FillHeight
+                            )
+                    })
                 {
-                    Image(painter = painterResource(R.drawable.urfulogo_full_russian), contentDescription = "urfu_logo")
-                    UserInputLayer(loginViewModel)
-                    ButtonsLayer(loginViewModel, context)
+                    ProgressIndicator(loginViewModel.progressVisible)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = padd.calculateTopPadding() + 20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    )
+                    {
+                        Image(
+                            painter = painterResource(R.drawable.urfulogo_full_russian),
+                            contentDescription = "urfu_logo"
+                        )
+                        UserInputLayer(loginViewModel)
+                        ButtonsLayer(loginViewModel, context)
+                    }
                 }
             })
     }

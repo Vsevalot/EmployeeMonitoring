@@ -2,6 +2,7 @@ package com.example.statohealth.activities
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +19,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.statohealth.Pages
+import com.example.statohealth.data.ResultResponse
+import com.example.statohealth.data.UpdateTokenModelRequest
 import com.example.statohealth.infrastructure.AuthTokenPreference
 import com.example.statohealth.infrastructure.Logger
 import com.example.statohealth.infrastructure.Network
@@ -32,6 +35,7 @@ import com.example.statohealth.view.MorningState
 import com.example.statohealth.view.Recommendations
 import com.example.statohealth.view.Register
 import com.example.statohealth.view.TimePicker
+import com.example.statohealth.view.Welcome
 import com.example.statohealth.viewmodel.AccountViewModel
 import com.example.statohealth.viewmodel.EveningStateViewModel
 import com.example.statohealth.viewmodel.FactorsViewModel
@@ -42,6 +46,7 @@ import com.example.statohealth.viewmodel.MorningStateViewModel
 import com.example.statohealth.viewmodel.RecommendationsViewModel
 import com.example.statohealth.viewmodel.RegisterViewModel
 import com.example.statohealth.viewmodel.TimePickerViewModel
+import com.example.statohealth.viewmodel.WelcomeViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -55,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private val eveningStateViewModel: EveningStateViewModel by viewModels()
     private val factorsViewModel: FactorsViewModel by viewModels()
     private val accountViewModel: AccountViewModel by viewModels()
+    private val welcomeViewModel: WelcomeViewModel by viewModels()
     private val recommendationsViewModel: RecommendationsViewModel by viewModels()
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -102,9 +108,24 @@ class MainActivity : ComponentActivity() {
 
             // Log and toast
             Logger.log(token)
-            var android_id =
+            var deviceId =
                 Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+
+            putTokenToServer(this,deviceId, token )
         })
+    }
+    fun putTokenToServer(context: Context, deviceId: String, token: String) {
+        Network(context)
+            .sendPutRequest(
+                "devices/${deviceId}/token",
+                UpdateTokenModelRequest(token),
+                ::successPutTokenToServerAction,
+                false
+            )
+    }
+
+    fun successPutTokenToServerAction(response: ResultResponse?) {
+        Logger.log("OnSuccess $response")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,7 +139,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val savedAuthToken = AuthTokenPreference().getToken(context)
             val startDestination: String = if (savedAuthToken == null)
-                Pages.instructionsPage+"/true"
+                Pages.welcomePage
             else {
                 Network.authorizationToken = savedAuthToken
                 Pages.timePickerPage
@@ -131,6 +152,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Pages.registerPage) {
                         Register(registerViewModel, navController, context)
+                    }
+                    composable(Pages.welcomePage) {
+                        Welcome(welcomeViewModel, navController, context)
                     }
                     composable(
                         Pages.instructionsPage + "/{tallowNavigation}",

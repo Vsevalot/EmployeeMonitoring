@@ -25,11 +25,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.statohealth.Feedbacks
+import com.example.statohealth.R
 import com.example.statohealth.activities.MainActivity
 import com.example.statohealth.viewmodel.AccountViewModel
 
@@ -67,60 +71,79 @@ fun Account(
                     }
                 )
             }, content = { padd ->
-                ProgressIndicator(accountViewModel.progressVisible)
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = padd.calculateTopPadding()),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
+                Box(
+                    modifier = with(Modifier) {
+                        fillMaxSize()
+                            .paint(
+                                painterResource(id = R.drawable.urfu),
+                                contentScale = ContentScale.FillHeight
+                            )
+                    })
                 {
+                    ProgressIndicator(accountViewModel.progressVisible)
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .weight(0.9f),
+                            .padding(top = padd.calculateTopPadding()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        Text(
-                            "Состояние на сегодня (${accountViewModel.currentDay.toStringDateRu()}):", fontSize = 25.sp, modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp).align(Start)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(0.9f),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         )
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.align(Start).padding(start = 20.dp)) {
-                            Icon(Icons.Filled.WbSunny, "", tint = Color.Yellow)
-                            if (Feedbacks.morning != null) {
-                                Text(
-                                    "Пройдено", fontSize = 22.sp, modifier = Modifier
-                                )
-                                Icon(Icons.Filled.CheckBox, "", tint = Color.Green)
-                            } else {
-                                Text(
-                                    "Не пройдено", fontSize = 22.sp, modifier = Modifier
-                                )
-                                Icon(Icons.Filled.IndeterminateCheckBox, "", tint = Color.Red)
-                            }
-                        }
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.align(Start).padding(start = 20.dp)) {
-                            Icon(Icons.Filled.Nightlight, "", tint = Color.Blue)
-                            if (Feedbacks.evening != null) {
-                                Text(
-                                    "Пройдено", fontSize = 22.sp, modifier = Modifier
-                                )
-                                Icon(Icons.Filled.CheckBox, "", tint = Color.Green)
-                            } else {
-                                Text(
-                                    "Не пройдено", fontSize = 22.sp, modifier = Modifier
-                                )
-                                Icon(Icons.Filled.IndeterminateCheckBox, "", tint = Color.Red)
-                            }
-                        }
-                    }
-                    Box(modifier = Modifier.weight(0.1f), contentAlignment = Alignment.Center)
-                    {
-                        Button(onClick = {
-                            accountViewModel.getRecommendationsClick()
-                        })
                         {
-                            Text("Получить рекомендации", fontSize = 25.sp)
+                            Text(
+                                "Состояние на сегодня (${accountViewModel.currentDay.toStringDateRu()}):",
+                                fontSize = 25.sp,
+                                modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
+                                    .align(Start)
+                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.align(Start).padding(start = 20.dp)
+                            ) {
+                                Icon(Icons.Filled.WbSunny, "", tint = Color.Yellow)
+                                if (Feedbacks.morning != null) {
+                                    Text(
+                                        "Пройдено", fontSize = 22.sp, modifier = Modifier
+                                    )
+                                    Icon(Icons.Filled.CheckBox, "", tint = Color.Green)
+                                } else {
+                                    Text(
+                                        "Не пройдено", fontSize = 22.sp, modifier = Modifier
+                                    )
+                                    Icon(Icons.Filled.IndeterminateCheckBox, "", tint = Color.Red)
+                                }
+                            }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.align(Start).padding(start = 20.dp)
+                            ) {
+                                Icon(Icons.Filled.Nightlight, "", tint = Color.Blue)
+                                if (Feedbacks.evening != null) {
+                                    Text(
+                                        "Пройдено", fontSize = 22.sp, modifier = Modifier
+                                    )
+                                    Icon(Icons.Filled.CheckBox, "", tint = Color.Green)
+                                } else {
+                                    Text(
+                                        "Не пройдено", fontSize = 22.sp, modifier = Modifier
+                                    )
+                                    Icon(Icons.Filled.IndeterminateCheckBox, "", tint = Color.Red)
+                                }
+                            }
+                        }
+                        Box(modifier = Modifier.weight(0.1f), contentAlignment = Alignment.Center)
+                        {
+                            Button(onClick = {
+                                accountViewModel.getRecommendationsClick()
+                            })
+                            {
+                                Text("Получить рекомендации", fontSize = 25.sp)
+                            }
                         }
                     }
                 }
