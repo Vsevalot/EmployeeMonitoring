@@ -1,8 +1,8 @@
 """init
 
-Revision ID: b0a7e85dfbc2
+Revision ID: f8d1317a21ba
 Revises: 
-Create Date: 2023-11-04 16:10:44.869961
+Create Date: 2023-12-11 09:42:30.816257
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'b0a7e85dfbc2'
+revision = 'f8d1317a21ba'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,10 +28,15 @@ def upgrade():
     sa.Column('name', sa.String(length=150), nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk__companies'))
     )
+    op.create_table('devices',
+    sa.Column('id', sa.String(length=50), nullable=False),
+    sa.Column('token', sa.String(length=200), nullable=True),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk__devices'))
+    )
     op.create_table('states',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('value', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=20), nullable=False),
+    sa.Column('name', sa.String(length=200), nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk__states'))
     )
     op.create_table('factors',
@@ -120,6 +125,7 @@ def downgrade():
     op.drop_index(op.f('ix__factors__category_id'), table_name='factors')
     op.drop_table('factors')
     op.drop_table('states')
+    op.drop_table('devices')
     op.drop_table('companies')
     op.drop_table('categories')
     # ### end Alembic commands ###
