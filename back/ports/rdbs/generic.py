@@ -102,7 +102,7 @@ state = factory.table(
     columns=(
         factory.integer_primary_key(),
         factory.integer(name="value"),
-        factory.string(name="name", length=20, nullable=False),
+        factory.string(name="name", length=200, nullable=False),
     ),
 )
 
