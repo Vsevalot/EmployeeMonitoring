@@ -1,6 +1,6 @@
 <template>
   <div class="home" style="text-align:center">
-    <HelloWorld msg="Приложение для мониторинга состояния сотрудников на рабочем месте."/>
+    <HelloWorld msg="Мониторинг благополучия сотрудников на рабочем месте методом самооценки."/>
   </div>
 </template>
 
