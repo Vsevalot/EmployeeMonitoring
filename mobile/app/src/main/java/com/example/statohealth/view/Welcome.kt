@@ -1,5 +1,7 @@
 package com.example.statohealth.view
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -54,7 +57,8 @@ fun Welcome(
                         fillMaxSize()
                             .paint(
                                 painterResource(id = R.drawable.urfu),
-                                contentScale = ContentScale.FillHeight
+                                contentScale = ContentScale.FillHeight,
+                                alignment = Alignment.Center
                             )
                     })
                 {
@@ -63,18 +67,32 @@ fun Welcome(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = padd.calculateTopPadding()),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     )
                     {
-                        Text(
-                            welcomeViewModel.welcomeText,
-                            fontSize = 22.sp,
-                            modifier = Modifier
-                                .weight(0.9f)
-                                .padding(16.dp)
-                                .verticalScroll(rememberScrollState())
+                        Box(modifier = Modifier.weight(0.15f).fillMaxSize(), contentAlignment = Alignment.Center)
+                        {
+                            Image(
+                                painter = painterResource(R.drawable.logotip_ugi),
+                                contentDescription = "ugi_logo"
+                            )
+                        }
+                        Box(modifier = Modifier.weight(0.7f).fillMaxSize(),
+                            contentAlignment = Alignment.Center,
                         )
-                        Box(modifier = Modifier.weight(0.1f), contentAlignment = Alignment.Center)
+                        {
+                            Text(
+                                welcomeViewModel.welcomeText,
+                                textAlign = TextAlign.Center,
+                                fontSize = 18.sp,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp)
+                                    .verticalScroll(rememberScrollState())
+                            )
+                        }
+                        Box(modifier = Modifier.weight(0.15f), contentAlignment = Alignment.Center)
                         {
                             Button(onClick = {
                                 welcomeViewModel.navigateToInstructions()
