@@ -8,8 +8,16 @@
                 <a class="nav-link buttontest text" to="/">©ФГАОУ ВО «УрФУ имени первого Президента России Б.Н. Ельцина»</a>
               </li>
 
-              <close class="nav-item">
-                <a class="nav-link buttontest text" href="https://urfu.ru/ru/">Внешние эксперты</a>
+              <close class="nav-item" style="display: flex; width: 700px;">
+                <div style="display: inline;">
+                  <a class="nav-link buttontest text">Федорова Алена Эдуардовна</a>
+                  <img src="https://urfu.ru/fileadmin/_processed_/2/6/csm_40980d7e59f6a7d06b2fff0e944bfb36_94bff0a278.jpg">
+                </div>
+
+                <div style="display: inline;margin-left: 100px;">
+                  <a class="nav-link buttontest text">Морохов Никита Дмитриевич</a>
+                  <a class="nav-link buttontest text">+79221546763, n.morohov@yandex.ru</a>
+                </div>
               </close>
             </ul>
           </div>
