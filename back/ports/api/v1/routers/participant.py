@@ -216,7 +216,7 @@ async def get_single_stat_csv(
     participant = await user_service.get_user(user_id=participant_id)
     media_type = "text/csv"
     filename = f"{participant['last_name']}-{date_from}-{date_to}.csv"
-    encoded_filename = quote(filename.encode('cp-1251'))
+    encoded_filename = quote(filename.encode('win-1251'))
     headers = {
         "Content-Disposition": f"attachment; filename*=cp-1251''{encoded_filename}",
         "Content-Type": media_type,
