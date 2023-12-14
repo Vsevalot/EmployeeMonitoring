@@ -187,7 +187,7 @@ def _csv_from_feedback_range(
             if _factor := feedback_range[date][DayTime.evening]["factor"]:
                 factor = _factor["name"]
                 category = _factor["category"]
-        res.append(f'{date},{morning},{evening},"{category}","{factor}"')
+        res.append(f'{date},"{morning}","{evening}","{category}","{factor}"')
     return "\n".join(res)
 
 
