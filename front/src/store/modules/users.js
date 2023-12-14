@@ -41,7 +41,6 @@ const actions = {
       email: user.get('email'),
       password: user.get('password')
     }
-    debugger
     const response = await axios.post('login', userData);
     //const response = await fetch('http://159.223.224.135:8000/api/v1/login', {body: JSON.stringify(userData), headers: {'Content-Type': 'application/json;charset=utf-8'}, method: 'post', credentials: "include"})
     //const result = await response.json()
@@ -77,8 +76,11 @@ const actions = {
     const response = await axios.get('participants/me', {headers: { Authorization: this.getters.userToken }});
     return response
   },
+  async getStates({commit}) {
+    const response = await axios.get('states', {headers: { Authorization: this.getters.userToken }});
+    return response
+  },
   async sendGetUserRequest({commit}, data) {
-    debugger
     const response = await axios.get('participants/' + data.get('user_id'), {headers: { Authorization: this.getters.userToken }});
     return response
   },
