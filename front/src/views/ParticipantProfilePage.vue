@@ -157,12 +157,6 @@
               font: {
                 size: 14
               },
-              callback: function(value, index, values) {
-                var yLabels = {
-                    0: 'Все очень плохо', 100: 'Плохо', 200: 'Нормально', 300: 'Хорошо', 400: 'Все очень хорошо',
-                }
-                return yLabels[value];
-              }
             }
           },
           x: {
@@ -195,7 +189,7 @@
     };
   },
     methods: {
-      ...mapActions(['participantStats', 'sendGetUserRequest', 'getUserScore', 'downloadFileForOne']),
+      ...mapActions(['participantStats', 'sendGetUserRequest', 'getUserScore', 'downloadFileForOne', 'getStates']),
 
       handlePieChartClick(evt, array) {
         try {
@@ -250,6 +244,16 @@
       },
       async groupClick() {
         const Data = new FormData();
+
+        const states = await this.getStates()
+        var yLabels = {}
+        for (let i = 0; i < states.data.result.length; i++) {
+          yLabels[states.data.result[i].value] = states.data.result[i].name;
+        }
+        this.chartOptions.scales.y.ticks.callback = function(value, index, values) {
+          return yLabels[value]
+        }
+
         Data.append('date_from', this.form.start_date);
         Data.append('date_to', this.form.end_date);
         Data.append('id', this.id)
