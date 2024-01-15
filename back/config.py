@@ -42,6 +42,6 @@ PERSONAL_RECOMMENDATION_MIN_FEEDBACKS = 10
 DAYS_FOR_GROUP_STAT = 30
 
 MORNING_NOTIFY_TIME = datetime.time(hour=9)
-EVENING_NOTIFY_TIME = datetime.time(hour=16)
+EVENING_NOTIFY_TIME = datetime.time(hour=18)
 NOTIFICATION_TITLE = "Мониторинг состояния сотрудников"
 NOTIFICATION_BODY = "Пожалуйста, укажите свое самочувствие!"
