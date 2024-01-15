@@ -22,7 +22,7 @@ class Foreman:
         schedule.every(600).seconds.do(self._run)
         while True:
             schedule.run_pending()
-            time.sleep(1)
+            time.sleep(100)
 
     def _run(self) -> None:
         asyncio.run(
