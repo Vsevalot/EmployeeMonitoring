@@ -1,3 +1,5 @@
+import datetime
+
 from pydantic import SecretStr, Field
 from pydantic_settings import BaseSettings
 
@@ -21,6 +23,15 @@ class DBConfig(BaseSettings):
         env_prefix = "rdbs_"
 
 
+class NotificationConfig(BaseSettings):
+    cert: str = "stat-o-health-firebase-adminsdk-1ckd1-d8c33025f0.json"
+
+    class Config:
+        case_sensitive = False
+        env_file = ".env"
+        env_prefix = "notification_"
+
+
 MANAGER_CODE_LENGTH = 5
 NOT_ENOUGH_FEEDBACKS_RECOMMENDATION = (
     "Для получения персональных рекоммендаций необходимо "
@@ -29,3 +40,8 @@ NOT_ENOUGH_FEEDBACKS_RECOMMENDATION = (
 )
 PERSONAL_RECOMMENDATION_MIN_FEEDBACKS = 10
 DAYS_FOR_GROUP_STAT = 30
+
+MORNING_NOTIFY_TIME = datetime.time(hour=9)
+EVENING_NOTIFY_TIME = datetime.time(hour=16)
+NOTIFICATION_TITLE = "Мониторинг состояния сотрудников"
+NOTIFICATION_BODY = "Пожалуйста, укажите свое самочувствие!"

@@ -130,5 +130,6 @@ device = factory.table(
     columns=(
         factory.string_primary_key(length=50),
         factory.string(name="token", length=200),
+        factory.datetime(name="notify_at"),
     ),
 )
