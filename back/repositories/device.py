@@ -26,7 +26,7 @@ class DeviceRepositoryRDBS:
     async def update(self, d: Device) -> None:
         stmt = (
             device.update()
-            .values(token=d["token"], notufy_at=d["notify_at"])
+            .values(token=d["token"], notify_at=d["notify_at"])
             .where(device.c.id == d["id"])
         )
         await self._connection.execute(stmt)
