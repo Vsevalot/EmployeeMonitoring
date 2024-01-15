@@ -19,10 +19,10 @@ class Foreman:
         self._notification_service = notification_service
 
     def run(self) -> NoReturn:
-        schedule.every(600).seconds.do(self._run)
+        schedule.every(30).seconds.do(self._run)
         while True:
             schedule.run_pending()
-            time.sleep(100)
+            time.sleep(10)
 
     def _run(self) -> None:
         asyncio.run(
