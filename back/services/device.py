@@ -45,9 +45,12 @@ class DeviceService:
                         body=NOTIFICATION_BODY,
                         device_token=d["token"],
                     )
+                    print(f"Notified device {d['id']}")
                 except Exception as e:
                     print(f"Can't notify {d['id']} reason: {e}")
                 finally:
                     d["notify_at"] = get_next_notification_time()
                     await self._uow.device.update(d)
             await self._uow.commit()
+            if devices:
+                print("All devices notified")

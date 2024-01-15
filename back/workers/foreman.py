@@ -19,13 +19,14 @@ class Foreman:
         self._notification_service = notification_service
 
     def run(self) -> NoReturn:
-        schedule.every(30).seconds.do(self._run)
+        schedule.every(5).seconds.do(self._run)
         while True:
             schedule.run_pending()
-            time.sleep(10)
+            time.sleep(1)
 
     def _run(self) -> None:
-        asyncio.run(
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(
             self._device_service.notify_devices(
                 notification_service=self._notification_service
             )
