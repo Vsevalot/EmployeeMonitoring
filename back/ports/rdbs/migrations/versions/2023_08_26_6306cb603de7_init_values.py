@@ -14,7 +14,7 @@ from contracts import Permissions
 
 # revision identifiers, used by Alembic.
 revision = "6306cb603de7"
-down_revision = "f8d1317a21ba"
+down_revision = "52ef1c384dc3"
 branch_labels = None
 depends_on = None
 
