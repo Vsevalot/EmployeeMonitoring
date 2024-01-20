@@ -1,14 +1,6 @@
 from firebase_admin import messaging, initialize_app, credentials
 
 
-class MyMessage:
-    def __init__(self, a: int, b: str):
-        pass
-
-
-MyMessage("asd", "asd")
-
-
 class NotificationService:
     def __init__(self, path_to_cert: str):
         self._path_to_cert = path_to_cert
