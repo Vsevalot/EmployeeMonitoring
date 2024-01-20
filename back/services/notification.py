@@ -12,7 +12,7 @@ class NotificationService:
 
     def notify(self, device_token: str, title: str, body: str) -> None:
         msg = messaging.Message(
-            messaging.Notification(
+            notification=messaging.Notification(
                 title=title,
                 body=body,
             ),
