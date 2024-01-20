@@ -9,11 +9,14 @@ from services import DeviceService
 from config import DBConfig
 from services.notification import NotificationService
 from utils import UnitOfWorkRDBS
+from lggr import logger
 
 
 class Foreman:
     def __init__(
-        self, device_service: DeviceService, notification_service: NotificationService
+        self,
+        device_service: DeviceService,
+        notification_service: NotificationService,
     ):
         self._device_service = device_service
         self._notification_service = notification_service
@@ -38,7 +41,7 @@ def bootstrap_worker(db_config: DBConfig, path_to_cert: str) -> Foreman:
     uow = UnitOfWorkRDBS(connection_fabric=engine)
     device_service = DeviceService(uow)
 
-    notification_service = NotificationService(path_to_cert)
+    notification_service = NotificationService(path_to_cert=path_to_cert, logger=logger)
     return Foreman(
         device_service=device_service,
         notification_service=notification_service,
