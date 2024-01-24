@@ -17,6 +17,8 @@ asyncpg = "^0.28.0"
 greenlet = "^2.0.2"
 pytest = "^7.4.0"
 pytest-asyncio = "^0.21.1"
+firebase-admin = "^6.3.0"
+schedule = "^1.2.1"
 
 [tool.poetry.group.dev.dependencies]
 httpx = "^0.24.1"

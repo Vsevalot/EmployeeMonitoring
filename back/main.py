@@ -4,13 +4,19 @@ import fire
 
 from ext import alembic_tools
 from ports import rdbs, api
-from config import DBConfig
+from config import DBConfig, NotificationConfig
+from workers.foreman import bootstrap_worker
 
 
 def launch(db_config: DBConfig):
     import uvicorn
     app = api.v1.get_application(db_config)
     uvicorn.run(app, host="0.0.0.0", port=80)
+
+
+def run_worker(db_config: DBConfig, path_to_firebase_cert: str):
+    worker = bootstrap_worker(db_config, path_to_firebase_cert)
+    worker.run()
 
 
 if __name__ == "__main__":
@@ -24,6 +30,7 @@ if __name__ == "__main__":
     fire.Fire(
         {
             "api:run": lambda: launch(db_config),
+            "worker:run": lambda: run_worker(db_config, NotificationConfig().cert),
             "rdbs:upgrade": functools.partial(
                 alembic_tools.commands.upgrade, **migrations_rdbs_args
             ),

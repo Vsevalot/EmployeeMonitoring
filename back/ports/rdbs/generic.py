@@ -129,6 +129,7 @@ device = factory.table(
     db_metadata=db_metadata,
     columns=(
         factory.string_primary_key(length=50),
-        factory.string(name="token", length=200),
+        factory.string(name="token", length=200, nullable=False),
+        factory.datetime(name="notify_at", nullable=False),
     ),
 )

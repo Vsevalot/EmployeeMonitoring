@@ -82,3 +82,4 @@ class Feedback(TypedDict):
 class Device(TypedDict):
     id: str
     token: str
+    notify_at: datetime.datetime

@@ -35,5 +35,17 @@ services:
       - dev.env
     command: ["api:run"]
 
+  monitoring-notification:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - db
+      - migration
+    env_file:
+      - dev.env
+    command: ["worker:run"]
+
 volumes:
   monitoring-db:
