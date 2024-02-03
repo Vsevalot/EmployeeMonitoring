@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  nginx:
+    image: ng
+    restart: always
+    ports:
+      - "3000:80"
+      - "3001:443"
+      - "3002:8000"
+
+  back:
+    build:
+      context: ./back
+      dockerfile: ./Dockerfile
+    restart: always
+    env_file:
+      - ./back/.env
+    depends_on:
+      - nginx
+    command: ["api:run"]
+
+      #front:
+      #  build:
+      #    context: ./front
+      #    dockerfile: ./Dockerfile
+      #  restart: always
+      #  depends_on:
+      #    - nginx

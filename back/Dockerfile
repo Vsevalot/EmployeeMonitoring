@@ -4,6 +4,8 @@ ENV MUSL_LOCPATH=en_US.utf8 \
     LC_ALL=C.UTF-8 \
     LANG=C.UTF-8
 
+# RUN apk update && apk add gcc g++
+
 WORKDIR /opt/app/
 ENV PYTHONPATH=${PYTHONPATH}:${PWD}
 
@@ -27,3 +29,4 @@ RUN --mount=type=cache,target=/root/.cache \
 ADD . /opt/app
 
 ENTRYPOINT ["python", "main.py"]
+
