@@ -2,7 +2,9 @@ version: '3.9'
 
 services:
   nginx:
-    image: ng
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     ports:
       - "3000:80"
@@ -16,14 +18,10 @@ services:
     restart: always
     env_file:
       - ./back/.env
-    depends_on:
-      - nginx
     command: ["api:run"]
 
-      #front:
-      #  build:
-      #    context: ./front
-      #    dockerfile: ./Dockerfile
-      #  restart: always
-      #  depends_on:
-      #    - nginx
+  front:
+    build:
+      context: ./front
+      dockerfile: ./Dockerfile
+    restart: always

@@ -15,7 +15,7 @@ import ToastService from 'primevue/toastservice';
 
 axios.defaults.withCredentials = true;
 
-axios.defaults.baseURL = window.location.host;
+axios.defaults.baseURL = 'http://' + window.location.hostname + ':3002/api/v1';
 const app = createApp(App)
 app.use(router)
 app.use(PrimeVue)
