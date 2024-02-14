@@ -7,9 +7,9 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "3000:80"
-      - "3001:443"
-      - "3002:8000"
+      - "80:8080"
+      - "443:4343"
+      - "8000:8000"
 
   back:
     build:
