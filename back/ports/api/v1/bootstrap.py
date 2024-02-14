@@ -15,11 +15,6 @@ def get_application(db_config: DBConfig) -> Application:
     app.add_exception_handler(AlreadyInUse, handler409)
     app.add_exception_handler(NotFoundError, handler404)
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_methods=['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'PATCH'],
-    )
-
     for r in ROUTERS:
         app.include_router(r)
     return app
