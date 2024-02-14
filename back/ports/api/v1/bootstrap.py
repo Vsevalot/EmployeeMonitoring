@@ -17,6 +17,7 @@ def get_application(db_config: DBConfig) -> Application:
 
     app.add_middleware(
         CORSMiddleware,
+        allow_methods=['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'PATCH'],
     )
 
     for r in ROUTERS:
