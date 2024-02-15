@@ -20,6 +20,26 @@ services:
       - ./back/.env
     command: ["api:run"]
 
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${RDBS_PASSWORD}
+      POSTGRES_DB: monitoring
+    volumes:
+      - monitoring-db:/var/lib/postgresql/data
+
+  migration:
+    build:
+      context: ./back
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    depends_on:
+      - db
+    env_file:
+      - dev.env
+    command: ["rdbs:upgrade"]
+
   front:
     build:
       context: ./front
