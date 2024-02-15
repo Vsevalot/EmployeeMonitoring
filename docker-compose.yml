@@ -17,7 +17,7 @@ services:
       dockerfile: ./Dockerfile
     restart: always
     env_file:
-      - ./back/.env
+      - dev.env
     command: ["api:run"]
 
   db:
@@ -45,3 +45,6 @@ services:
       context: ./front
       dockerfile: ./Dockerfile
     restart: always
+
+volumes:
+  monitoring-db:
