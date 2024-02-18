@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException
 
 
 class Network(val context: Context) {
-    private val apiUrl: String = "http://159.223.224.135:8000"
+    private val apiUrl: String = "http://rabota-ya.urfu.ru"
     private val apiVersion: String = "/api/v1/"
 
     companion object {
