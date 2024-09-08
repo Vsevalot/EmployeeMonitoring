@@ -14,7 +14,7 @@ from lggr import logger
 
 def get_next_notification_time() -> datetime.datetime:
     now = datetime.datetime.now()
-    if MORNING_NOTIFY_TIME.hour < now.hour < EVENING_NOTIFY_TIME.hour:
+    if MORNING_NOTIFY_TIME.hour <= now.hour < EVENING_NOTIFY_TIME.hour:
         return now.replace(hour=EVENING_NOTIFY_TIME.hour)
     tomorrow = now + datetime.timedelta(days=1)
     return tomorrow.replace(hour=MORNING_NOTIFY_TIME.hour)
